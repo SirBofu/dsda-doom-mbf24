@@ -7,13 +7,13 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
 #### New Thing Flags
 - Add `MBF24 Bits = X` in the Thing definition.
 - The format is the same as the existing `Bits` and `MBF21 Bits` field.
-- Example: `MBF24 Bits = INVULNERABLE+PUSHABLE`.
+- Example: `MBF24 Bits = NODAMAGE+PUSHABLE`.
 - The value can also be given as a number (sum of the individual flag values below).
 - While these flags can be set via the `A_AddFlags`/`A_RemoveFlags` or queried via the `A_JumpIfFlagsSet` codepointers (see below) in the MBF21 complevel, the actual gameplay logic is gated behind the MBF24 complevel to preserve demo compatibility.
 
 | Flag         | Value   | Description                                                                                                            |
 |--------------|---------|------------------------------------------------------------------------------------------------------------------------|
-| INVULNERABLE | 0x00001 | Thing doesn't take damage even if it can be shot                                                                       |
+| NODAMAGE     | 0x00001 | Thing doesn't take damage even if it can be shot                                                                       |
 | NOCRUSH      | 0x00002 | Thing's corpse will not turn into gibs when crushed; a dropped Thing with this flag will not be destroyed when crushed |
 | PUSHABLE     | 0x00004 | Thing can be pushed by other things                                                                                    |
 | CANNOTPUSH   | 0x00008 | Thing cannot push other things                                                                                         |
