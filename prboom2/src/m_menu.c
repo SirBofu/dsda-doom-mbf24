@@ -2871,6 +2871,9 @@ static const char *gen_compstrings[] =
   "~",
   "~",
   "MBF21",
+  "~",
+  "~",
+  "MBF24",
   NULL
 };
 

@@ -409,6 +409,9 @@ typedef struct mobj_s
     byte color;
     const byte* tranmap;
 
+    // mbf24
+    uint64_t flags3;            // MBF24 flags
+
     // SEE WARNING ABOVE ABOUT POINTER FIELDS!!!
 } mobj_t;
 
@@ -519,6 +522,14 @@ void P_RemoveMonsters(void);
 // zdoom
 #define MF2_CANUSEWALLS       0x0002000000000000ull // can activate use lines
 #define MF2_COUNTSECRET       0x0004000000000000ull // picking up counts as a secret
+
+// --- mobj.flags3 ---
+
+#define MF3_INVULNERABLE      0x00000001ull // mobj is invulnerable
+#define MF3_NOCRUSH           0x00000002ull // mobj isn't turned into gibs when its corpse is crushed
+#define MF3_PUSHABLE          0x00000004ull // mobj can be pushed
+#define MF3_CANNOTPUSH        0x00000008ull // mobj cannot push other objects
+#define MF3_ANTITELEFRAG      0x00000010ull // mobj plays an Uno Reverse when telefragged
 
 #define AMMO_GWND_WIMPY 10
 #define AMMO_GWND_HEFTY 50

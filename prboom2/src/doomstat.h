@@ -70,7 +70,8 @@ extern complevel_t compatibility_level;
 #define compatibility (compatibility_level<=boom_compatibility_compatibility)
 #define demo_compatibility (compatibility_level < boom_compatibility_compatibility)
 #define mbf_features (compatibility_level>=mbf_compatibility)
-#define mbf21 (compatibility_level == mbf21_compatibility)
+#define mbf21 (compatibility_level >= mbf21_compatibility)
+#define mbf24 (compatibility_level == mbf24_compatibility)
 
 extern int demo_insurance;      // killough 4/5/98
 
@@ -177,7 +178,7 @@ extern dboolean randomclass;
 // Internal parameters for sound rendering.
 // These have been taken from the DOS version,
 //  but are not (yet) supported with Linux
-//  (e.g. no sound volume adjustment with menu.
+//  (e.g. no sound volume adjustment with menu.)
 
 // These are not used, but should be (menu).
 // From m_menu.c:

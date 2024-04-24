@@ -2372,7 +2372,7 @@ const char * comp_lev_str[MAX_COMPATIBILITY_LEVEL] =
 { "Doom v1.2", "Doom v1.666", "Doom/Doom2 v1.9", "Ultimate Doom/Doom95", "Final Doom",
   "early DosDoom", "TASDoom", "\"boom compatibility\"", "boom v2.01", "boom v2.02", "lxdoom v1.3.2+",
   "MBF", "PrBoom 2.03beta", "PrBoom v2.1.0-2.1.1", "PrBoom v2.1.2-v2.2.6",
-  "PrBoom v2.3.x", "PrBoom 2.4.0", "Current PrBoom", "", "", "", "MBF21" };
+  "PrBoom v2.3.x", "PrBoom 2.4.0", "Current PrBoom", "", "", "", "MBF21", "", "", "MBF24" };
 
 //==========================================================================
 //
@@ -3367,6 +3367,11 @@ void G_BeginRecording (void)
              longtics = 1;
              shorttics = !dsda_Flag(dsda_arg_longtics);
              break;
+        case mbf24_compatibility:
+             v = 224;
+             longtics = 1;
+             shorttics = !dsda_Flag(dsda_arg_longtics);
+             break;
         default: I_Error("G_BeginRecording: PrBoom compatibility level unrecognised?");
       }
       *demo_p++ = v;
@@ -3620,7 +3625,7 @@ const byte* G_ReadDemoHeaderEx(const byte *demo_p, size_t size, unsigned int par
   if (!((demover >=   0  && demover <=   4) ||
         (demover >= 104  && demover <= 111) ||
         (demover >= 200  && demover <= 214) ||
-        (demover == 221)))
+        (demover == 221) || (demover == 224)))
   {
     I_Error("G_ReadDemoHeader: Unknown demo format %d.", demover);
   }
@@ -3787,6 +3792,10 @@ const byte* G_ReadDemoHeaderEx(const byte *demo_p, size_t size, unsigned int par
         break;
       case 221:
         compatibility_level = mbf21_compatibility;
+        longtics = 1;
+        break;
+      case 224:
+        compatibility_level = mbf24_compatibility;
         longtics = 1;
         break;
     }

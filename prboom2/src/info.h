@@ -6586,6 +6586,9 @@ typedef struct
   // misc
   int bloodcolor;
   int visibility;
+
+  // mbf24
+  uint64_t flags3;
 } mobjinfo_t;
 
 #define NO_ALTSPEED -1
@@ -6644,6 +6647,7 @@ typedef struct
     int activesound;
     uint64_t flags;
     uint64_t flags2;
+    uint64_t flags3;
 } raven_mobjinfo_t;
 
 // all the stuff - dynamically selected in global.c

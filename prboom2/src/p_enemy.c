@@ -3571,11 +3571,12 @@ void A_JumpIfTracerCloser(mobj_t* actor)
 //   args[0]: State to jump to
 //   args[1]: Standard Flag(s) to check
 //   args[2]: MBF21 Flag(s) to check
+//   args[3]: MBF24 Flag(s) to check
 //
 void A_JumpIfFlagsSet(mobj_t* actor)
 {
   int state;
-  uint64_t flags, flags2;
+  uint64_t flags, flags2, flags3;
 
   if (!mbf21 || !actor)
     return;
@@ -3583,9 +3584,11 @@ void A_JumpIfFlagsSet(mobj_t* actor)
   state  = actor->state->args[0];
   flags  = actor->state->args[1];
   flags2 = actor->state->args[2];
+  flags3 = actor->state->args[3];
 
   if ((actor->flags & flags) == flags &&
-      (actor->flags2 & flags2) == flags2)
+      (actor->flags2 & flags2) == flags2 &&
+      (actor->flags3 & flags3))
     P_SetMobjState(actor, state);
 }
 
@@ -3594,19 +3597,22 @@ void A_JumpIfFlagsSet(mobj_t* actor)
 // Adds the specified thing flags to the caller.
 //   args[0]: Standard Flag(s) to add
 //   args[1]: MBF21 Flag(s) to add
+//   args[2]: MBF24 Flag(s) to add
 //
 void A_AddFlags(mobj_t* actor)
 {
-  uint64_t flags, flags2;
+  uint64_t flags, flags2, flags3;
 
   if (!mbf21 || !actor)
     return;
 
   flags  = actor->state->args[0];
   flags2 = actor->state->args[1];
+  flags3 = actor->state->args[2];
 
   actor->flags  |= flags;
   actor->flags2 |= flags2;
+  actor->flags3 |= flags3;
 }
 
 //
@@ -3617,16 +3623,18 @@ void A_AddFlags(mobj_t* actor)
 //
 void A_RemoveFlags(mobj_t* actor)
 {
-  uint64_t flags, flags2;
+  uint64_t flags, flags2, flags3;
 
   if (!mbf21 || !actor)
     return;
 
   flags  = actor->state->args[0];
   flags2 = actor->state->args[1];
+  flags3 = actor->state->args[2];
 
   actor->flags  &= ~flags;
   actor->flags2 &= ~flags2;
+  actor->flags3 &= ~flags3;
 }
 
 

@@ -1136,6 +1136,7 @@ static const char *deh_mobjinfo_fields[] =
 
   // misc
   "Blood color",         // .bloodcolor
+  "MBF24 Bits",          // .flags3
 
   NULL
 };
@@ -1271,6 +1272,17 @@ static const struct deh_flag_s deh_mobjflags_mbf21[] = {
   {"E4M8BOSS",       MF2_E4M8BOSS}, // E4M8 boss
   {"RIP",            MF2_RIP}, // projectile rips through targets
   {"FULLVOLSOUNDS",  MF2_FULLVOLSOUNDS}, // full volume see / death sound
+  { NULL }
+};
+
+// MBF24
+
+static const struct deh_flag_s deh_mobjflags_mbf24[] = {
+  {"INVULNERABLE",    MF3_INVULNERABLE}, // doesn't take damage when shot
+  {"NOCRUSH",         MF3_NOCRUSH}, // doesn't turn into gibs when crushed or get removed if dropped
+  {"PUSHABLE",        MF3_PUSHABLE}, // can be pushed by other things
+  {"CANNOTPUSH",      MF3_CANNOTPUSH}, // cannot push pushable things
+  {"ANTITELEFRAG",    MF3_ANTITELEFRAG}, // objects that would telefrag this thing are telefragged instead
   { NULL }
 };
 
@@ -1515,9 +1527,9 @@ static const deh_bexptr deh_bexptrs[] = // CPhipps - static const
   {A_JumpIfTargetCloser,  "A_JumpIfTargetCloser", 2},
   {A_JumpIfTracerInSight, "A_JumpIfTracerInSight", 2},
   {A_JumpIfTracerCloser,  "A_JumpIfTracerCloser", 2},
-  {A_JumpIfFlagsSet,      "A_JumpIfFlagsSet", 3},
-  {A_AddFlags,            "A_AddFlags", 2},
-  {A_RemoveFlags,         "A_RemoveFlags", 2},
+  {A_JumpIfFlagsSet,      "A_JumpIfFlagsSet", 4}, // incremented by 1 to support MBF24 flags
+  {A_AddFlags,            "A_AddFlags", 3}, // incremented by 1 to support MBF24 flags
+  {A_RemoveFlags,         "A_RemoveFlags", 3}, // incremented by 1 to support MBF24 flags
   {A_WeaponProjectile,    "A_WeaponProjectile", 5, {0}, TI_ARGS1},
   {A_WeaponBulletAttack,  "A_WeaponBulletAttack", 5, {0, 0, 1, 5, 3}},
   {A_WeaponMeleeAttack,   "A_WeaponMeleeAttack", 5, {2, 10, 1 * FRACUNIT, 0, 0}},
@@ -1565,6 +1577,11 @@ static uint64_t deh_stringToFlags(char *strval, const struct deh_flag_s *flags)
 uint64_t deh_stringToMBF21MobjFlags(char *strval)
 {
   return deh_stringToFlags(strval, deh_mobjflags_mbf21);
+}
+
+uint64_t deh_stringToMBF24MobjFlags(char *strval)
+{
+  return deh_stringToFlags(strval, deh_mobjflags_mbf24);
 }
 
 uint64_t deh_stringToMobjFlags(char *strval)
@@ -2068,6 +2085,18 @@ static void deh_procThing(DEHFILE *fpin, char *line)
         }
 
         deh_mobjinfo.info->flags2 = value;
+      }
+      else if (!deh_strcasecmp(key, "MBF24 Bits")) {
+          if (bGetData == 1)
+          {
+              value = deh_translate_bits(value, deh_mobjflags_mbf24);
+          }
+          else
+          {
+              value = deh_stringToMBF24MobjFlags(strval);
+          }
+
+          deh_mobjinfo.info->flags3 = value;
       }
       else if (deh_strcasecmp(key, "Bits")) {
         // standard value set
@@ -3427,11 +3456,13 @@ void PostProcessDeh(void)
       {
         states[i].args[0] = deh_translate_bits(states[i].args[0], deh_mobjflags_standard);
         states[i].args[1] = deh_translate_bits(states[i].args[1], deh_mobjflags_mbf21);
+        states[i].args[2] = deh_translate_bits(states[i].args[2], deh_mobjflags_mbf24);
       }
       else if (bexptr_match->cptr == A_JumpIfFlagsSet)
       {
         states[i].args[1] = deh_translate_bits(states[i].args[1], deh_mobjflags_standard);
         states[i].args[2] = deh_translate_bits(states[i].args[2], deh_mobjflags_mbf21);
+        states[i].args[3] = deh_translate_bits(states[i].args[3], deh_mobjflags_mbf24);
       }
     }
   }
