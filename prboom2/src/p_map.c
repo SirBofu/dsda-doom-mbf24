@@ -2533,10 +2533,7 @@ dboolean PTR_ShootTraverse (intercept_t* in)
     }
     else
     {
-        if (!mbf24 || !(in->d.thing->flags3 & MF3_INVULNERABLE)) // MBF24: don't damage invulnerable objects
-        {
-            P_DamageMobj(th, shootthing, shootthing, la_damage);
-        }
+      P_DamageMobj(th, shootthing, shootthing, la_damage);
     }
   }
 
@@ -3085,8 +3082,7 @@ dboolean PIT_ChangeSector (mobj_t* thing)
       !hexen ||
       (
         !(thing->flags & MF_NOBLOOD) &&
-        !(thing->flags2 & MF2_INVULNERABLE) &&
-        !(thing->flags3 & MF3_INVULNERABLE)
+        !(thing->flags2 & MF2_INVULNERABLE)
       )
     )
     {

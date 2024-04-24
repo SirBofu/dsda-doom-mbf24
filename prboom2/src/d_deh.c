@@ -1278,7 +1278,7 @@ static const struct deh_flag_s deh_mobjflags_mbf21[] = {
 // MBF24
 
 static const struct deh_flag_s deh_mobjflags_mbf24[] = {
-  {"INVULNERABLE",    MF3_INVULNERABLE}, // doesn't take damage when shot
+  {"NODAMAGE",        MF3_NODAMAGE}, // doesn't take damage when shot
   {"NOCRUSH",         MF3_NOCRUSH}, // doesn't turn into gibs when crushed or get removed if dropped
   {"PUSHABLE",        MF3_PUSHABLE}, // can be pushed by other things
   {"CANNOTPUSH",      MF3_CANNOTPUSH}, // cannot push pushable things

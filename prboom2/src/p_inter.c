@@ -1608,7 +1608,11 @@ void P_DamageMobj(mobj_t *target,mobj_t *inflictor, mobj_t *source, int damage)
   dsda_WatchDamage(target, inflictor, source, damage);
 
   // do the damage
-  target->health -= damage;
+  // MBF24: skip dealing damage if the target has MF3_NODAMAGE set
+  if (!(mbf24 && (target->flags3 & MF3_NODAMAGE)))
+  {
+    target->health -= damage;
+  }
   if (target->health <= 0)
   {
     if (heretic) {

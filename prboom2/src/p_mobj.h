@@ -525,7 +525,7 @@ void P_RemoveMonsters(void);
 
 // --- mobj.flags3 ---
 
-#define MF3_INVULNERABLE      0x00000001ull // mobj is invulnerable
+#define MF3_NODAMAGE          0x00000001ull // mobj is invulnerable
 #define MF3_NOCRUSH           0x00000002ull // mobj isn't turned into gibs when its corpse is crushed
 #define MF3_PUSHABLE          0x00000004ull // mobj can be pushed
 #define MF3_CANNOTPUSH        0x00000008ull // mobj cannot push other objects
