@@ -696,6 +696,7 @@ void e6y_G_Compatibility(void)
     case boom_202_compatibility:
     case mbf_compatibility:
     case mbf21_compatibility:
+    case mbf24_compatibility:
       P_CrossSubsector = P_CrossSubsector_Boom;
     break;
     }

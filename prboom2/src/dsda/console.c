@@ -1311,11 +1311,12 @@ static dboolean console_SetTarget(mobj_t* mobj, mobj_t* target) {
   return true;
 }
 
-static void console_SetMobjFlags(mobj_t* mobj, uint64_t flags, uint64_t flags2) {
+static void console_SetMobjFlags(mobj_t* mobj, uint64_t flags, uint64_t flags2, uint64_t flags3) {
   P_MapStart();
   P_UnsetThingPosition(mobj);
   mobj->flags = flags;
   mobj->flags2 = flags2;
+  mobj->flags3 = flags3;
   P_SetThingPosition(mobj);
   P_MapEnd();
 }
@@ -1466,7 +1467,7 @@ static dboolean console_TargetActivateLine(const char* command, const char* args
 
 static dboolean console_TargetAddFlags(const char* command, const char* args) {
   mobj_t* target;
-  uint64_t flags, flags2;
+  uint64_t flags, flags2, flags3;
   char flag_str[CONSOLE_ENTRY_SIZE];
 
   if (sscanf(args, "%s", flag_str) != 1)
@@ -1479,15 +1480,16 @@ static dboolean console_TargetAddFlags(const char* command, const char* args) {
 
   flags = target->flags | deh_stringToMobjFlags(flag_str);
   flags2 = target->flags2 | deh_stringToMBF21MobjFlags(flag_str);
+  flags3 = target->flags3 | deh_stringToMBF24MobjFlags(flag_str);
 
-  console_SetMobjFlags(target, flags, flags2);
+  console_SetMobjFlags(target, flags, flags2, flags3);
 
   return true;
 }
 
 static dboolean console_TargetRemoveFlags(const char* command, const char* args) {
   mobj_t* target;
-  uint64_t flags, flags2;
+  uint64_t flags, flags2, flags3;
   char flag_str[CONSOLE_ENTRY_SIZE];
 
   if (sscanf(args, "%s", flag_str) != 1)
@@ -1500,15 +1502,16 @@ static dboolean console_TargetRemoveFlags(const char* command, const char* args)
 
   flags = target->flags & ~deh_stringToMobjFlags(flag_str);
   flags2 = target->flags2 & ~deh_stringToMBF21MobjFlags(flag_str);
+  flags3 = target->flags3 & ~deh_stringToMBF24MobjFlags(flag_str);
 
-  console_SetMobjFlags(target, flags, flags2);
+  console_SetMobjFlags(target, flags, flags2, flags3);
 
   return true;
 }
 
 static dboolean console_TargetSetFlags(const char* command, const char* args) {
   mobj_t* target;
-  uint64_t flags, flags2;
+  uint64_t flags, flags2, flags3;
   char flag_str[CONSOLE_ENTRY_SIZE];
 
   if (sscanf(args, "%s", flag_str) != 1)
@@ -1521,8 +1524,9 @@ static dboolean console_TargetSetFlags(const char* command, const char* args) {
 
   flags = deh_stringToMobjFlags(flag_str);
   flags2 = deh_stringToMBF21MobjFlags(flag_str);
+  flags3 = deh_stringToMBF24MobjFlags(flag_str);
 
-  console_SetMobjFlags(target, flags, flags2);
+  console_SetMobjFlags(target, flags, flags2, flags3);
 
   return true;
 }
@@ -1715,7 +1719,7 @@ static dboolean console_MobjActivateLine(const char* command, const char* args) 
 static dboolean console_MobjAddFlags(const char* command, const char* args) {
   int index;
   mobj_t* target;
-  uint64_t flags, flags2;
+  uint64_t flags, flags2, flags3;
   char flag_str[CONSOLE_ENTRY_SIZE];
 
   if (sscanf(args, "%d %s", &index, flag_str) != 2)
@@ -1728,8 +1732,9 @@ static dboolean console_MobjAddFlags(const char* command, const char* args) {
 
   flags = target->flags | deh_stringToMobjFlags(flag_str);
   flags2 = target->flags2 | deh_stringToMBF21MobjFlags(flag_str);
+  flags3 = target->flags3 | deh_stringToMBF24MobjFlags(flag_str);
 
-  console_SetMobjFlags(target, flags, flags2);
+  console_SetMobjFlags(target, flags, flags2, flags3);
 
   return true;
 }
@@ -1737,7 +1742,7 @@ static dboolean console_MobjAddFlags(const char* command, const char* args) {
 static dboolean console_MobjRemoveFlags(const char* command, const char* args) {
   int index;
   mobj_t* target;
-  uint64_t flags, flags2;
+  uint64_t flags, flags2, flags3;
   char flag_str[CONSOLE_ENTRY_SIZE];
 
   if (sscanf(args, "%d %s", &index, flag_str) != 2)
@@ -1750,8 +1755,9 @@ static dboolean console_MobjRemoveFlags(const char* command, const char* args) {
 
   flags = target->flags & ~deh_stringToMobjFlags(flag_str);
   flags2 = target->flags2 & ~deh_stringToMBF21MobjFlags(flag_str);
+  flags3 = target->flags3 & ~deh_stringToMBF24MobjFlags(flag_str);
 
-  console_SetMobjFlags(target, flags, flags2);
+  console_SetMobjFlags(target, flags, flags2, flags3);
 
   return true;
 }
@@ -1759,7 +1765,7 @@ static dboolean console_MobjRemoveFlags(const char* command, const char* args) {
 static dboolean console_MobjSetFlags(const char* command, const char* args) {
   int index;
   mobj_t* target;
-  uint64_t flags, flags2;
+  uint64_t flags, flags2, flags3;
   char flag_str[CONSOLE_ENTRY_SIZE];
 
   if (sscanf(args, "%d %s", &index, flag_str) != 2)
@@ -1772,8 +1778,9 @@ static dboolean console_MobjSetFlags(const char* command, const char* args) {
 
   flags = deh_stringToMobjFlags(flag_str);
   flags2 = deh_stringToMBF21MobjFlags(flag_str);
+  flags3 = deh_stringToMBF24MobjFlags(flag_str);
 
-  console_SetMobjFlags(target, flags, flags2);
+  console_SetMobjFlags(target, flags, flags2, flags3);
 
   return true;
 }
@@ -2198,6 +2205,7 @@ static dboolean console_MobjInfoAddFlags(const char* command, const char* args) 
 
   mobjinfo[type].flags |= deh_stringToMobjFlags(flag_str);
   mobjinfo[type].flags2 |= deh_stringToMBF21MobjFlags(flag_str);
+  mobjinfo[type].flags3 |= deh_stringToMBF24MobjFlags(flag_str);
 
   return true;
 }
@@ -2216,6 +2224,7 @@ static dboolean console_MobjInfoRemoveFlags(const char* command, const char* arg
 
   mobjinfo[type].flags &= ~deh_stringToMobjFlags(flag_str);
   mobjinfo[type].flags2 &= ~deh_stringToMBF21MobjFlags(flag_str);
+  mobjinfo[type].flags3 &= ~deh_stringToMBF24MobjFlags(flag_str);
 
   return true;
 }
@@ -2234,6 +2243,7 @@ static dboolean console_MobjInfoSetFlags(const char* command, const char* args) 
 
   mobjinfo[type].flags = deh_stringToMobjFlags(flag_str);
   mobjinfo[type].flags2 = deh_stringToMBF21MobjFlags(flag_str);
+  mobjinfo[type].flags3 = deh_stringToMBF24MobjFlags(flag_str);
 
   return true;
 }

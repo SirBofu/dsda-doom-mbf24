@@ -165,6 +165,14 @@ dboolean PIT_StompThing (mobj_t* thing)
       !(tmthing->flags2 & MF2_TELESTOMP))
     return false;
 
+  // MBF24 - if the thing getting telefragged has the ANTITELEFRAG flag, then reverse Stomp!
+  if (mbf24 && (thing->flags3 & MF3_ANTITELEFRAG))
+  {
+      P_DamageMobj(tmthing, thing, thing, 10000); // Reverse Stomp!
+
+      return true;
+  }
+
   P_DamageMobj (thing, tmthing, tmthing, 10000); // Stomp!
 
   return true;
@@ -1106,6 +1114,11 @@ static dboolean PIT_CheckThing(mobj_t *thing) // killough 3/26/98: make static
         thing->momx += tmthing->momx >> 2;
         thing->momy += tmthing->momy >> 2;
       }
+      if (mbf24 && (thing->flags3 & MF3_PUSHABLE && !(tmthing->flags3 & MF3_CANNOTPUSH))) // MBF24 implementation
+      {                   // Push thing
+        thing->momx += tmthing->momx >> 2;
+        thing->momy += tmthing->momy >> 2;
+      }
       numspechit = 0;
       return (true);
     }
@@ -1142,6 +1155,12 @@ static dboolean PIT_CheckThing(mobj_t *thing) // killough 3/26/98: make static
       thing->momx += tmthing->momx >> 2;
       thing->momy += tmthing->momy >> 2;
   }
+
+    if (thing->flags3 & MF3_PUSHABLE && !(tmthing->flags3 & MF3_CANNOTPUSH)) // MBF24 implementation
+    {                           // Push thing
+        thing->momx += tmthing->momx >> 2;
+        thing->momy += tmthing->momy >> 2;
+    }
 
   // check for special pickup
 
@@ -2514,7 +2533,10 @@ dboolean PTR_ShootTraverse (intercept_t* in)
     }
     else
     {
-      P_DamageMobj(th, shootthing, shootthing, la_damage);
+        if (!mbf24 || !(in->d.thing->flags3 & MF3_INVULNERABLE)) // MBF24: don't damage invulnerable objects
+        {
+            P_DamageMobj(th, shootthing, shootthing, la_damage);
+        }
     }
   }
 
@@ -3008,7 +3030,7 @@ dboolean PIT_ChangeSector (mobj_t* thing)
     }
     else
     {
-      if (!heretic) P_SetMobjState (thing, S_GIBS);
+      if (!heretic && !(mbf24 && (thing->flags3 & MF3_NOCRUSH))) P_SetMobjState (thing, S_GIBS);
 
       if (compatibility_level != doom_12_compatibility)
       {
@@ -3025,10 +3047,16 @@ dboolean PIT_ChangeSector (mobj_t* thing)
 
   if (thing->flags & MF_DROPPED)
   {
-    P_RemoveMobj (thing);
+      if (mbf24 && (thing->flags3 & MF3_NOCRUSH)) // MBF24: don't crush uncrushable dropped items
+      {
+          return true;
+      }
+      else {
+          P_RemoveMobj(thing);
 
-    // keep checking
-    return true;
+          // keep checking
+          return true;
+      }
   }
 
   /* killough 11/98: kill touchy things immediately */
@@ -3057,7 +3085,8 @@ dboolean PIT_ChangeSector (mobj_t* thing)
       !hexen ||
       (
         !(thing->flags & MF_NOBLOOD) &&
-        !(thing->flags2 & MF2_INVULNERABLE)
+        !(thing->flags2 & MF2_INVULNERABLE) &&
+        !(thing->flags3 & MF3_INVULNERABLE)
       )
     )
     {

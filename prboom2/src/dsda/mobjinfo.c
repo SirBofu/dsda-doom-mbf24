@@ -151,6 +151,7 @@ static mobjinfo_t zmt_mapspot_info = {
   .meleerange = MELEERANGE,
   .bloodcolor = 0,
   .visibility = VF_ZDOOM,
+  .flags3 = 0,
 };
 
 static mobjinfo_t zmt_mapspot_gravity_info = {
@@ -188,6 +189,7 @@ static mobjinfo_t zmt_mapspot_gravity_info = {
   .meleerange = MELEERANGE,
   .bloodcolor = 0,
   .visibility = VF_ZDOOM,
+  .flags3 = 0,
 };
 
 static mobjinfo_t zmt_teleportdest2_info = {
@@ -225,6 +227,7 @@ static mobjinfo_t zmt_teleportdest2_info = {
   .meleerange = MELEERANGE,
   .bloodcolor = 0,
   .visibility = VF_ZDOOM,
+  .flags3 = 0,
 };
 
 static mobjinfo_t zmt_teleportdest3_info = {
@@ -262,6 +265,7 @@ static mobjinfo_t zmt_teleportdest3_info = {
   .meleerange = MELEERANGE,
   .bloodcolor = 0,
   .visibility = VF_ZDOOM,
+  .flags3 = 0,
 };
 
 static mobjinfo_t zmt_ambient_sound = {
@@ -299,6 +303,7 @@ static mobjinfo_t zmt_ambient_sound = {
   .meleerange = MELEERANGE,
   .bloodcolor = 0,
   .visibility = VF_DOOM,
+  .flags3 = 0,
 };
 
 typedef struct {

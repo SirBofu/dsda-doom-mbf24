@@ -219,7 +219,7 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_default_complevel] = {
     "default_compatibility_level", dsda_config_default_complevel,
-    dsda_config_int, 0, mbf21_compatibility, { mbf21_compatibility }
+    dsda_config_int, 0, mbf24_compatibility, { mbf21_compatibility }
   },
   [dsda_config_default_skill] = {
     "default_skill", dsda_config_default_skill,

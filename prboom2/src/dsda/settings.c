@@ -86,6 +86,8 @@ static int dsda_WadCompatibilityLevel(void) {
         complvl = 11;
       else if (length == 5 && !strncasecmp("mbf21", data, 5))
         complvl = 21;
+      else if (length == 5 && !strncasecmp("mbf24", data, 5))
+        complvl = 24;
 
       lprintf(LO_INFO, "Detected COMPLVL lump: %i\n", complvl);
     }
