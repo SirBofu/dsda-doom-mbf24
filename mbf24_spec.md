@@ -21,8 +21,10 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
 
 ## Frames
 
-#### Updated DEHACKED Codepointers
+#### Updated DEHACKED Actor Codepointers
 - Additional optional "Args" fields have been added for additional params.
+
+##### Actor pointers
 
 - **A_AddFlags(flags, flags2, flags3)**
     - Adds the specified thing flags to the caller.
@@ -30,6 +32,8 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
         - `flags (int)`: Standard actor flag(s) to add
         - `flags2 (int)`: MBF21 actor flag(s) to add
         - `flags3 (int)`: MBF24 actor flag(s) to add
+    - Notes:
+        - If the current complevel is less than MBF24, then `flags3` is ignored. 
 
 - **A_RemoveFlags(flags, flags2, flags3)**
     - Removes the specified thing flags from the caller.
@@ -37,6 +41,8 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
         - `flags (int)`: Standard actor flag(s) to remove
         - `flags2 (int)`: MBF21 actor flag(s) to remove
         - `flags3 (int)`: MBF24 actor flag(s) to remove
+    - Notes:
+        - If the current complevel is less than MBF24, then `flags3` is ignored.
 
 - **A_JumpIfFlagsSet(state, flags, flags2, flags3)**
     - Jumps to a state if caller has the specified thing flags set.
@@ -47,10 +53,24 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
         - `flags3 (int)`: MBF24 actor flag(s) to check
     - Notes:
         - If multiple flags are specified in a field, jump will only occur if all the flags are set (e.g. AND comparison, not OR)
+        - If the current complevel is les than MBF24, then `flags3` is ignored.
+
+#### New DEHACKED Actor Codepointers
+
+#### Actor pointers
+
+- **A_JumpIfTargetHigher(state, distance, hilo)**
+  - Jumps to a state if caller's target's z position is closer than the specified vertical distance.
+  - Args:
+      - `state (uint)`: State to jump to.
+      - `distance (fixed)`: Vertical distance threshold, in map units.
+      - `hilo (uint)`: 0 = check distance in both directions; 1 = only check to make sure the target isn't higher than the target distance; 2 = only check to make sure the player isn't lower than the target distance.
+  - Notes:
+      - Name is very likely to change. 
 
 #### In-progress
 - Fix the disappearing SSG reloading bug.
-- Additional Thing Flags.
+- Additional Thing Flags, including a flag to have the thing be ignored by Autoaim as well as generic flags for logic gates.
 - Additional movement codepointers, such as A_Chase2 codepointer that doesn't perform attack checks for generic movement.
 - Parameterized version of A_SkullAttack that can be used for ground charging enemies.
 - Paramterized version of A_VileAttack.

@@ -1541,6 +1541,10 @@ static const deh_bexptr deh_bexptrs[] = // CPhipps - static const
   {A_RefireTo,            "A_RefireTo", 2},
   {A_GunFlashTo,          "A_GunFlashTo", 2},
 
+  // MBF24 codepointers
+
+  {A_JumpIfTargetHigher,  "A_JumpIfTargetHigher", 3},
+
   // This NULL entry must be the last in the list
   {NULL,              "A_NULL"},  // Ty 05/16/98
 };

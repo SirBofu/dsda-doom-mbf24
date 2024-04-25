@@ -142,6 +142,10 @@ void A_JumpIfFlagsSet(mobj_t *);
 void A_AddFlags(mobj_t *);
 void A_RemoveFlags(mobj_t *);
 
+// New MBF24 codepointerse
+
+void A_JumpIfTargetHigher(mobj_t *);
+
 // heretic
 
 void A_UnHideThing(mobj_t * actor);

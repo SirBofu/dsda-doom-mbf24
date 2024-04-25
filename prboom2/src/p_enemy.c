@@ -3586,10 +3586,19 @@ void A_JumpIfFlagsSet(mobj_t* actor)
   flags2 = actor->state->args[2];
   flags3 = actor->state->args[3];
 
-  if ((actor->flags & flags) == flags &&
+  if (mbf24)
+  {
+    if ((actor->flags & flags) == flags &&
       (actor->flags2 & flags2) == flags2 &&
-      (actor->flags3 & flags3))
-    P_SetMobjState(actor, state);
+      (actor->flags3 & flags3) == flags3)
+      P_SetMobjState(actor, state);
+  }
+  else
+  {
+    if ((actor->flags & flags) == flags &&
+      (actor->flags2 & flags2) == flags2)
+      P_SetMobjState(actor, state);
+  }
 }
 
 //
@@ -3612,7 +3621,7 @@ void A_AddFlags(mobj_t* actor)
 
   actor->flags  |= flags;
   actor->flags2 |= flags2;
-  actor->flags3 |= flags3;
+  if (mbf24) actor->flags3 |= flags3;
 }
 
 //
@@ -3634,10 +3643,50 @@ void A_RemoveFlags(mobj_t* actor)
 
   actor->flags  &= ~flags;
   actor->flags2 &= ~flags2;
-  actor->flags3 &= ~flags3;
+  if (mbf24) actor->flags3 &= ~flags3;
 }
 
+// MBF24
 
+//
+// A_JumpIfTargetHigher
+// Jumps to a state if caller's target's z position is closer than the specified distance.
+//   args[0]: State to jump to
+//   args[1]: Distance threshold
+//   args[2]: If 0, check in both directions from caller;
+//            If 1, only check that target's z position is lower than caller z + distance;
+//            If 2, only check that target's z position is higher than caller z - distance
+//
+void A_JumpIfTargetHigher(mobj_t* actor)
+{
+    int state, distance, hilo;
+
+    if (!mbf24 || !actor || !actor->target)
+        return;
+
+    state    = actor->state->args[0];
+    distance = actor->state->args[1];
+    hilo     = actor->state->args[2];
+
+    switch(hilo)
+    {
+      case 0: default:
+      {
+        if ((actor->target->z < (actor->z + distance)) && (actor->target->z > (actor->z - distance))) P_SetMobjState(actor, state);
+        break;
+      }
+      case 1:
+      {
+        if ((actor->target->z) < (actor->z + distance)) P_SetMobjState(actor, state);
+        break;
+      }
+      case 2:
+      {
+        if ((actor->target->z) > (actor->z - distance)) P_SetMobjState(actor, state);
+        break;
+      }
+  }
+}
 
 // heretic
 
