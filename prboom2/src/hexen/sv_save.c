@@ -381,6 +381,19 @@ static void StreamIn_mobj_t(mobj_t *str)
     // int flags2;
     str->flags2 = SV_ReadFlags();
 
+    // int flags3;
+    str->flags3 = SV_ReadFlags();
+
+    // int counter1;
+    // int counter2;
+    // int counter3;
+    // int counter4;
+
+    str->counter1 = SV_ReadLong();
+    str->counter2 = SV_ReadLong();
+    str->counter3 = SV_ReadLong();
+    str->counter4 = SV_ReadLong();
+
     // specialval_t special1;
     // specialval_t special2;
     // Read in special values: there are special cases to deal with with
@@ -515,6 +528,18 @@ static void StreamOut_mobj_t(mobj_t *str)
 
     // int flags2;
     SV_WriteFlags(str->flags2);
+
+    // int flags3;
+    SV_WriteFlags(str->flags3);
+
+    // int counter1;
+    // int counter2;
+    // int counter3;
+    // int counter4;
+    SV_WriteLong(str->counter1);
+    SV_WriteLong(str->counter2);
+    SV_WriteLong(str->counter3);
+    SV_WriteLong(str->counter4);
 
     // specialval_t special1;
     // specialval_t special2;

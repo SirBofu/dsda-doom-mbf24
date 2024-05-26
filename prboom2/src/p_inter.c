@@ -823,7 +823,10 @@ static void P_KillMobj(mobj_t *source, mobj_t *target)
   target->flags &= ~(MF_SHOOTABLE|MF_FLOAT|MF_SKULLFLY);
 
   if (target->type != MT_SKULL)
-    target->flags &= ~MF_NOGRAVITY;
+  {
+    if (!mbf24 || !(target->flags3 & MF3_DEADFLOAT))
+      target->flags &= ~MF_NOGRAVITY;
+  }
 
   target->flags |= MF_CORPSE|MF_DROPOFF;
   target->height >>= 2;
@@ -1262,6 +1265,7 @@ void P_DamageMobj(mobj_t *target,mobj_t *inflictor, mobj_t *source, int damage)
   if (target->flags & MF_SKULLFLY)
   {
     if (heretic && target->type == HERETIC_MT_MINOTAUR) return;
+    if (mbf24 && target->flags3 & MF3_UNSTOPPABLE) return;
     target->momx = target->momy = target->momz = 0;
   }
 
@@ -1466,7 +1470,7 @@ void P_DamageMobj(mobj_t *target,mobj_t *inflictor, mobj_t *source, int damage)
     fixed_t thrust = damage * (FRACUNIT >> 3) * g_thrust_factor / target->info->mass;
 
     // make fall forwards sometimes
-    if ( damage < 40 && damage > target->health
+    if ( damage < 40 && damage > target->health && (!mbf24 || !(target->flags3 & MF3_NODAMAGE))
          && target->z - inflictor->z > 64*FRACUNIT
          && P_Random(pr_damagemobj) & 1)
     {
@@ -1490,8 +1494,11 @@ void P_DamageMobj(mobj_t *target,mobj_t *inflictor, mobj_t *source, int damage)
     }
     else
     {
-      target->momx += FixedMul(thrust, finecosine[ang]);
-      target->momy += FixedMul(thrust, finesine[ang]);
+      if (!mbf24 || !(target->flags3 & MF3_DONTTHRUST))
+      {
+        target->momx += FixedMul(thrust, finecosine[ang]);
+        target->momy += FixedMul(thrust, finesine[ang]);
+      }
     }
 
     /* killough 11/98: thrust objects hanging off ledges */
@@ -1701,7 +1708,7 @@ void P_DamageMobj(mobj_t *target,mobj_t *inflictor, mobj_t *source, int damage)
 
   if (!(skill_info.flags & SI_NO_PAIN) &&
       P_Random(pr_painchance) < target->info->painchance &&
-      !(target->flags & MF_SKULLFLY)) //killough 11/98: see below
+      !(target->flags & MF_SKULLFLY) && (!mbf24 || !(target->flags3 & MF3_NOPAIN))) //killough 11/98: see below
   {
     if (hexen && inflictor && inflictor->type >= HEXEN_MT_LIGHTNING_FLOOR &&
                               inflictor->type <= HEXEN_MT_LIGHTNING_ZAP)

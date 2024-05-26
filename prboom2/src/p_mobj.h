@@ -411,6 +411,11 @@ typedef struct mobj_s
 
     // mbf24
     uint64_t flags3;            // MBF24 flags
+    int floatfactor;            // MBF24 FLOATBOB amount - this is defaulted to health
+    int counter1;               // MBF24 generic counter 1
+    int counter2;               // MBF24 generic counter 2
+    int counter3;               // MBF24 generic counter 3
+    int counter4;               // MBF24 generic counter 4
 
     // SEE WARNING ABOVE ABOUT POINTER FIELDS!!!
 } mobj_t;
@@ -530,6 +535,25 @@ void P_RemoveMonsters(void);
 #define MF3_PUSHABLE          0x00000004ull // mobj can be pushed
 #define MF3_CANNOTPUSH        0x00000008ull // mobj cannot push other objects
 #define MF3_ANTITELEFRAG      0x00000010ull // mobj plays an Uno Reverse when telefragged
+#define MF3_NEVERRESPAWN      0x00000020ull // thing doesn't respawn on Nightmare
+#define MF3_NOTAUTOAIMED      0x00000040ull // thing is ignored by autoaim
+#define MF3_ONLYSLAMSOLID     0x00000080ull // charging thing doesn't stop because of non-solid objects
+#define MF3_KEEPCHARGETARGET  0x00000100ull // charging thing doesn't lose its target after collision
+#define MF3_NOINFIGHTING      0x00000200ull // thing doesn't turn on other monsters
+#define MF3_DONTTHRUST        0x00000400ull // thing doesn't get moved by damage
+#define MF3_NOPAIN            0x00000800ull // thing does not enter its pain state
+#define MF3_FLOORHUGGER       0x00001000ull // missile moves along floor until it hits a solid wall
+#define MF3_STEPMISSILE       0x00002000ull // missile can climb up steps
+#define MF3_RESETONDEATH      0x00004000ull // reset counters on A_Fall
+#define MF3_NOBFGSPRAY        0x00008000ull // thing is ignored by spray attacks (such as A_BFGSpray)
+#define MF3_NOHITTHRUST       0x00010000ull // thing does not cause thrust when it directly damages another thing
+#define MF3_UNSTOPPABLE       0x00020000ull // charging thing does not get interrupted when damaged
+#define MF3_FLOATBOB          0x00040000ull // use float bobbing z movement
+#define MF3_DEADFLOAT         0x00080000ull // thing doesn't drop when killed
+#define MF3_GENERIC1          0x00100000ull // generic flag 1
+#define MF3_GENERIC2          0x00200000ull // generic flag 2
+#define MF3_GENERIC3          0x00400000ull // generic flag 3
+#define MF3_GENERIC4          0x00800000ull // generic flag 4
 
 #define AMMO_GWND_WIMPY 10
 #define AMMO_GWND_HEFTY 50

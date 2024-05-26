@@ -1174,11 +1174,22 @@ void A_BFGSpray(mobj_t *mo)
 
       // mo->target is the originator (player) of the missile
 
-      // killough 8/2/98: make autoaiming prefer enemies
-      if (!mbf_features ||
-         (P_AimLineAttack(mo->target, an, 16*64*FRACUNIT, MF_FRIEND),
-         !linetarget))
-        P_AimLineAttack(mo->target, an, 16*64*FRACUNIT, 0);
+      // MBF24: use P_AimSprayAttack instead of P_AimLineAttack
+      if (mbf24)
+      {
+        if (!mbf_features ||
+          (P_AimSprayAttack(mo->target, an, 16*64*FRACUNIT, MF_FRIEND),
+          !linetarget))
+         P_AimSprayAttack(mo->target, an, 16*64*FRACUNIT, 0);
+      }
+      else
+      {
+        // killough 8/2/98: make autoaiming prefer enemies
+        if (!mbf_features ||
+          (P_AimLineAttack(mo->target, an, 16*64*FRACUNIT, MF_FRIEND),
+          !linetarget))
+         P_AimLineAttack(mo->target, an, 16*64*FRACUNIT, 0);
+      }
 
       if (!linetarget)
         continue;
