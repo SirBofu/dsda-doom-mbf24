@@ -1283,6 +1283,25 @@ static const struct deh_flag_s deh_mobjflags_mbf24[] = {
   {"PUSHABLE",        MF3_PUSHABLE}, // can be pushed by other things
   {"CANNOTPUSH",      MF3_CANNOTPUSH}, // cannot push pushable things
   {"ANTITELEFRAG",    MF3_ANTITELEFRAG}, // objects that would telefrag this thing are telefragged instead
+  {"NEVERRESPAWN",    MF3_NEVERRESPAWN}, // thing doesn't respawn on Nightmare
+  {"NOTAUTOAIMED",    MF3_NOTAUTOAIMED}, // thing is ignored by autoaim
+  {"ONLYSLAMSOLID",   MF3_ONLYSLAMSOLID}, // charging thing doesn't stop because of non-solid objects
+  {"KEEPCHARGETARGET",MF3_KEEPCHARGETARGET}, // charging thing doesn't lose its target after collision
+  {"NOINFIGHTING",    MF3_NOINFIGHTING}, // thing doesn't turn on other monsters
+  {"DONTTHRUST",      MF3_DONTTHRUST}, // thing doesn't get moved by damage
+  {"NOPAIN",          MF3_NOPAIN}, // thing does not enter its pain state
+  {"FLOORHUGGER",     MF3_FLOORHUGGER}, // missile moves along floor until it hits a solid wall
+  {"STEPMISSILE",     MF3_STEPMISSILE}, // missile can climb up steps
+  {"RESETONDEATH",    MF3_RESETONDEATH}, // reset counters on A_Fall
+  {"NOBFGSPRAY",      MF3_NOBFGSPRAY}, // thing is ignored by spray attacks (such as A_BFGSpray)
+  {"NOHITTHRUST",     MF3_NOHITTHRUST}, // thing does not cause thrust when it directly damages another thing
+  {"UNSTOPPABLE",     MF3_UNSTOPPABLE}, // charging thing does not get interrupted when damaged
+  {"FLOATBOB",        MF3_FLOATBOB}, // use float bobbing z movement
+  {"DEADFLOAT",       MF3_DEADFLOAT}, // thing doesn't drop when killed
+  {"GENERIC1",        MF3_GENERIC1}, // generic flag 1
+  {"GENERIC2",        MF3_GENERIC2}, // generic flag 2
+  {"GENERIC3",        MF3_GENERIC3}, // generic flag 3
+  {"GENERIC4",        MF3_GENERIC4},
   { NULL }
 };
 

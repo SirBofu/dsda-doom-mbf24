@@ -2468,6 +2468,14 @@ void A_Fall(mobj_t *actor)
 {
   // actor is on ground, it can be walked over
   actor->flags &= ~MF_SOLID;
+  // MBF24 - reset counters
+  if(mbf24 && actor->flags3 & MF3_RESETONDEATH)
+  {
+    actor->counter1 = 0;
+    actor->counter2 = 0;
+    actor->counter3 = 0;
+    actor->counter4 = 0;
+  }
 }
 
 //

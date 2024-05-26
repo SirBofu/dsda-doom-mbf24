@@ -262,7 +262,7 @@ static void P_XYMovement (mobj_t* mo)
       mo->flags &= ~MF_SKULLFLY;
       mo->momz = 0;
 
-      if (raven)
+      if (raven || (mbf24 && mo->flags3 & MF3_KEEPCHARGETARGET))
         new_state = mo->info->seestate;
       else
         new_state = mo->info->spawnstate;
@@ -1290,6 +1290,10 @@ void P_MobjThinker (mobj_t* mobj)
       mobj->z = mobj->floorz +
                 (hexen ? mobj->special1.i : 0) + FloatBobOffsets[(mobj->health++) & 63];
   }
+  else if (mbf24 && mobj->flags3 & MF3_FLOATBOB && !(mobj->flags & MF_NOGRAVITY))
+  {
+    mobj->z = mobj->floorz + (mbf24 ? mobj->special1.i : 0) + FloatBobOffsets[(mobj->floatfactor++) & 63];
+  }
   else if (mobj->z != mobj->floorz || mobj->momz || BlockingMobj)
   {
     if (mobj->flags2 & MF2_PASSMOBJ)
@@ -1422,6 +1426,9 @@ void P_MobjThinker (mobj_t* mobj)
   else
   {
     // check for nightmare respawn
+
+    if (mbf24 && mobj->flags3 & MF3_NEVERRESPAWN)
+      return;
 
     if (! (mobj->flags & MF_COUNTKILL) )
       return;
@@ -1775,6 +1782,10 @@ mobj_t* P_SpawnMobj(fixed_t x,fixed_t y,fixed_t z,mobjtype_t type)
   else if (hexen && mobj->flags2 & MF2_FLOATBOB)
   {
     mobj->z = mobj->floorz + z;     // artifact z passed in as height
+  }
+  else if (mbf24 && mobj->flags3 & MF3_FLOATBOB)
+  {
+    mobj->z = mobj->floorz + z;
   }
   else
   {
@@ -2561,6 +2572,8 @@ spawnit:
     z = FLOATRANDZ;
   else if (hexen && mobjinfo[i].flags2 & MF2_FLOATBOB)
     z = mthing->height;
+  else if (mbf24 && mobjinfo[i].flags3 & MF3_FLOATBOB)
+    z = mthing->height;
   else
     z = ONFLOORZ;
 
@@ -2633,6 +2646,11 @@ spawnit:
   {                           // Seed random starting index for bobbing motion
     mobj->health = P_Random(pr_heretic);
     if (hexen) mobj->special1.i = mthing->height;
+  }
+  if (mobj->flags3 & MF3_FLOATBOB)
+  {
+    mobj->floatfactor = P_Random(pr_mbf21);
+    if (mbf24) mobj->special1.i = mthing->height;
   }
 
   if (mobj->tics > 0)

@@ -216,7 +216,7 @@ dboolean EV_ThingSpawn(byte * args, dboolean fog)
     angle = (int) args[2] << 24;
     while ((mobj = P_FindMobjFromTID(tid, &searcher)) != NULL)
     {
-        if (mobjinfo[moType].flags2 & MF2_FLOATBOB)
+        if (mobjinfo[moType].flags2 & MF2_FLOATBOB || (mbf24 && mobjinfo[moType].flags3 & MF3_FLOATBOB))
         {
             z = mobj->z - mobj->floorz;
         }
@@ -239,7 +239,7 @@ dboolean EV_ThingSpawn(byte * args, dboolean fog)
                 S_StartMobjSound(fogMobj, hexen_sfx_teleport);
             }
             newMobj->flags |= MF_DROPPED;     // Don't respawn
-            if (newMobj->flags2 & MF2_FLOATBOB)
+            if (newMobj->flags2 & MF2_FLOATBOB || (mbf24 && newMobj->flags3 & MF3_FLOATBOB))
             {
                 newMobj->special1.i = newMobj->z - newMobj->floorz;
             }

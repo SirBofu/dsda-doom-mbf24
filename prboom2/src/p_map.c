@@ -797,8 +797,9 @@ static dboolean PIT_CheckThing(mobj_t *thing) // killough 3/26/98: make static
   }
 
   // check for skulls slamming into things
+  // In MBF24, skip this if the thing being charged isn't solid and the thing charging only slams into solid things
 
-  if (tmthing->flags & MF_SKULLFLY)
+  if (tmthing->flags & MF_SKULLFLY && (!mbf24 || !(tmthing->flags3 & MF3_ONLYSLAMSOLID) || (tmthing->flags3 & MF3_ONLYSLAMSOLID && thing->flags & MF_SOLID)))
   {
     // A flying skull is smacking something.
     // Determine damage amount, and the skull comes to a dead stop.
@@ -879,7 +880,7 @@ static dboolean PIT_CheckThing(mobj_t *thing) // killough 3/26/98: make static
     tmthing->flags &= ~MF_SKULLFLY;
     tmthing->momx = tmthing->momy = tmthing->momz = 0;
 
-    if (raven)
+    if (raven || (mbf24 && tmthing->flags3 & MF3_KEEPCHARGETARGET))
       new_state = tmthing->info->seestate;
     else
       new_state = tmthing->info->spawnstate;
@@ -2295,6 +2296,11 @@ dboolean PTR_AimTraverse (intercept_t* in)
   if (th->flags & shootthing->flags & aim_flags_mask && !th->player)
     return true;
 
+  // MBF24: player shouldn't autoaim at things with MF3_NOTAUTOAIMED
+
+  if(mbf24 && th->flags3 & MF3_NOTAUTOAIMED)
+    return true;
+
   // check angles to see if the thing can be aimed at
 
   dist = FixedMul (attackrange, in->frac);
@@ -2320,6 +2326,118 @@ dboolean PTR_AimTraverse (intercept_t* in)
   linetarget = th;
 
   return false;   // don't go any farther
+}
+
+//
+// PTR_SprayTraverse
+// Sets linetaget and aimslope when a target is aimed at.
+// Specifically for Spray-type attacks.
+//
+dboolean PTR_SprayTraverse (intercept_t* in)
+{
+    line_t* li;
+    mobj_t* th;
+    fixed_t slope;
+    fixed_t thingtopslope;
+    fixed_t thingbottomslope;
+    fixed_t dist;
+
+    if (in->isaline)
+    {
+        li = in->d.line;
+
+        if ( !(li->flags & (ML_TWOSIDED | ML_BLOCKEVERYTHING)) )
+            return false;   // stop
+
+        // Crosses a two sided line.
+        // A two sided line will restrict
+        // the possible target ranges.
+
+        P_LineOpening (li, NULL);
+
+        if (line_opening.bottom >= line_opening.top)
+            return false;   // stop
+
+        dist = FixedMul (attackrange, in->frac);
+
+        // e6y: emulation of missed back side on two-sided lines.
+        // backsector can be NULL if overrun_missedbackside_emulate is 1
+        if (!li->backsector || li->frontsector->floorheight != li->backsector->floorheight)
+        {
+            slope = FixedDiv (line_opening.bottom - shootz , dist);
+            if (slope > bottomslope)
+                bottomslope = slope;
+        }
+
+        // e6y: emulation of missed back side on two-sided lines.
+        if (!li->backsector || li->frontsector->ceilingheight != li->backsector->ceilingheight)
+        {
+            slope = FixedDiv (line_opening.top - shootz , dist);
+            if (slope < topslope)
+                topslope = slope;
+        }
+
+        if (topslope <= bottomslope)
+            return false;   // stop
+
+        return true;    // shot continues
+    }
+
+    // shoot a thing
+
+    th = in->d.thing;
+    if (th == shootthing)
+        return true;    // can't shoot self
+
+    if (!(th->flags&MF_SHOOTABLE))
+        return true;    // corpse or something
+
+    if (heretic && th->type == HERETIC_MT_POD)
+        return true;    // Can't auto-aim at pods
+
+    if (hexen && th->player && netgame && !deathmatch)
+    {                           // don't aim at fellow co-op players
+        return true;
+    }
+
+    /* killough 7/19/98, 8/2/98:
+     * friends don't aim at friends (except players), at least not first
+     */
+    if (th->flags & shootthing->flags & aim_flags_mask && !th->player)
+        return true;
+
+    // MBF24: player shouldn't autoaim at things with MF3_NOTAUTOAIMED
+    // Since A_BFGSpray and eventual generic spray attacks reuse autoaim
+    // code, we must
+
+    if(mbf24 && th->flags3 & MF3_NOBFGSPRAY)
+        return true;
+
+    // check angles to see if the thing can be aimed at
+
+    dist = FixedMul (attackrange, in->frac);
+    thingtopslope = FixedDiv (th->z+th->height - shootz , dist);
+
+    if (thingtopslope < bottomslope)
+        return true;    // shot over the thing
+
+    thingbottomslope = FixedDiv (th->z - shootz, dist);
+
+    if (thingbottomslope > topslope)
+        return true;    // shot under the thing
+
+    // this thing can be hit!
+
+    if (thingtopslope > topslope)
+        thingtopslope = topslope;
+
+    if (thingbottomslope < bottomslope)
+        thingbottomslope = bottomslope;
+
+    aimslope = (thingtopslope+thingbottomslope)/2;
+    linetarget = th;
+
+    return false;   // don't go any farther
 }
 
 // heretic
@@ -2576,6 +2694,43 @@ fixed_t P_AimLineAttack(mobj_t* t1,angle_t angle,fixed_t distance, uint64_t mask
     return aimslope;
 
   return 0;
+}
+
+//
+// P_AimSprayAttack
+// Used in MBF24 to allow MF3_NOTAUTOAIMED and MF3_NOBFGSPRAY to coexist
+//
+fixed_t P_AimSprayAttack(mobj_t* t1,angle_t angle,fixed_t distance, uint64_t mask)
+{
+    fixed_t x2;
+    fixed_t y2;
+
+    t1 = P_SubstNullMobj(t1);
+
+    angle >>= ANGLETOFINESHIFT;
+    shootthing = t1;
+
+    x2 = t1->x + (distance>>FRACBITS)*finecosine[angle];
+    y2 = t1->y + (distance>>FRACBITS)*finesine[angle];
+    shootz = t1->z + (t1->height>>1) + 8*FRACUNIT;
+
+    // can't shoot outside view angles
+
+    topslope = 100*FRACUNIT/160;
+    bottomslope = -100*FRACUNIT/160;
+
+    attackrange = distance;
+    linetarget = NULL;
+
+    /* killough 8/2/98: prevent friends from aiming at friends */
+    aim_flags_mask = mask;
+
+    P_PathTraverse(t1->x,t1->y,x2,y2,PT_ADDLINES|PT_ADDTHINGS,PTR_SprayTraverse);
+
+    if (linetarget)
+        return aimslope;
+
+    return 0;
 }
 
 
