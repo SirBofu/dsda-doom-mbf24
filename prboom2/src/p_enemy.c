@@ -3725,6 +3725,204 @@ void A_JumpIfTargetHigher(mobj_t* actor)
   }
 }
 
+//
+// A_CleanupCounter
+// Ensures that counters are set no higher than the max of 100 and no lower than the min of 0.
+//
+void A_CleanupCounter(mobj_t* actor)
+{
+  if (actor->counter1 < 0)
+    actor->counter1 = 0;
+  if (actor->counter1 > 100)
+    actor->counter1 = 100;
+  if (actor->counter2 < 0)
+    actor->counter2 = 0;
+  if (actor->counter2 > 100)
+    actor->counter2 = 100;
+  if (actor->counter3 < 0)
+    actor->counter3 = 0;
+  if (actor->counter3 > 100)
+    actor->counter3 = 100;
+  if (actor->counter4 < 0)
+    actor->counter4 = 0;
+  if (actor->counter4 > 100)
+    actor->counter4 = 100;
+}
+
+//
+// A_SetCounter
+// Sets the specified counter to the specified value.
+//   args[0]: counter to change
+//     0: all counters
+//     1: counter1
+//     2: counter2
+//     3: counter3
+//     4: counter4
+//   args[1]: value to set
+//
+void A_SetCounter(mobj_t* actor)
+{
+    int counternum, value;
+
+    if (!mbf24 || !actor)
+        return;
+
+    counternum = actor->state->args[0];
+    value      = actor->state->args[1];
+
+    switch (counternum)
+    {
+        case 1:
+            actor->counter1 = value;
+            break;
+        case 2:
+            actor->counter2 = value;
+            break;
+        case 3:
+            actor->counter3 = value;
+            break;
+        case 4:
+            actor->counter4 = value;
+            break;
+        default:
+            actor->counter1 = value;
+            actor->counter2 = value;
+            actor->counter3 = value;
+            actor->counter4 = value;
+            break;
+    }
+
+    A_CleanupCounter(actor);
+}
+
+//
+// A_AddCounter
+// Adds the specified value to the specified counter.
+//   args[0]: counter to change
+//     0: all counters
+//     1: counter1
+//     2: counter2
+//     3: counter3
+//     4: counter4
+//   args[1]: value to set
+//
+void A_AddCounter(mobj_t* actor)
+{
+    int counternum, value;
+
+    if (!mbf24 || !actor)
+        return;
+
+    counternum = actor->state->args[0];
+    value      = actor->state->args[1];
+
+    switch (counternum)
+    {
+        case 1:
+            actor->counter1 = actor->counter1+value;
+            break;
+        case 2:
+            actor->counter2 = actor->counter2+value;
+            break;
+        case 3:
+            actor->counter3 = actor->counter3+value;
+            break;
+        case 4:
+            actor->counter4 = actor->counter4+value;
+            break;
+        default:
+            actor->counter1 = actor->counter1+value;
+            actor->counter2 = actor->counter2+value;
+            actor->counter3 = actor->counter3+value;
+            actor->counter4 = actor->counter4+value;
+            break;
+    }
+
+    A_CleanupCounter(actor);
+}
+
+//
+// A_JumpIfCounterEquals
+// Jumps to a state if caller's specified counter is equal to specified value
+//   args[0]: State to jump to
+//   args[1]: Counter to check (1-4)
+//   args[2]: Value to look for
+//
+void A_JumpIfCounterEquals(mobj_t* actor)
+{
+    int state, counternum, value;
+
+    if (!mbf24 || !actor)
+        return;
+
+    state  = actor->state->args[0];
+    counternum  = actor->state->args[1];
+    value = actor->state->args[2];
+
+    switch (counternum)
+    {
+        case 1:
+        if (actor->counter1 == value)
+            P_SetMobjState(actor, state);
+            break;
+        case 2:
+        if (actor->counter2 == value)
+            P_SetMobjState(actor, state);
+            break;
+        case 3:
+        if (actor->counter3 == value)
+            P_SetMobjState(actor, state);
+            break;
+        case 4:
+        if (actor->counter4 == value)
+            P_SetMobjState(actor, state);
+            break;
+        default:
+          break;
+    }
+}
+
+//
+// A_JumpIfCounterGreater
+// Jumps to a state if caller's specified counter is greater than specified value
+//   args[0]: State to jump to
+//   args[1]: Counter to check (1-4)
+//   args[2]: Value to look for
+//
+void A_JumpIfCounterGreater(mobj_t* actor)
+{
+    int state, counternum, value;
+
+    if (!mbf24 || !actor)
+        return;
+
+    state  = actor->state->args[0];
+    counternum  = actor->state->args[1];
+    value = actor->state->args[2];
+
+    switch (counternum)
+    {
+        case 1:
+            if (actor->counter1 > value)
+                P_SetMobjState(actor, state);
+            break;
+        case 2:
+            if (actor->counter2 > value)
+                P_SetMobjState(actor, state);
+            break;
+        case 3:
+            if (actor->counter3 > value)
+                P_SetMobjState(actor, state);
+            break;
+        case 4:
+            if (actor->counter4 > value)
+                P_SetMobjState(actor, state);
+            break;
+        default:
+            break;
+    }
+}
+
 // heretic
 
 #include "heretic/def.h"

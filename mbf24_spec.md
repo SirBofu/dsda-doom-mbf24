@@ -93,6 +93,37 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
   - Notes:
       - Name is very likely to change. 
 
+- **A_SetCounter(counternum, value)**
+  - Sets the caller's specified counter to a specific value.
+  - Args:
+    - `counternum (int)`: Counter to alter (1-4). If any other value, sets all four counters.
+    - `value (int)`: Value to set counter to.
+  - Notes: 
+    - Note that values below 0 or above 100 will result in the counter being adjusted to the minimum of 0 or the maximum of 100 respectively.
+
+- **A_AddCounter(counternum, value)**
+    - Adds the specified value to the caller's specified counter.
+    - Args:
+        - `counternum (int)`: Counter to alter (1-4). If any other value, adds to all four counters.
+        - `value (int)`: Value to set counter to.
+    - Notes:
+        - Negative values are accepted.
+        - Note that values below 0 or above 100 will result in the counter being adjusted to the minimum of 0 or the maximum of 100 respectively.
+
+- **A_JumpIfCounterEquals(state, counternum, value)**
+    - Jumps to a state if caller's specified counter is equal to the specified value.
+    - Args:
+        - `state (uint)`: State to jump to.
+        - `counternum (int)`: Counter to compare.
+        - `value (int)`: Value for the counter to equal in order to jump.
+ 
+- **A_JumpIfCounterGreater(state, counternum, value)**
+    - Jumps to a state if caller's specified counter is greater than the specified value.
+    - Args:
+        - `state (uint)`: State to jump to.
+        - `counternum (int)`: Counter to compare.
+        - `value (int)`: Value for the counter to be greater than in order to jump.
+    
 #### In-progress/To-Do
 - Fix the disappearing SSG reloading bug.
 - Improve handling of FLOATBOB with floating monsters.

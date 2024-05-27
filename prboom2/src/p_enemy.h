@@ -145,6 +145,10 @@ void A_RemoveFlags(mobj_t *);
 // New MBF24 codepointerse
 
 void A_JumpIfTargetHigher(mobj_t *);
+void A_SetCounter(mobj_t *);
+void A_AddCounter(mobj_t *);
+void A_JumpIfCounterEquals(mobj_t *);
+void A_JumpIfCounterGreater(mobj_t *);
 
 // heretic
 
