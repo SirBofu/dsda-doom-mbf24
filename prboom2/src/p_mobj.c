@@ -1290,7 +1290,7 @@ void P_MobjThinker (mobj_t* mobj)
       mobj->z = mobj->floorz +
                 (hexen ? mobj->special1.i : 0) + FloatBobOffsets[(mobj->health++) & 63];
   }
-  else if (mbf24 && mobj->flags3 & MF3_FLOATBOB && !(mobj->flags & MF_NOGRAVITY))
+  else if (mbf24 && mobj->flags3 & MF3_FLOATBOB)
   {
     mobj->z = mobj->floorz + (mbf24 ? mobj->special1.i : 0) + FloatBobOffsets[(mobj->floatfactor++) & 63];
   }
@@ -1779,13 +1779,9 @@ mobj_t* P_SpawnMobj(fixed_t x,fixed_t y,fixed_t z,mobjtype_t type)
       mobj->z = mobj->floorz;
     }
   }
-  else if (hexen && mobj->flags2 & MF2_FLOATBOB)
+  else if ((hexen && mobj->flags2 & MF2_FLOATBOB) || (mbf24 && mobj->flags3 & MF3_FLOATBOB))
   {
     mobj->z = mobj->floorz + z;     // artifact z passed in as height
-  }
-  else if (mbf24 && mobj->flags3 & MF3_FLOATBOB)
-  {
-    mobj->z = mobj->floorz + z;
   }
   else
   {
@@ -2570,9 +2566,7 @@ spawnit:
     z = ONCEILINGZ;
   else if (mobjinfo[i].flags2 & MF2_SPAWNFLOAT)
     z = FLOATRANDZ;
-  else if (hexen && mobjinfo[i].flags2 & MF2_FLOATBOB)
-    z = mthing->height;
-  else if (mbf24 && mobjinfo[i].flags3 & MF3_FLOATBOB)
+  else if ((hexen && mobjinfo[i].flags2 & MF2_FLOATBOB) || (mbf24 && mobjinfo[i].flags3 & MF3_FLOATBOB))
     z = mthing->height;
   else
     z = ONFLOORZ;
