@@ -28,7 +28,7 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
 | NOTAUTOAIMED     | 0x000040 | Thing is ignored by player autoaim                                                                                     |
 | ONLYSLAMSOLID    | 0x000080 | Charging thing doesn't stop when hitting non-solid objects                                                             |
 | KEEPCHARGETARGET | 0x000100 | Charging thing doesn't lose its target after collision                                                                 |
-| NOINFIGHTING     | 0x000200 | Thing doesn't retaliate against other monsters when damaged (to be implemented)                                        |
+| NOINFIGHTING     | 0x000200 | Thing doesn't retaliate against other monsters when damaged                                                            |
 | DONTTHRUST       | 0x000400 | Thing doesn't get moved by damage                                                                                      |
 | NOPAIN           | 0x000800 | Thing doesn't enter its pain state when damaged; can be used to temporarily prevent damage from interrupting attacks   |
 | FLOORHUGGER      | 0x001000 | Missile moves along floor until it hits a solid wall (to be implemented)                                               |

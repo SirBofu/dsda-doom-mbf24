@@ -1762,6 +1762,7 @@ void P_DamageMobj(mobj_t *target,mobj_t *inflictor, mobj_t *source, int damage)
 
   /* killough 9/9/98: cleaned up, made more consistent: */
   //e6y: Monsters could commit suicide in Doom v1.2 if they damaged themselves by exploding a barrel
+  // MBF24: Added support for MF3_NOINFIGHTING flag
   if (
     source &&
     (source != target || compatibility_level == doom_12_compatibility) &&
@@ -1778,6 +1779,7 @@ void P_DamageMobj(mobj_t *target,mobj_t *inflictor, mobj_t *source, int damage)
         (target->type == HEXEN_MT_CENTAURLEADER && source->type == HEXEN_MT_CENTAUR)
       )
     ) &&
+    !(mbf24 && target->flags3 & MF3_NOINFIGHTING) &&
     !P_InfightingImmune(target, source)
   )
   {
