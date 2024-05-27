@@ -14,13 +14,13 @@ In addition, there is a pushable office chair prop that is impervious to damage 
 [Thing Counter Test](https://www.dropbox.com/scl/fi/kbtqb60lufsfnyz2ar0s0/ThingCounterTest.wad?rlkey=ugu01l5p4hj9hmxupdjkgougf&st=y1hg5yrp&dl=0)
 In this WAD, zombiemen have been modified via new DEHACKED codepointers to use a simple incrementing counter and fire a different projectile based thereupon.
 After reaching the highest value, the counter resets to 0.
-0: Imp fireball
-1: Cacodemon fireball
-2: Lost Soul
-3: Revenant missile
-4: Arachnotron plasma
-5-6: Baron fireball
-7: Cyberdemon rocket
+- 0: Imp fireball
+- 1: Cacodemon fireball
+- 2: Lost Soul
+- 3: Revenant missile
+- 4: Arachnotron plasma
+- 5-6: Baron fireball
+- 7: Cyberdemon rocket
 
 [Noinfighting Flag Test](https://www.dropbox.com/scl/fi/hacr3hutcx0pfys1kaqu1/NoInfightingTest.wad?rlkey=y9fra0zqwhesluc5kg54oy06n&st=qa57b1oz&dl=0)
 In this WAD, Arachnotrons have been given the new `NOINFIGHTING` flag. Even if the player hasn't damaged them, they won't respond to damage from other
