@@ -1562,7 +1562,11 @@ static const deh_bexptr deh_bexptrs[] = // CPhipps - static const
 
   // MBF24 codepointers
 
-  {A_JumpIfTargetHigher,  "A_JumpIfTargetHigher", 3},
+  {A_JumpIfTargetHigher,   "A_JumpIfTargetHigher", 3},
+  {A_SetCounter,           "A_SetCounter", 2},
+  {A_AddCounter,           "A_AddCounter", 2},
+  {A_JumpIfCounterEquals,  "A_JumpIfCounterEquals", 3},
+  {A_JumpIfCounterGreater, "A_JumpIfCounterGreater", 4},
 
   // This NULL entry must be the last in the list
   {NULL,              "A_NULL"},  // Ty 05/16/98
