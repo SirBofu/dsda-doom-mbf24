@@ -1,74 +1,34 @@
-# dsda-doom-mbf24 v0.28.1
+# dsda-doom-mbf24 v0.27.5
 
 This is a heavily WIP, mostly proof of concept build of DSDA-Doom that focuses on building a new complevel, MBF24.
 Its implementation is pretty simple so far.
 
 Documentation of the MBF24 spec as envisioned in this build can be found in mbf24_spec.md.
 
-Original DSDA documentation below.
+Test WADs implementing the features so far:
 
-# dsda-doom v0.28.1
-This is a successor of prboom+ with many new features, including:
-- Heretic, Hexen, MBF21, Doom-in-Hexen, UDMF, and MAPINFO support
-- In-game console and scripting
-- Full controller support
-- Palette-based opengl renderer
-- Debugging features for testing
-- Strict mode for speedrunning
-- Various quality of life improvements
-- Advanced tools for TASing
-- Rewind
+[Antitelefrag/Nodamage/Pushable Flag Test](https://www.dropbox.com/scl/fi/0ew1sbdqjf93w87xqczo7/ThingFlagTest.wad?rlkey=vsr9cwgoeare93qbtfrn35ung&st=1ilxe0yg&dl=0)
+In this WAD, the Mancubus in the level is impervious to damage, and if the player attempts to teleport into it, they will be telefragged instantly.
+In addition, there is a pushable office chair prop that is impervious to damage but can be shot. Both have the `NODAMAGE` flag, while the chair has `PUSHABLE` and the Mancubus has `ANTITELEFRAG`.
 
-### Patch Notes
-- [v0.28](./patch_notes/v0.28.md)
-- [v0.27](./patch_notes/v0.27.md)
-- [v0.26](./patch_notes/v0.26.md)
+[Thing Counter Test](https://www.dropbox.com/scl/fi/kbtqb60lufsfnyz2ar0s0/ThingCounterTest.wad?rlkey=ugu01l5p4hj9hmxupdjkgougf&st=y1hg5yrp&dl=0)
+In this WAD, zombiemen have been modified via new DEHACKED codepointers to use a simple incrementing counter and fire a different projectile based thereupon.
+After reaching the highest value, the counter resets to 0.
+- 0: Imp fireball
+- 1: Cacodemon fireball
+- 2: Lost Soul
+- 3: Revenant missile
+- 4: Arachnotron plasma
+- 5-6: Baron fireball
+- 7: Cyberdemon rocket
 
-### Launcher
-There is a dedicated launcher for this port available [here](https://github.com/Pedro-Beirao/dsda-launcher) by PBeGood4.
+[Noinfighting Flag Test](https://www.dropbox.com/scl/fi/hacr3hutcx0pfys1kaqu1/NoInfightingTest.wad?rlkey=y9fra0zqwhesluc5kg54oy06n&st=qa57b1oz&dl=0)
+In this WAD, Arachnotrons have been given the new `NOINFIGHTING` flag. Even if the player hasn't damaged them, they won't respond to damage from other
+enemies (and are still immune to damage from other Arachnotrons), but will still respond to receiving damage from the player.
 
-### Doom-in-Hexen Support
-- [Full details](./docs/doom_in_hexen.md)
+[Floatbob Flag Test](https://www.dropbox.com/scl/fi/5b2n1dptx5jwa0vtynwr3/FloatBobTest.wad?rlkey=qzklrg7kbru7vsqecovrpszul&st=nzp11uyq&dl=0)
+In this simple WAD, the Soulsphere has been modified via DEHACKED and bobs similar to how Hexen powerups bob thanks to the addition of the `BOBFLOAT` flag.
 
-### UDMF Support
-- [Full details](./docs/udmf.md)
-
-### MAPINFO Support
-- [Full details](./docs/mapinfo.md)
-
-### Hexen Support
-- DSDA-Doom includes demo-compatible support for hexen.
-  - Use -iwad HEXEN.WAD (-file HEXDD.WAD for the expansion)
-    - Or drag wads onto the exe
-  - You can force hexen engine behaviour with `-hexen` (shouldn't be necessary)
-- Don't need to supply complevel (hexen is complevel 0 by necessity)
-- Known issues
-  - Setting the "Status Bar and Menu Appearance" option to "not adjusted" will have no effect for hexen (it will default instead to "Doom format")
-  - The "Apply multisampling" automap option is disabled for hexen
-  - Automap colors are not configurable for hexen
-  - Some of the more advanced features are not implemented for hexen yet, and using them may cause crashes or other odd behaviour.
-  - Some menus extend over the hud.
-  - Monster counter doesn't work as expected, due to cluster format (ex hud / levelstat)
-  - Hexen-style skies aren't implemented yet (layering, etc)
-  - The ALTSHADOW thing flag isn't affecting the rendering
-  - Dynamic fade palettes aren't being used
-  - The yellow message variant isn't implemented
-
-### Heretic Support
-- DSDA-Doom includes demo-compatible support for heretic (all the demos stored on dsda are in sync).
-- Heretic game logic should be set automatically if you use `HERETIC.WAD` as the iwad. If it doesn't work, please use the `-heretic` commandline option. This flips a switch in the engine that determines all the core game data.
-- Don't need to supply complevel (heretic is complevel 0 by necessity)
-- Known issues
-  - Setting the "Status Bar and Menu Appearance" option to "not adjusted" will have no effect for heretic (it will default instead to "Doom format").
-  - The "Apply multisampling" automap option is disabled for heretic.
-  - Automap colors are not configurable for heretic.
-  - Some of the more advanced features are not implemented for heretic yet, and using them may cause crashes or other odd behaviour.
-  - Dehacked support for heretic isn't implemented yet.
-  - Some menus extend over the hud.
-
-### Other Standards
-- [MBF21 v1.4](https://github.com/kraflab/mbf21)
-- [UMAPINFO v2.2](https://github.com/kraflab/umapinfo)
-
-### Credits
-- The DSDA-Doom icon was designed by Mal (129thVisplane). Thanks!
+[Deadfloat and Onlyslamsolid Flag Test](https://www.dropbox.com/scl/fi/0xt3ma73r2fp584krnle5/DeadFloatTest.wad?rlkey=l1cusdxz8r23fcq9cj2y76c1r&st=n3gwgfry&dl=0)
+In this WAD, Pain Elementals have been modified via DEHACKED to have the `DEADFLOAT` flag, which causes them to not fall when they are killed.
+In addition, Lost Souls have been given the `ONLYSLAMSOLID` flag, which prevents them from colliding with non-solid objects and being interrupted.
