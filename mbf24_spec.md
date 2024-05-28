@@ -123,6 +123,30 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
         - `state (uint)`: State to jump to.
         - `counternum (int)`: Counter to compare.
         - `value (int)`: Value for the counter to be greater than in order to jump.
+                
+- **A_LaunchTarget(thrust)**
+    - Launches caller's target upward vertically.
+    - Args:
+        - `thrust (int)`: Amount of vertical momentum to apply. Defaults to 1000 if not set, identical to an Archvile jump.
+
+- **A_SetHealth(sethealth)**
+    - Sets caller's health to the specified value. Has no effect if currently health is 0 or lower.
+    - Args:
+        - `sethealth (int)`: Amount to set health to.
+
+- **A_RegainHealth(healamount, maxheal)**
+    - Heals caller by a specified amount, up to a specified maximum.
+    - Args:
+        - `healamount (int)`: Amount of health to regain.
+        - `maxheal (int)`: Maximum amount of health to heal up to. If 0, uses the thing's spawnhealth instead.
+
+- **A_ChaseNoAttack(lowerreactiontime, lowerstepcount)**
+  - Makes the caller pursue their target similar to A_Chase, but does not perform checks for melee or ranged attacks.
+  - Args:
+    - `lowerreactiontime (int)`: If nonzero, movement counts toward the caller's reaction time.
+    - `lowerstepcount (int)`: If nonzero, movement counts toward the caller's step count between attacks. 
+
+                                                
     
 #### In-progress/To-Do
 - Fix the disappearing SSG reloading bug.
