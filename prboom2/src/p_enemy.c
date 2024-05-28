@@ -3894,6 +3894,245 @@ void A_JumpIfCounterGreater(mobj_t* actor)
     }
 }
 
+//
+// A_LaunchTarget
+// Launches the caller's target upward a specified distance.
+// Requires line of sight.
+//   args[0]: Amount of upward thrust to inflict; default is 1000 (Archvile jump)
+//
+void A_LaunchTarget(mobj_t *actor)
+{
+    int    thrust;
+
+    if (!mbf24)
+        return;
+
+    if (!actor->target)
+        return;
+
+    thrust = actor->state->args[0];
+
+    A_FaceTarget(actor);
+
+    if (!P_CheckSight(actor, actor->target))
+        return;
+
+    actor->target->momz = thrust*FRACUNIT/actor->target->info->mass;
+}
+
+//
+// A_SetHealth
+// Sets the caller's health to the specified value.
+// Has no effect on dead creatures.
+//   args[0]: Amount of health to set
+//
+void A_SetHealth(mobj_t *actor)
+{
+    int    sethealth;
+
+    sethealth = actor->state->args[0];
+
+    if (!mbf24)
+        return;
+
+    if (actor->health <= 0)
+        return;
+
+    actor->health = sethealth;
+}
+
+//
+// A_RegainHealth
+// Heals the caller by the specified amount.
+// Has no effect on dead creatures, and no healing will occur if the creature is already above the maximum.
+//   args[0]: Amount of health to restore
+//   args[1]: Maximum health to heal to; if 0, default to spawnhealth
+//
+void A_RegainHealth(mobj_t *actor)
+{
+    int healamount, maxheal;
+
+    healamount = actor->state->args[0];
+    maxheal = actor->state->args[1];
+
+    if (healamount == 0)
+      return;
+
+    if (maxheal == 0)
+      maxheal = actor->info->spawnhealth;
+
+    if (actor->health >= maxheal)
+      return;
+
+    if ((actor->health + healamount) > maxheal)
+      actor->health = maxheal;
+    else actor->health = actor->health + healamount;
+
+}
+
+//
+// A_ChaseNoAttack
+// Similar to A_Chase, but doesn't allow the creature to attack.
+//   args[0]: If 0, decreases reaction time as with A_Chase.
+//   args[1]: If 1, decreases step count for attack threshold as with A_Chase.
+//
+
+void A_ChaseNoAttack(mobj_t *actor)
+{
+    int lowerreactiontime, lowerstepcount;
+
+    if (!mbf24)
+    {
+      A_Chase(actor);
+      return;
+    }
+
+    lowerreactiontime = actor->state->args[0];
+    lowerstepcount = actor->state->args[1];
+
+    if (lowerreactiontime != 0 && actor->reactiontime)
+          actor->reactiontime--;
+
+    if (lowerstepcount != 0 && actor->threshold) { /* modify target threshold */
+        {
+            if (!actor->target || actor->target->health <= 0)
+                actor->threshold = 0;
+            else
+                actor->threshold--;
+        }
+    }
+
+    if (raven && skill_info.flags & SI_FAST_MONSTERS)
+    {                           // Monsters move faster in nightmare mode
+        actor->tics -= actor->tics / 2;
+        if (actor->tics < 3)
+        {
+            actor->tics = 3;
+        }
+    }
+
+    /* turn towards movement direction if not there yet
+     * killough 9/7/98: keep facing towards target if strafing or backing out
+     */
+
+    if (actor->strafecount)
+        A_FaceTarget(actor);
+    else if (actor->movedir < 8)
+    {
+        int delta = (actor->angle &= (7<<29)) - (actor->movedir << 29);
+        if (delta > 0)
+            actor->angle -= ANG90/2;
+        else
+        if (delta < 0)
+            actor->angle += ANG90/2;
+    }
+
+    if (!actor->target || !(actor->target->flags&MF_SHOOTABLE))
+    {
+        if (!P_LookForTargets(actor,true)) // look for a new target
+            P_SetMobjState(actor, actor->info->spawnstate); // no new target
+        return;
+    }
+
+    // do not attack twice in a row
+    if (actor->flags & MF_JUSTATTACKED)
+    {
+        actor->flags &= ~MF_JUSTATTACKED;
+        if (!(skill_info.flags & SI_FAST_MONSTERS))
+            P_NewChaseDir(actor);
+        return;
+    }
+
+    if (!actor->threshold) {
+        if (!mbf_features)
+        {   /* killough 9/9/98: for backward demo compatibility */
+            if (netgame && !P_CheckSight(actor, actor->target) &&
+                P_LookForPlayers(actor, true))
+                return;
+        }
+            /* killough 7/18/98, 9/9/98: new monster AI */
+        else if (help_friends && P_HelpFriend(actor))
+            return;      /* killough 9/8/98: Help friends in need */
+            /* Look for new targets if current one is bad or is out of view */
+        else if (actor->pursuecount)
+            actor->pursuecount--;
+        else {
+            /* Our pursuit time has expired. We're going to think about
+             * changing targets */
+            actor->pursuecount = BASETHRESHOLD;
+
+            // look for new target, unless conditions are met
+            if (
+                    !(
+                            actor->target &&                       // have a target
+                            actor->target->health > 0 &&           // and the target is alive
+                            (
+                                    (comp[comp_pursuit] && !netgame) ||  // and using old pursuit behaviour
+                                    (
+                                            (                                  // or the target is not friendly
+                                                    (actor->target->flags ^ actor->flags) & MF_FRIEND ||
+                                                    (!(actor->flags & MF_FRIEND) && monster_infighting)
+                                            ) &&
+                                            P_CheckSight(actor, actor->target) // and we can see it
+                                    )
+                            )
+                    ) &&
+                    P_LookForTargets(actor, true)
+                    )
+                return;
+
+            /* (Current target was good, or no new target was found.)
+             *
+             * If monster is a missile-less friend, give up pursuit and
+             * return to player, if no attacks have occurred recently.
+             */
+
+            if (!actor->info->missilestate && actor->flags & MF_FRIEND) {
+                if (actor->flags & MF_JUSTHIT)          /* if recent action, */
+                    actor->flags &= ~MF_JUSTHIT;          /* keep fighting */
+                else if (P_LookForPlayers(actor, true)) /* else return to player */
+                    return;
+            }
+        }
+    }
+
+    if (actor->strafecount)
+        actor->strafecount--;
+
+    // chase towards player
+    if (--actor->movecount < 0 || !P_SmartMove(actor))
+        P_NewChaseDir(actor);
+
+    // make active sound
+    if (actor->info->activesound && P_Random(pr_see) < 3)
+    {
+        if (heretic && actor->type == HERETIC_MT_WIZARD && P_Random(pr_heretic) < 128)
+        {
+            S_StartMobjSound(actor, actor->info->seesound);
+        }
+        else if (heretic && actor->type == HERETIC_MT_SORCERER2)
+        {
+            S_StartVoidSound(actor->info->activesound);
+        }
+        else if (hexen && actor->type == HEXEN_MT_BISHOP && P_Random(pr_hexen) < 128)
+        {
+            S_StartMobjSound(actor, actor->info->seesound);
+        }
+        else if (hexen && actor->type == HEXEN_MT_PIG)
+        {
+            S_StartMobjSound(actor, hexen_sfx_pig_active1 + (P_Random(pr_hexen) & 1));
+        }
+        else if (hexen && actor->flags2 & MF2_BOSS)
+        {
+            S_StartVoidSound(actor->info->activesound);
+        }
+        else
+        {
+            S_StartMobjSound(actor, actor->info->activesound);
+        }
+    }
+}
+
 // heretic
 
 #include "heretic/def.h"
