@@ -1298,10 +1298,11 @@ static const struct deh_flag_s deh_mobjflags_mbf24[] = {
   {"UNSTOPPABLE",     MF3_UNSTOPPABLE}, // charging thing does not get interrupted when damaged
   {"FLOATBOB",        MF3_FLOATBOB}, // use float bobbing z movement
   {"DEADFLOAT",       MF3_DEADFLOAT}, // thing doesn't drop when killed
+  {"TOUCHYTARGET",    MF3_TOUCHYTARGET}, // automatically targets living things that touch it
   {"GENERIC1",        MF3_GENERIC1}, // generic flag 1
   {"GENERIC2",        MF3_GENERIC2}, // generic flag 2
   {"GENERIC3",        MF3_GENERIC3}, // generic flag 3
-  {"GENERIC4",        MF3_GENERIC4},
+  {"GENERIC4",        MF3_GENERIC4}, // generic flag 4
   { NULL }
 };
 
@@ -1571,6 +1572,9 @@ static const deh_bexptr deh_bexptrs[] = // CPhipps - static const
   {A_SetHealth,            "A_SetHealth", 1},
   {A_RegainHealth,         "A_RegainHealth", 2},
   {A_ChaseNoAttack,        "A_ChaseNoAttack", 2},
+  {A_ClearTarget,          "A_ClearTarget", 0},
+
+  {A_WeaponRemove,         "A_WeaponRemove", 1},
 
   // This NULL entry must be the last in the list
   {NULL,              "A_NULL"},  // Ty 05/16/98

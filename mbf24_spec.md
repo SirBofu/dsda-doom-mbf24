@@ -144,9 +144,22 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
   - Makes the caller pursue their target similar to A_Chase, but does not perform checks for melee or ranged attacks.
   - Args:
     - `lowerreactiontime (int)`: If nonzero, movement counts toward the caller's reaction time.
-    - `lowerstepcount (int)`: If nonzero, movement counts toward the caller's step count between attacks. 
+    - `lowerstepcount (int)`: If nonzero, movement counts toward the caller's step count between attacks.
 
-                                                
+- **A_ClearTarget**
+  - Removes the caller's current target. Use with caution.
+  - No args.
+
+#### New DEHACKED Weapon Codepointers
+
+#### Weapon pointers
+
+- **A_WeaponRemove(removeammo)**
+  - Removes the current weapon from the player's inventory and switches to a different weapon.
+  - Args:
+    - `removeammo (int)`: If nonzero, also removes all ammunition of the weapon's ammo type.
+  - Notes:
+    - Does nothing if the calling weapon is the pistol or fist (or DEHACKED replacements). This may change in the future.                                                   
     
 #### In-progress/To-Do
 - Fix the disappearing SSG reloading bug.

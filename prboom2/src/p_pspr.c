@@ -1516,6 +1516,48 @@ void A_GunFlashTo(player_t *player, pspdef_t *psp)
   P_SetPsprite(player, ps_flash, psp->state->args[0]);
 }
 
+// MBF24
+
+//
+// A_WeaponRemove
+// Removes the calling weapon from the player's inventory.
+// Will not work on pistol or fist.
+//   args[0]: If nonzero, also removes all ammunition for the weapon's ammunition type
+//
+
+void A_WeaponRemove(player_t *player, pspdef_t *psp)
+{
+  CHECK_WEAPON_CODEPOINTER("A_WeaponRemove", player);
+
+  ammotype_t type;
+  dboolean noammotype;
+  weapontype_t oldweapon;
+
+  type = weaponinfo[player->readyweapon].ammo;
+  oldweapon = player->readyweapon;
+
+  if(!mbf24 || !psp->state)
+    return;
+
+  if(player->readyweapon == wp_fist || player->readyweapon == wp_pistol)
+    return;
+
+  if(!type || type == (am_noammo))
+    noammotype = true;
+
+  if(psp->state->args[0] != 0)
+  {
+    if (!noammotype)
+    {
+      player->ammo[type] = 0;
+    }
+  }
+
+  player->pendingweapon=P_SwitchWeaponMBF21(player);
+  player->weaponowned[oldweapon] = false;
+
+}
+
 //
 // P_SetupPsprites
 // Called at start of level for each player.

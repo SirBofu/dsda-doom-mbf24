@@ -142,7 +142,7 @@ void A_JumpIfFlagsSet(mobj_t *);
 void A_AddFlags(mobj_t *);
 void A_RemoveFlags(mobj_t *);
 
-// New MBF24 codepointerse
+// New MBF24 codepointers
 
 void A_JumpIfTargetHigher(mobj_t *);
 void A_SetCounter(mobj_t *);
@@ -153,6 +153,7 @@ void A_LaunchTarget(mobj_t *);
 void A_SetHealth(mobj_t *);
 void A_RegainHealth(mobj_t *);
 void A_ChaseNoAttack(mobj_t *);
+void A_ClearTarget(mobj_t *);
 
 // heretic
 

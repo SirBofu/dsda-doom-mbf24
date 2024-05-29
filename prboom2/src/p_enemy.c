@@ -484,6 +484,7 @@ static dboolean P_Move(mobj_t *actor, dboolean dropoff) /* killough 9/12/98 */
     {
       P_HitFloor(actor);
     }
+    if (!mbf24 || actor->momz <= 0 && (actor->z - actor->floorz) <= 24*FRACUNIT )
     actor->z = actor->floorz;
   }
 
@@ -4131,6 +4132,22 @@ void A_ChaseNoAttack(mobj_t *actor)
             S_StartMobjSound(actor, actor->info->activesound);
         }
     }
+}
+
+//
+// A_ClearTarget
+// Clears caller's current target. Use with care.
+//
+
+void A_ClearTarget(mobj_t *actor)
+{
+    if (!mbf24)
+        return;
+
+    if (!actor->target)
+        return;
+
+    actor->target = NULL;
 }
 
 // heretic

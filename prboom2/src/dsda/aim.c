@@ -22,6 +22,8 @@
 
 #include "aim.h"
 
+#include "doomstat.h" // MBF24
+
 angle_t dsda_PlayerPitch(player_t* player)
 {
   return dsda_FreeAim() ? player->mo->pitch : -(angle_t)(player->lookdir * ANG1 / M_PI);
@@ -84,5 +86,9 @@ void dsda_PlayerAim(mobj_t* source, angle_t angle, aim_t* aim, uint64_t target_m
     while (target_mask && (target_mask = 0, !linetarget));  // killough 8/2/98
 
     aim->z_offset = raven ? ((source->player->lookdir) << FRACBITS) / 173 : 0;
+    // MBF24: disable horizontal autoaim and always fire the projectile straight ahead;
+    // however, we will still allow horizontal autoaim targets to affect z-slope so that players can lead
+    // targets that are higher or lower than them.
+    if (mbf24) aim->angle = angle;
   }
 }
