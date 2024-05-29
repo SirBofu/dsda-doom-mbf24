@@ -89,7 +89,7 @@ void dsda_PlayerAim(mobj_t* source, angle_t angle, aim_t* aim, uint64_t target_m
     // MBF24: disable horizontal autoaim and always fire the projectile straight ahead;
     // however, we will still allow horizontal autoaim targets to affect z-slope so that players can lead
     // targets that are higher or lower than them.
-    if (comp_nohorizontalautoaim) aim->angle = angle;
+    if (comp[comp_nohorizontalautoaim]) aim->angle = angle;
   }
 }
 
