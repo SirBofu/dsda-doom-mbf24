@@ -136,6 +136,10 @@ void A_CheckAmmo();
 void A_RefireTo();
 void A_GunFlashTo();
 
+// MBF24
+
+void A_WeaponRemove();
+
 // heretic
 
 #include "p_mobj.h"

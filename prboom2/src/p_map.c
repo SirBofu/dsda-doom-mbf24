@@ -716,7 +716,7 @@ static dboolean PIT_CheckThing(mobj_t *thing) // killough 3/26/98: make static
   int damage;
 
   // killough 11/98: add touchy things
-  if (!(thing->flags & (MF_SOLID|MF_SPECIAL|MF_SHOOTABLE|MF_TOUCHY)))
+  if (!(thing->flags & (MF_SOLID|MF_SPECIAL|MF_SHOOTABLE|MF_TOUCHY) || thing->flags3 & MF3_TOUCHYTARGET))
     return true;
 
   blockdist = thing->radius + tmthing->radius;
@@ -762,6 +762,20 @@ static dboolean PIT_CheckThing(mobj_t *thing) // killough 3/26/98: make static
       P_DamageMobj(thing, NULL, NULL, thing->health);  // kill object
       return true;
     }
+
+  // MBF24 - TOUCHYTARGET flag, for things like jumppads that need to have a target
+  // set in order for a codepointer to successfully execute.
+
+  if (mbf24 && thing->flags3 & MF3_TOUCHYTARGET &&
+      tmthing->flags & MF_SOLID &&
+      thing->health > 0 &&
+      thing->type != tmthing->type &&
+      thing->z + thing->height >= tmthing->z &&
+      tmthing->z + tmthing->height >= thing->z)
+  {
+    thing->target = tmthing;
+    return true;
+  }
 
   if (tmthing->flags2 & MF2_PASSMOBJ)
   {                           // check if a mobj passed over/under another object
