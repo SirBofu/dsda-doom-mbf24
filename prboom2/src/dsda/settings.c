@@ -102,7 +102,7 @@ int dsda_CompatibilityLevel(void) {
 
   if (raven) return doom_12_compatibility;
 
-  if (map_format.zdoom) return mbf21_compatibility;
+  if (map_format.zdoom) return mbf24_compatibility; // formerly mbf21_compatibility
 
   complevel_arg = dsda_Arg(dsda_arg_complevel);
 
