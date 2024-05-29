@@ -795,7 +795,7 @@ void dsda_ApplyDSDADemoFormat(byte** demo_p) {
   if (map_format.zdoom)
   {
     if (!mbf21)
-      I_Error("You must use complevel 21 when recording in advanced formats.");
+      I_Error("You must use complevel 21 or higher when recording in advanced formats.");
 
     use_dsda_format = true;
   }

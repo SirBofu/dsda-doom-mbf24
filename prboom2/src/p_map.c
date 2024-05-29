@@ -714,7 +714,7 @@ static dboolean PIT_CheckThing(mobj_t *thing) // killough 3/26/98: make static
   int damage;
 
   // killough 11/98: add touchy things
-  if (!(thing->flags & (MF_SOLID|MF_SPECIAL|MF_SHOOTABLE|MF_TOUCHY) || thing->flags3 & MF3_TOUCHYTARGET))
+  if (!(thing->flags & (MF_SOLID|MF_SPECIAL|MF_SHOOTABLE|MF_TOUCHY)) && !(thing->flags3 & MF3_TOUCHYTARGET))
     return true;
 
   blockdist = thing->radius + tmthing->radius;
@@ -811,7 +811,7 @@ static dboolean PIT_CheckThing(mobj_t *thing) // killough 3/26/98: make static
   // check for skulls slamming into things
   // In MBF24, skip this if the thing being charged isn't solid and the thing charging only slams into solid things
 
-  if (tmthing->flags & MF_SKULLFLY && (!mbf24 || !(tmthing->flags3 & MF3_ONLYSLAMSOLID) || (tmthing->flags3 & MF3_ONLYSLAMSOLID && thing->flags & MF_SOLID)))
+  if (tmthing->flags & MF_SKULLFLY && (!(mbf24) || !(tmthing->flags3 & MF3_ONLYSLAMSOLID) || (tmthing->flags3 & MF3_ONLYSLAMSOLID && thing->flags & MF_SOLID)))
   {
     // A flying skull is smacking something.
     // Determine damage amount, and the skull comes to a dead stop.
@@ -3114,7 +3114,7 @@ dboolean PIT_ChangeSector (mobj_t* thing)
     }
     else
     {
-      if (!heretic && !(mbf24 && (thing->flags3 & MF3_NOCRUSH))) P_SetMobjState (thing, S_GIBS);
+      if (!heretic && !mbf24 || (mbf24 && (thing->flags3 & MF3_NOCRUSH))) P_SetMobjState (thing, S_GIBS);
 
       if (compatibility_level != doom_12_compatibility)
       {

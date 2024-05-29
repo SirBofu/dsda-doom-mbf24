@@ -2634,10 +2634,10 @@ spawnit:
     mobj->health = P_Random(pr_heretic);
     if (hexen) mobj->special1.i = mthing->height;
   }
-  if (mobj->flags3 & MF3_FLOATBOB)
+  if (mbf24 && mobj->flags3 & MF3_FLOATBOB)
   {
     mobj->floatfactor = P_Random(pr_mbf21);
-    if (mbf24) mobj->special1.i = mthing->height;
+    mobj->special1.i = mthing->height;
   }
 
   if (mobj->tics > 0)

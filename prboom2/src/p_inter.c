@@ -1470,7 +1470,7 @@ void P_DamageMobj(mobj_t *target,mobj_t *inflictor, mobj_t *source, int damage)
     fixed_t thrust = damage * (FRACUNIT >> 3) * g_thrust_factor / target->info->mass;
 
     // make fall forwards sometimes
-    if ( damage < 40 && damage > target->health && (!mbf24 || !(target->flags3 & MF3_NODAMAGE))
+    if ( damage < 40 && damage > target->health
          && target->z - inflictor->z > 64*FRACUNIT
          && P_Random(pr_damagemobj) & 1)
     {

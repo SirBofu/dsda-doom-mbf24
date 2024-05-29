@@ -484,7 +484,7 @@ static dboolean P_Move(mobj_t *actor, dboolean dropoff) /* killough 9/12/98 */
     {
       P_HitFloor(actor);
     }
-    if (!mbf24 || actor->momz <= 0 && (actor->z - actor->floorz) <= 24*FRACUNIT )
+//    if (!mbf24 || actor->momz <= 0 && (actor->z - actor->floorz) <= 24*FRACUNIT )
     actor->z = actor->floorz;
   }
 

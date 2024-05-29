@@ -2689,7 +2689,9 @@ void G_Compatibility(void)
     // comp_voodooscroller - Voodoo dolls on slow scrollers move too slowly
     { mbf21_compatibility, mbf21_compatibility },
     // comp_reservedlineflag - ML_RESERVED clears extended flags
-    { mbf21_compatibility, mbf21_compatibility }
+    { mbf21_compatibility, mbf21_compatibility },
+    // comp_nohorizontalautoaim - Player projectiles don't have horizontal autoaim
+    { mbf24_compatibility, mbf24_compatibility },
   };
   unsigned int i;
 
@@ -2710,6 +2712,8 @@ void G_Compatibility(void)
     comp[comp_ouchface] = 0;
     comp[comp_maxhealth] = 0;
     comp[comp_translucency] = 0;
+    // MBF24
+    comp[comp_nohorizontalautoaim] = 0;
   }
 
   e6y_G_Compatibility();//e6y
@@ -2827,6 +2831,13 @@ void G_ReloadDefaults(void)
     comp[comp_friendlyspawn] = options->comp_friendlyspawn;
     comp[comp_voodooscroller] = options->comp_voodooscroller;
     comp[comp_reservedlineflag] = options->comp_reservedlineflag;
+  }
+
+  // MBF24 compatibility settings
+
+  if (mbf24_features)
+  {
+    comp[comp_nohorizontalautoaim] = options->comp_nohorizontalautoaim;
   }
 
   G_Compatibility();
@@ -3172,7 +3183,8 @@ byte *G_WriteOptions(byte *demo_p)
 
   if (mbf21)
   {
-    return dsda_WriteOptions21(demo_p);
+    if (mbf24) return dsda_WriteOptions24(demo_p);
+    else return dsda_WriteOptions21(demo_p);
   }
 
   target = demo_p + dsda_GameOptionSize();
@@ -3257,7 +3269,8 @@ const byte *G_ReadOptions(const byte *demo_p)
 
   if (mbf21)
   {
-    return dsda_ReadOptions21(demo_p);
+    if (mbf24) return dsda_ReadOptions24(demo_p);
+    else return dsda_ReadOptions21(demo_p);
   }
 
   target = demo_p + dsda_GameOptionSize();

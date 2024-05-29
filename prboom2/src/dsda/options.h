@@ -62,6 +62,7 @@ typedef struct dsda_options {
   int comp_friendlyspawn;
   int comp_voodooscroller;
   int comp_reservedlineflag;
+  int comp_nohorizontalautoaim;
 } dsda_options_t;
 
 void dsda_ParseOptionsLump(void);
@@ -69,5 +70,7 @@ const dsda_options_t* dsda_Options(void);
 int dsda_GameOptionSize(void);
 byte* dsda_WriteOptions21(byte* demo_p);
 const byte *dsda_ReadOptions21(const byte *demo_p);
+byte* dsda_WriteOptions24(byte* demo_p);
+const byte *dsda_ReadOptions24(const byte *demo_p);
 
 #endif

@@ -102,6 +102,54 @@ static const dsda_options_t default_mbf_options = {
   // .comp_reservedlineflag = 1,
 };
 
+static const dsda_options_t default_mbf21_options = {
+        .weapon_recoil = 0,
+        .monsters_remember = 1,
+        .monster_infighting = 1,
+        .monster_backing = 0,
+        .monster_avoid_hazards = 1,
+        .monkeys = 0,
+        .monster_friction = 1,
+        .help_friends = 0,
+        .player_helpers = 0,
+        .friend_distance = 128,
+        .dog_jumping = 1,
+
+        .comp_telefrag = 0,
+        .comp_dropoff = 0,
+        .comp_vile = 0,
+        .comp_pain = 0,
+        .comp_skull = 0,
+        .comp_blazing = 0,
+        .comp_doorlight = 0,
+        .comp_model = 0,
+        .comp_god = 0,
+        .comp_falloff = 0,
+        .comp_floors = 0,
+        .comp_skymap = 0,
+        .comp_pursuit = 1,
+        .comp_doorstuck = 0,
+        .comp_staylift = 0,
+        .comp_zombie = 1,
+        .comp_stairs = 0,
+        .comp_infcheat = 0,
+        .comp_zerotags = 0,
+
+        .comp_moveblock = 0,
+        .comp_respawn = 0,
+        .comp_sound = 0,
+        .comp_666 = 0,
+        .comp_soul = 0,
+        .comp_maskedanim = 0,
+        .comp_ouchface = 0,
+        .comp_maxhealth = 0,
+        .comp_translucency = 0,
+        .comp_ledgeblock = 1,
+        .comp_friendlyspawn = 1,
+        .comp_voodooscroller = 0,
+        .comp_reservedlineflag = 1,
+};
+
 static const dsda_options_t default_latest_options = {
   .weapon_recoil = 0,
   .monsters_remember = 1,
@@ -148,6 +196,7 @@ static const dsda_options_t default_latest_options = {
   .comp_friendlyspawn = 1,
   .comp_voodooscroller = 0,
   .comp_reservedlineflag = 1,
+  .comp_nohorizontalautoaim = 1,
 };
 
 static dsda_options_t mbf_options;
@@ -198,6 +247,7 @@ static dsda_option_t option_list[] = {
   { "comp_friendlyspawn", &mbf_options.comp_friendlyspawn, 0, 1 },
   { "comp_voodooscroller", &mbf_options.comp_voodooscroller, 0, 1 },
   { "comp_reservedlineflag", &mbf_options.comp_reservedlineflag, 0, 1 },
+  { "comp_nohorizontalautoaim", &mbf_options.comp_nohorizontalautoaim, 0, 1 },
 
   { "mapcolor_back", NULL, 0, 255, dsda_config_mapcolor_back },
   { "mapcolor_grid", NULL, 0, 255, dsda_config_mapcolor_grid },
@@ -307,6 +357,8 @@ static const dsda_options_t* dsda_MBFOptions(void) {
 
   if (compatibility_level == mbf_compatibility)
     mbf_options = default_mbf_options;
+  else if (compatibility_level == mbf21_compatibility)
+    mbf_options = default_mbf21_options;
   else
     mbf_options = default_latest_options;
 
@@ -327,7 +379,7 @@ const dsda_options_t* dsda_Options(void) {
   return dsda_MBFOptions();
 }
 
-#define MBF21_COMP_TOTAL 25
+#define MBF21_COMP_TOTAL 26
 
 static int mbf21_comp_translation[MBF21_COMP_TOTAL] = {
   comp_telefrag,
@@ -355,7 +407,9 @@ static int mbf21_comp_translation[MBF21_COMP_TOTAL] = {
   comp_friendlyspawn,
   comp_voodooscroller,
   comp_reservedlineflag,
+  comp_nohorizontalautoaim,
 };
+
 
 // killough 5/2/98: number of bytes reserved for saving options
 #define MBF_GAME_OPTION_SIZE 64
@@ -403,6 +457,46 @@ byte* dsda_WriteOptions21(byte* demo_p) {
     I_Error("dsda_WriteOptions21: dsda_GameOptionSize is too small");
 
   return demo_p;
+}
+
+byte* dsda_WriteOptions24(byte* demo_p) {
+    int i, j;
+    byte *target = demo_p + dsda_GameOptionSize();
+
+    *demo_p++ = monsters_remember;
+    *demo_p++ = weapon_recoil;
+    *demo_p++ = player_bobbing;
+
+    *demo_p++ = respawnparm;
+    *demo_p++ = fastparm;
+    *demo_p++ = nomonsters;
+
+    *demo_p++ = (byte)((rngseed >> 24) & 0xff);
+    *demo_p++ = (byte)((rngseed >> 16) & 0xff);
+    *demo_p++ = (byte)((rngseed >>  8) & 0xff);
+    *demo_p++ = (byte)( rngseed        & 0xff);
+
+    *demo_p++ = monster_infighting;
+    *demo_p++ = dogs;
+
+    *demo_p++ = (distfriend >> 8) & 0xff;
+    *demo_p++ =  distfriend       & 0xff;
+
+    *demo_p++ = monster_backing;
+    *demo_p++ = monster_avoid_hazards;
+    *demo_p++ = monster_friction;
+    *demo_p++ = help_friends;
+    *demo_p++ = dog_jumping;
+    *demo_p++ = monkeys;
+
+    *demo_p++ = MBF21_COMP_TOTAL;
+    for (i = 0; i < MBF21_COMP_TOTAL; i++)
+        *demo_p++ = comp[mbf21_comp_translation[i]] != 0;
+
+    if (demo_p != target)
+        I_Error("dsda_WriteOptions24: dsda_GameOptionSize is too small");
+
+    return demo_p;
 }
 
 const byte *dsda_ReadOptions21(const byte *demo_p) {
@@ -458,7 +552,72 @@ const byte *dsda_ReadOptions21(const byte *demo_p) {
   if (count < 25)
     comp[mbf21_comp_translation[24]] = 0;
 
+  comp[mbf21_comp_translation[25]] = 0;
+
   G_Compatibility();
 
   return demo_p;
+}
+
+const byte *dsda_ReadOptions24(const byte *demo_p) {
+    int i, count;
+
+    // not configurable in mbf21
+    variable_friction = 1;
+    allow_pushers = 1;
+    demo_insurance = 0;
+
+    monsters_remember = *demo_p++;
+    weapon_recoil = *demo_p++;
+    player_bobbing = *demo_p++;
+
+    respawnparm = *demo_p++;
+    fastparm = *demo_p++;
+    nomonsters = *demo_p++;
+
+    rngseed  = *demo_p++ & 0xff;
+    rngseed <<= 8;
+    rngseed += *demo_p++ & 0xff;
+    rngseed <<= 8;
+    rngseed += *demo_p++ & 0xff;
+    rngseed <<= 8;
+    rngseed += *demo_p++ & 0xff;
+
+    monster_infighting = *demo_p++;
+    dogs = *demo_p++;
+
+    distfriend  = *demo_p++ << 8;
+    distfriend += *demo_p++;
+
+    monster_backing = *demo_p++;
+    monster_avoid_hazards = *demo_p++;
+    monster_friction = *demo_p++;
+    help_friends = *demo_p++;
+    dog_jumping = *demo_p++;
+    monkeys = *demo_p++;
+
+    count = *demo_p++;
+
+    if (count > MBF21_COMP_TOTAL)
+        I_Error("Encountered unknown mbf21 compatibility options!");
+
+    for (i = 0; i < count; i++)
+        comp[mbf21_comp_translation[i]] = *demo_p++;
+
+    // comp_voodooscroller
+    if (count < 24)
+        comp[mbf21_comp_translation[23]] = 1;
+
+    // comp_reservedlineflag
+    if (count < 25)
+        comp[mbf21_comp_translation[24]] = 0;
+
+    // comp_nohorizontalautoaim - MBF24
+
+    if (count < 26)
+        comp[mbf21_comp_translation[25]] = 0;
+
+    G_Compatibility();
+
+    return demo_p;
 }
