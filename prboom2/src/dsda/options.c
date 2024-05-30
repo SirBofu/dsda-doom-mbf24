@@ -197,6 +197,7 @@ static const dsda_options_t default_latest_options = {
   .comp_voodooscroller = 0,
   .comp_reservedlineflag = 1,
   .comp_nohorizontalautoaim = 1,
+  .comp_ssgautoswitch = 1,
 };
 
 static dsda_options_t mbf_options;
@@ -248,6 +249,7 @@ static dsda_option_t option_list[] = {
   { "comp_voodooscroller", &mbf_options.comp_voodooscroller, 0, 1 },
   { "comp_reservedlineflag", &mbf_options.comp_reservedlineflag, 0, 1 },
   { "comp_nohorizontalautoaim", &mbf_options.comp_nohorizontalautoaim, 0, 1 },
+  { "comp_ssgautoswitch", &mbf_options.comp_ssgautoswitch, 0, 1 },
 
   { "mapcolor_back", NULL, 0, 255, dsda_config_mapcolor_back },
   { "mapcolor_grid", NULL, 0, 255, dsda_config_mapcolor_grid },
@@ -379,7 +381,7 @@ const dsda_options_t* dsda_Options(void) {
   return dsda_MBFOptions();
 }
 
-#define MBF21_COMP_TOTAL 26
+#define MBF21_COMP_TOTAL 27
 
 static int mbf21_comp_translation[MBF21_COMP_TOTAL] = {
   comp_telefrag,
@@ -408,6 +410,7 @@ static int mbf21_comp_translation[MBF21_COMP_TOTAL] = {
   comp_voodooscroller,
   comp_reservedlineflag,
   comp_nohorizontalautoaim,
+  comp_ssgautoswitch,
 };
 
 
@@ -553,6 +556,7 @@ const byte *dsda_ReadOptions21(const byte *demo_p) {
     comp[mbf21_comp_translation[24]] = 0;
 
   comp[mbf21_comp_translation[25]] = 0;
+  comp[mbf21_comp_translation[26]] = 0;
 
   G_Compatibility();
 
@@ -615,7 +619,12 @@ const byte *dsda_ReadOptions24(const byte *demo_p) {
     // comp_nohorizontalautoaim - MBF24
 
     if (count < 26)
-        comp[mbf21_comp_translation[25]] = 0;
+        comp[mbf21_comp_translation[25]] = 1;
+
+    // comp_ssgautoswitch - MBF24
+
+    if (count < 27)
+        comp[mbf21_comp_translation[26]] = 1;
 
     G_Compatibility();
 

@@ -2673,6 +2673,8 @@ void G_Compatibility(void)
     { mbf21_compatibility, mbf21_compatibility },
     // comp_nohorizontalautoaim - Player projectiles don't have horizontal autoaim
     { mbf24_compatibility, mbf24_compatibility },
+    // comp_ssgautoswitch - Fix buggy MBF21 A_CheckReload behavior
+    { mbf24_compatibility, mbf24_compatibility },
   };
   unsigned int i;
 
@@ -2695,6 +2697,7 @@ void G_Compatibility(void)
     comp[comp_translucency] = 0;
     // MBF24
     comp[comp_nohorizontalautoaim] = 0;
+    comp[comp_ssgautoswitch] = 0;
   }
 
   e6y_G_Compatibility();//e6y
@@ -2819,6 +2822,7 @@ void G_ReloadDefaults(void)
   if (mbf24_features)
   {
     comp[comp_nohorizontalautoaim] = options->comp_nohorizontalautoaim;
+    comp[comp_ssgautoswitch] = options->comp_ssgautoswitch;
   }
 
   G_Compatibility();
