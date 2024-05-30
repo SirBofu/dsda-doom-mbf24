@@ -120,8 +120,9 @@ enum {
   // mbf24
 
   comp_nohorizontalautoaim,
+  comp_ssgautoswitch,
 
-  MBF_COMP_TOTAL = 33  // limit in MBF format
+  MBF_COMP_TOTAL = 34  // limit in MBF format
 };
 
 enum {

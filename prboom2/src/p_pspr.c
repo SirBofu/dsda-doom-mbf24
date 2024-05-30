@@ -429,6 +429,13 @@ dboolean P_CheckAmmo(player_t *player)
       // Now set appropriate weapon overlay.
       P_SetPsprite(player,ps_weapon,weaponinfo[player->readyweapon].downstate);
     }
+  else
+    {
+      if (comp[comp_ssgautoswitch] && player->pendingweapon > wp_supershotgun)
+      {
+        player->pendingweapon = P_SwitchWeaponMBF21(player);
+      }
+    }
 
   return false;
 }
