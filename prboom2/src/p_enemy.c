@@ -3698,6 +3698,46 @@ void A_JumpIfTargetHigher(mobj_t* actor)
 }
 
 //
+// A_JumpIfTracerHigher
+// Jumps to a state if caller's tracer's z position is closer than the specified distance.
+//   args[0]: State to jump to
+//   args[1]: Distance threshold
+//   args[2]: If 0, check in both directions from caller;
+//            If 1, only check that target's z position is lower than caller z + distance;
+//            If 2, only check that target's z position is higher than caller z - distance
+//
+void A_JumpIfTracerHigher(mobj_t* actor)
+{
+    int state, distance, hilo;
+
+    if (!mbf24 || !actor || !actor->tracer)
+        return;
+
+    state    = actor->state->args[0];
+    distance = actor->state->args[1];
+    hilo     = actor->state->args[2];
+
+    switch(hilo)
+    {
+        case 0: default:
+        {
+            if ((actor->tracer->z < (actor->z + distance)) && (actor->tracer->z > (actor->z - distance))) P_SetMobjState(actor, state);
+            break;
+        }
+        case 1:
+        {
+            if ((actor->tracer->z) < (actor->z + distance)) P_SetMobjState(actor, state);
+            break;
+        }
+        case 2:
+        {
+            if ((actor->tracer->z) > (actor->z - distance)) P_SetMobjState(actor, state);
+            break;
+        }
+    }
+}
+
+//
 // A_CleanupCounter
 // Ensures that counters are set no higher than the max of 100 and no lower than the min of 0.
 //
