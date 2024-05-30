@@ -90,9 +90,18 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
   - Args:
       - `state (uint)`: State to jump to.
       - `distance (fixed)`: Vertical distance threshold, in map units.
-      - `hilo (uint)`: 0 = check distance in both directions; 1 = only check to make sure the target isn't higher than the target distance; 2 = only check to make sure the player isn't lower than the target distance.
+      - `hilo (uint)`: 0 = check distance in both directions; 1 = only check to make sure the target isn't higher than the target distance; 2 = only check to make sure the target isn't lower than the target distance.
   - Notes:
-      - Name is very likely to change. 
+      - Name is very likely to change.
+
+- **A_JumpIfTracerHigher(state, distance, hilo)**
+    - Jumps to a state if caller's tracer target's z position is closer than the specified vertical distance.
+    - Args:
+        - `state (uint)`: State to jump to.
+        - `distance (fixed)`: Vertical distance threshold, in map units.
+        - `hilo (uint)`: 0 = check distance in both directions; 1 = only check to make sure the tracer target isn't higher than the target distance; 2 = only check to make sure the tracer target isn't lower than the target distance.
+    - Notes:
+        - Name is very likely to change.
 
 - **A_SetCounter(counternum, value)**
   - Sets the caller's specified counter to a specific value.
