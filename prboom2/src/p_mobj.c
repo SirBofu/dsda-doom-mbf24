@@ -863,6 +863,12 @@ floater:
   {
     // hit the floor
 
+    // MBF24 - remove the jumped flag if momentum is zero or negative
+    if (mbf24 && mo->flags3 & MF3_JUMPED && mo->momz <= 0)
+    {
+      mo->flags3 = ~MF3_JUMPED;
+    }
+
     if (raven)
     {
       if (mo->flags & MF_MISSILE)
@@ -944,7 +950,7 @@ floater:
     )
       mo->momz = -mo->momz; // the skull slammed into something
 
-    if (hexen) mo->z = mo->floorz;
+    if (!hexen) mo->z = mo->floorz;
     if (mo->momz < 0)
     {
       /* killough 11/98: touchy objects explode on impact */
@@ -1720,7 +1726,13 @@ mobj_t* P_SpawnMobj(fixed_t x,fixed_t y,fixed_t z,mobjtype_t type)
 
   /* killough 8/23/98: no friends, bouncers, or touchy things in old demos */
   if (!mbf_features)
+  {
     mobj->flags &= ~(MF_BOUNCES | MF_FRIEND | MF_TOUCHY);
+    if (!mbf24_features)
+    {
+      mobj->flags3 &= ~MF3_TOUCHYTARGET;
+    }
+  }
   else
     if (type == g_mt_player)         // Except in old demos, players
       mobj->flags |= MF_FRIEND;    // are always friends.

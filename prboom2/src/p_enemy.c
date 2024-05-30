@@ -484,8 +484,8 @@ static dboolean P_Move(mobj_t *actor, dboolean dropoff) /* killough 9/12/98 */
     {
       P_HitFloor(actor);
     }
-//    if (!mbf24 || actor->momz <= 0 && (actor->z - actor->floorz) <= 24*FRACUNIT )
-    actor->z = actor->floorz;
+    if (!mbf24 || actor->momz <= 0 && (actor->flags3 & ~MF3_JUMPED))
+      actor->z = actor->floorz;
   }
 
   return true;
@@ -3738,6 +3738,42 @@ void A_JumpIfTracerHigher(mobj_t* actor)
 }
 
 //
+// A_JumpIfTargetTouching
+// Jumps to a state if caller's target is overlapping the caller.
+//   args[0]: State to jump to
+//   args[1]: If nonzero, ignore Z position
+
+void A_JumpIfTargetTouching(mobj_t* actor)
+{
+    int state, checkz;
+
+    if (!mbf24 || !(actor->target))
+      return;
+
+    state    = actor->state->args[0];
+    checkz   = actor->state->args[1];
+
+    if (checkz == 0)
+    {
+        if ((actor->target->x - actor->target->radius <= actor->x + actor->radius) &&
+        (actor->target->x + actor->target->radius >= actor->x - actor->radius) &&
+        (actor->target->y - actor->target->radius <= actor->y + actor->radius) &&
+        (actor->target->y + actor->target->radius >= actor->y - actor->radius) &&
+        (actor->target->z >= actor->z - actor->target->height) &&
+        (actor->target->z <= actor->z + actor->height))
+            P_SetMobjState(actor, state);
+    }
+    else
+    {
+        if ((actor->target->x - actor->target->radius <= actor->x + actor->radius) &&
+            (actor->target->x + actor->target->radius >= actor->x - actor->radius) &&
+            (actor->target->y - actor->target->radius <= actor->y + actor->radius) &&
+            (actor->target->y + actor->target->radius >= actor->y - actor->radius))
+            P_SetMobjState(actor, state);
+    }
+}
+
+//
 // A_CleanupCounter
 // Ensures that counters are set no higher than the max of 100 and no lower than the min of 0.
 //
@@ -3959,6 +3995,9 @@ void A_LaunchTarget(mobj_t *actor)
         return;
 
     actor->target->momz = thrust*FRACUNIT/actor->target->info->mass;
+
+    if ((actor->target->flags3 & ~MF3_JUMPED || actor->target->flags & ~MF_NOGRAVITY) && (actor->target->type != MT_PLAYER))
+      actor->target->flags3 &= MF3_JUMPED;
 }
 
 //
@@ -4188,6 +4227,31 @@ void A_ClearTarget(mobj_t *actor)
         return;
 
     actor->target = NULL;
+}
+
+//
+// A_MonsterJump
+// Caller launches itself into the air.
+// Can only be used if thing is not already launched into the air.
+//   args[0]: amount of vertical momentum to give self.
+//
+
+void A_MonsterJump(mobj_t *actor)
+{
+    int    thrust;
+
+    if (!mbf24)
+        return;
+
+    thrust = actor->state->args[0];
+
+    if (actor->flags3 & MF3_JUMPED)
+        return;
+
+    actor->target->momz = thrust*FRACUNIT/actor->target->info->mass;
+
+    if (actor->target->flags & ~MF_NOGRAVITY && actor->target->type != MT_PLAYER)
+        actor->target->flags3 &= MF3_JUMPED;
 }
 
 // heretic
