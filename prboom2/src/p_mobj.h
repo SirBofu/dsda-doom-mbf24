@@ -555,6 +555,7 @@ void P_RemoveMonsters(void);
 #define MF3_GENERIC2          0x00400000ull // generic flag 2
 #define MF3_GENERIC3          0x00800000ull // generic flag 3
 #define MF3_GENERIC4          0x01000000ull // generic flag 4
+#define MF3_JUMPED            0x02000000ull // thing has just jumped/been launched
 
 #define AMMO_GWND_WIMPY 10
 #define AMMO_GWND_HEFTY 50

@@ -155,6 +155,8 @@ void A_SetHealth(mobj_t *);
 void A_RegainHealth(mobj_t *);
 void A_ChaseNoAttack(mobj_t *);
 void A_ClearTarget(mobj_t *);
+void A_JumpIfTargetTouching(mobj_t *);
+void A_MonsterJump(mobj_t *);
 
 // heretic
 
