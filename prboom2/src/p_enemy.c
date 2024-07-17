@@ -4283,6 +4283,92 @@ void A_MonsterJump(mobj_t *actor)
         actor->target->flags3 &= MF3_JUMPED;
 }
 
+//
+// A_JumpIfTargetFlagsSet
+// Jumps to a state if caller's target has the specified thing flags set.
+//   args[0]: State to jump to
+//   args[1]: Standard Flag(s) to check
+//   args[2]: MBF21 Flag(s) to check
+//   args[3]: MBF24 Flag(s) to check
+//
+void A_JumpIfTargetFlagsSet(mobj_t* actor)
+{
+    int state;
+    uint64_t flags, flags2, flags3;
+
+    if (!mbf24 || !actor || !actor->target)
+        return;
+
+    state  = actor->state->args[0];
+    flags  = actor->state->args[1];
+    flags2 = actor->state->args[2];
+    flags3 = actor->state->args[3];
+
+    if ((actor->target->flags & flags) == flags &&
+      (actor->target->flags2 & flags2) == flags2 &&
+      (actor->target->flags3 & flags3) == flags3)
+      P_SetMobjState(actor, state);
+}
+
+//
+// A_JumpIfTracerFlagsSet
+// Jumps to a state if caller's tracer has the specified thing flags set.
+//   args[0]: State to jump to
+//   args[1]: Standard Flag(s) to check
+//   args[2]: MBF21 Flag(s) to check
+//   args[3]: MBF24 Flag(s) to check
+//
+void A_JumpIfTracerFlagsSet(mobj_t* actor)
+{
+    int state;
+    uint64_t flags, flags2, flags3;
+
+    if (!mbf24 || !actor || !actor->tracer)
+        return;
+
+    state  = actor->state->args[0];
+    flags  = actor->state->args[1];
+    flags2 = actor->state->args[2];
+    flags3 = actor->state->args[3];
+
+    if ((actor->tracer->flags & flags) == flags &&
+        (actor->tracer->flags2 & flags2) == flags2 &&
+        (actor->tracer->flags3 & flags3) == flags3)
+        P_SetMobjState(actor, state);
+}
+
+//
+// A_JumpIfHasTarget
+// Jumps to a state if caller has a valid target.
+//   args[0]: State to jump to
+//
+void A_JumpIfHasTarget(mobj_t* actor)
+{
+  int state;
+
+  if (!mbf24 || !actor || !actor->target)
+    return;
+
+  state = actor->state->args[0];
+  P_SetMobjState(actor, state);
+}
+
+//
+// A_JumpIfHasTracer
+// Jumps to a state if caller has a valid tracer.
+//   args[0]: State to jump to
+//
+void A_JumpIfHasTracer(mobj_t* actor)
+{
+    int state;
+
+    if (!mbf24 || !actor || !actor->tracer)
+        return;
+
+    state = actor->state->args[0];
+    P_SetMobjState(actor, state);
+}
+
 // heretic
 
 #include "heretic/def.h"
