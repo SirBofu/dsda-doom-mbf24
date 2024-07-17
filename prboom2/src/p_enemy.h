@@ -157,6 +157,10 @@ void A_ChaseNoAttack(mobj_t *);
 void A_ClearTarget(mobj_t *);
 void A_JumpIfTargetTouching(mobj_t *);
 void A_MonsterJump(mobj_t *);
+void A_JumpIfTargetFlagsSet(mobj_t *);
+void A_JumpIfTracerFlagsSet(mobj_t *);
+void A_JumpIfHasTarget(mobj_t *);
+void A_JumpIfHasTracer(mobj_t *);
 
 // heretic
 
