@@ -4340,6 +4340,39 @@ void A_JumpIfHasTracer(mobj_t* actor)
     P_SetMobjState(actor, state);
 }
 
+//
+// A_JumpIfBlocked
+// Jumps to a state if thing doesn't have room to become solid.
+//   args[0]: State to jump to
+//   args[1]: Angle (degrees, in fixed point), relative to calling actor's angle
+//   args[2]: X spawn offset (fixed point), relative to calling actor
+//   args[3]: Y spawn offset (fixed point), relative to calling actor
+//
+
+void A_JumpIfBlocked(mobj_t* actor)
+{
+  int state, angle, ofs_x, ofs_y, ofs_z;
+  angle_t an;
+  int fan, dx, dy;
+
+  if (!mbf24)
+    return;
+
+  state = actor->state->args[0];
+  angle = actor->state->args[1];
+  ofs_x = actor->state->args[2];
+  ofs_y = actor->state->args[3];
+
+  an = actor->angle + (unsigned int)(((int64_t)angle << 16) / 360);
+  fan = an >> ANGLETOFINESHIFT;
+  dx = FixedMul(ofs_x, finecosine[fan]) - FixedMul(ofs_y, finesine[fan]  );
+  dy = FixedMul(ofs_x, finesine[fan]  ) + FixedMul(ofs_y, finecosine[fan]);
+
+  if (P_CheckPosition(actor, dx, dy) == false)
+    P_SetMobjState(actor, state);
+
+}
+
 // heretic
 
 #include "heretic/def.h"

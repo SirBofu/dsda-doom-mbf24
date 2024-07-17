@@ -1580,6 +1580,7 @@ static const deh_bexptr deh_bexptrs[] = // CPhipps - static const
   {A_JumpIfTracerFlagsSet, "A_JumpIfTracerFlagsSet", 4},
   {A_JumpIfHasTarget,      "A_JumpIfHasTarget", 1},
   {A_JumpIfHasTracer,      "A_JumpIfHasTracer", 1},
+  {A_JumpIfBlocked,        "A_JumpIfBlocked", 4, {0,0,0,0}},
 
   {A_WeaponRemove,         "A_WeaponRemove", 1},
 

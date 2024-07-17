@@ -192,6 +192,16 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
     - Args:
         - `state (uint)`: State to jump to.
 
+- **A_JumpIfBlocked(state, angle, ofs_x, ofs_y)**
+  - Jumps to a state if caller's position or relative position is blocked.
+  - Args:
+    - `state (int)`: State to jump to.
+    - `angle (fixed)`: Angle (degrees), relative to calling actor's angle
+    - `x_ofs (fixed)`: X (forward/back) position offset
+    - `y_ofs (fixed)`: Y (left/right) position offset
+  - Notes:
+    - Uses existing position checking codepointers and will not check for a clear path.
+
 #### New DEHACKED Weapon Codepointers
 
 #### Weapon pointers
