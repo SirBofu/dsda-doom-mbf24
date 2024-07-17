@@ -160,6 +160,38 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
   - Removes the caller's current target. Use with caution.
   - No args.
 
+- **A_JumpIfTargetFlagsSet(state, flags, flags2, flags3)**
+    - Jumps to a state if caller's target has the specified thing flags set.
+    - Args:
+        - `state (uint)`: State to jump to.
+        - `flags (int)`: Standard actor flag(s) to check
+        - `flags2 (int)`: MBF21 actor flag(s) to check
+        - `flags3 (int)`: MBF24 actor flag(s) to check
+    - Notes:
+        - If multiple flags are specified in a field, jump will only occur if all the flags are set (e.g. AND comparison, not OR)
+        - If the caller has no target, then has no effect.
+
+- **A_JumpIfTracerFlagsSet(state, flags, flags2, flags3)**
+    - Jumps to a state if caller's tracer has the specified thing flags set.
+    - Args:
+        - `state (uint)`: State to jump to.
+        - `flags (int)`: Standard actor flag(s) to check
+        - `flags2 (int)`: MBF21 actor flag(s) to check
+        - `flags3 (int)`: MBF24 actor flag(s) to check
+    - Notes:
+        - If multiple flags are specified in a field, jump will only occur if all the flags are set (e.g. AND comparison, not OR)
+        - If the caller has no tracer, then has no effect.
+
+- **A_JumpIfHasTarget(state)**
+  - Jumps to a state if caller has a target.
+  - Args:
+    - `state (uint)`: State to jump to.
+
+- **A_JumpIfHasTracer(state)**
+    - Jumps to a state if caller has a tracer.
+    - Args:
+        - `state (uint)`: State to jump to.
+
 #### New DEHACKED Weapon Codepointers
 
 #### Weapon pointers
@@ -189,6 +221,7 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
 - Parameterized version of A_SkullAttack that can be used for ground charging enemies.
 - Parameterized version of A_VileAttack.
 - Parameterized version of A_BFGSpray.
+- A_SetTracerState and A_SetTargetState.
 - Add support for Crispy Doom's `Melee threshold`, `Max target range`, `Min missile chance`, and `Missile chance multiplier` values.
 
 #### Potential Additions
@@ -198,5 +231,4 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
 - Function to capture use presses on things that have use states.
 - State flag indicating whether or not a thing can be used.
 - Teleporter multi-destination support without map format requirements.
-- Thing tags.
 - Allow DEHACKED definition of what weapons and ammunition the player starts with.
