@@ -1137,6 +1137,7 @@ static const char *deh_mobjinfo_fields[] =
   // misc
   "Blood color",         // .bloodcolor
   "MBF24 Bits",          // .flags3
+  "Use frame",           // .usestate
 
   NULL
 };
@@ -1349,6 +1350,7 @@ static const char *deh_state_fields[] = // CPhipps - static const*
 
 static const struct deh_flag_s deh_stateflags_mbf21[] = {
   { "SKILL5FAST", STATEF_SKILL5FAST }, // tics halve on nightmare skill
+  { "ALLOWUSE", STATEF_ALLOWUSE }, // thing can be used while this state is displayed
   { NULL }
 };
 
