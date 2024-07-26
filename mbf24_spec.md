@@ -45,7 +45,31 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
 | GENERIC3         | 0x0800000 | Generic flag 3                                                                                                         |
 | GENERIC4         | 0x1000000 | Generic flag 4                                                                                                         |
 
+#### Use frame
+
+- Sets the state for the thing to jump to when it intercepts a use press.
+- Things will only intercept use presses when their current frame has the `ALLOWUSE` flag set.
+- Use presses require line of sight between the thing pressing use and the thing being used.
+- Things cannot use themselves, but may use other things of the same type as well as dead or inanimate things.
+- Precedence is given to the first linedef or thing closest to the player when use is pressed.
+- Can be used to create thing-based switches, interactive actors, and many other effects.
+- For multi-state presses, consider using the `GENERIC1`, `GENERIC2`, ... flags or counters.
+- Add `Use frame = X` in the Thing definition.
+- `X` represents a frame number.
+
 ## Frames
+
+#### Frame Flags
+
+- Because MBF21 only used one frame flag, frame flags have been added to the `MBF21 Bits` field in the Frame definition.
+- MBF21's `SKILL5FAST` is preserved, and the flags introduced here are not consumed unless using MBF24 or greater.
+- Example: `MBF21 Bits = SKILL5FAST+ALLOWUSE`.
+- As with MBF21, the value can also be given as a number (sum of the individual flag values below).
+
+| Name       | Value | Description                                           |
+|------------|-------|-------------------------------------------------------|
+| SKILL5FAST | 0x001 | Tics halve on nightmare skill (demon) (from MBF21)    |
+| ALLOWUSE   | 0x002 | Thing can intercept use presses if it has a use state |
 
 #### Updated DEHACKED Actor Codepointers
 - Additional optional "Args" fields have been added for additional params.

@@ -2905,24 +2905,30 @@ dboolean PTR_UseTraverse (intercept_t* in)
           true : false;
 }
 
-// PTR_UseThingTraverse
+// PTR_UseThingTraverse (MBF24)
+// Checks if the player's use press intercept intersects with a thing.
 
 dboolean PTR_UseThingTraverse (intercept_t* in)
 {
     mobj_t* th;
 
+    // Skip the check if there's no thing found or if it's the thing that pressed use.
+
     if (in->d.thing && in->d.thing != usething)
     {
       th = in->d.thing;
 
-      if (th->info->usestate)
-      {
-        if (th->state->flags & STATEF_ALLOWUSE)
+      // The following conditions need to be met for a thing to intercept a use press:
+      // 1. It must have a use state defined
+      // 2. Its current state must have ALLOWUSE set
+      // 3. It must be in line of sight of the thing that pressed it
+
+        if (th->info->usestate && th->state->flags & STATEF_ALLOWUSE && P_CheckSight(usething, th))
         {
             P_SetMobjState(th,th->info->usestate);
             return false;
         }
-      }
+
     }
 
     return true;
@@ -2954,6 +2960,15 @@ dboolean PTR_NoWayTraverse(intercept_t* in)
   );
 }
 
+// PTR_UseTraverseEnhanced (MBF24) - combines checks for lines
+// and for usable things so that one doesn't take precedence over
+// the other. Thanks to kgorob for the suggestion.
+
+dboolean PTR_UseTraverseEnhanced (intercept_t* in)
+{
+  return in->isaline ? PTR_UseTraverse(in) : PTR_UseThingTraverse(in);
+}
+
 //
 // P_UseLines
 // Looks for special lines in front of the player to activate.
@@ -2980,13 +2995,15 @@ void P_UseLines (player_t*  player)
   // P_PathTraverse ( x1, y1, x2, y2, PT_ADDLINES, PTR_UseTraverse );
   //
   // This added test makes the "oof" sound work on 2s lines -- killough:
+  //
+  // MBF24 (bofu) --
+  // Combine PTR_UseTraverse and PTR_UseThingTraverse; thanks to kgorob
 
   if (mbf24_features)
   {
-    if (P_PathTraverse ( x1, y1, x2, y2, PT_ADDLINES, PTR_UseTraverse ))
-      if (P_PathTraverse (x1, y1, x2, y2, PT_ADDTHINGS, PTR_UseThingTraverse ))
-        if (!comp[comp_sound] && !P_PathTraverse ( x1, y1, x2, y2, PT_ADDLINES, PTR_NoWayTraverse ))
-          S_StartSound (usething, sfx_noway);
+    if (P_PathTraverse ( x1, y1, x2, y2, PT_ADDLINES | PT_ADDTHINGS, PTR_UseTraverseEnhanced ))
+      if (!comp[comp_sound] && !P_PathTraverse ( x1, y1, x2, y2, PT_ADDLINES, PTR_NoWayTraverse ))
+        S_StartSound (usething, sfx_noway);
   }
   else
   {
