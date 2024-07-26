@@ -5768,6 +5768,7 @@ typedef struct
 
 // state flags
 #define STATEF_SKILL5FAST 0x00000001 // tics halve on nightmare skill
+#define STATEF_ALLOWUSE   0x00000002 // thing can be used while this state is displayed
 
 /********************************************************************
  * Thing enumeration -- must match info.c                           *
@@ -6589,6 +6590,8 @@ typedef struct
 
   // mbf24
   uint64_t flags3;
+  int usestate;  /* State to jump to when player presses use on
+           the thing. Use presses are ignored if not set. */
 } mobjinfo_t;
 
 #define NO_ALTSPEED -1

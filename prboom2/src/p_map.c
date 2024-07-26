@@ -2811,6 +2811,7 @@ mobj_t*   usething;
 dboolean PTR_UseTraverse (intercept_t* in)
 {
   int side;
+  mobj_t* th;
 
   if (!in->d.line->special)
   {
@@ -2886,7 +2887,25 @@ dboolean PTR_UseTraverse (intercept_t* in)
     }
 
     // not a special line, but keep checking
+    if (!mbf24_features)
+    {
+      return true;
+    }
 
+    // MBF24: use a thing; TO DO: Troubleshoot why this doesn't work
+    if (in->d.thing)
+    {
+      if (in->d.thing=usething)
+      {
+        return true;
+      }
+      th = in->d.thing;
+      if (th->state->flags & (STATEF_ALLOWUSE) && th->info->usestate > 0)
+        {
+          P_SetMobjState(in->d.thing, in->d.thing->info->usestate);
+          return false;
+        }
+    }
     return true;
   }
 
