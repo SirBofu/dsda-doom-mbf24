@@ -2050,6 +2050,9 @@ static void setMobjInfoValue(int mobjInfoIndex, int keyIndex, uint64_t value) {
     // misc
     case 32: mi->bloodcolor = V_BloodColor((int)value); return;
 
+    // MBF24
+    case 34: mi->usestate = (int)value; return;
+
     default: return;
   }
 }

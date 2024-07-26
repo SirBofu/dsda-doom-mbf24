@@ -2730,104 +2730,85 @@ mobj_t*   usething;
 
 dboolean PTR_UseTraverse (intercept_t* in)
 {
-  int side;
-  mobj_t* th;
+    int side;
 
-  if (!in->d.line->special)
-  {
-    int sound;
+    if (!in->d.line->special)
+    {
+        int sound;
 
-    if (in->d.line->flags & (ML_BLOCKEVERYTHING | ML_BLOCKUSE))
-    {
-      line_opening.range = 0;
-    }
-    else
-    {
-      P_LineOpening (in->d.line, NULL);
-    }
-
-    if (line_opening.range <= 0)
-    {
-      if (hexen && usething->player)
-      {
-        switch (usething->player->pclass)
+        if (in->d.line->flags & (ML_BLOCKEVERYTHING | ML_BLOCKUSE))
         {
-          case PCLASS_FIGHTER:
-            sound = hexen_sfx_player_fighter_failed_use;
-            break;
-          case PCLASS_CLERIC:
-            sound = hexen_sfx_player_cleric_failed_use;
-            break;
-          case PCLASS_MAGE:
-            sound = hexen_sfx_player_mage_failed_use;
-            break;
-          case PCLASS_PIG:
-            sound = hexen_sfx_pig_active1;
-            break;
-          default:
-            sound = hexen_sfx_None;
-            break;
+            line_opening.range = 0;
         }
-        S_StartMobjSound(usething, sound);
-      }
-      else if (!heretic)
-      {
-        S_StartSound (usething, sfx_noway);
-      }
-
-      // can't use through a wall
-      return false;
-    }
-
-    if (hexen && usething->player)
-    {
-      fixed_t pheight = usething->z + (usething->height / 2);
-      if ((line_opening.top < pheight) || (line_opening.bottom > pheight))
-      {
-        switch (usething->player->pclass)
+        else
         {
-          case PCLASS_FIGHTER:
-            sound = hexen_sfx_player_fighter_failed_use;
-            break;
-          case PCLASS_CLERIC:
-            sound = hexen_sfx_player_cleric_failed_use;
-            break;
-          case PCLASS_MAGE:
-            sound = hexen_sfx_player_mage_failed_use;
-            break;
-          case PCLASS_PIG:
-            sound = hexen_sfx_pig_active1;
-            break;
-          default:
-            sound = hexen_sfx_None;
-            break;
+            P_LineOpening (in->d.line, NULL);
         }
-        S_StartMobjSound(usething, sound);
-      }
-    }
 
-    // not a special line, but keep checking
-    if (!mbf24_features)
-    {
-      return true;
-    }
+        if (line_opening.range <= 0)
+        {
+            if (hexen && usething->player)
+            {
+                switch (usething->player->pclass)
+                {
+                    case PCLASS_FIGHTER:
+                        sound = hexen_sfx_player_fighter_failed_use;
+                        break;
+                    case PCLASS_CLERIC:
+                        sound = hexen_sfx_player_cleric_failed_use;
+                        break;
+                    case PCLASS_MAGE:
+                        sound = hexen_sfx_player_mage_failed_use;
+                        break;
+                    case PCLASS_PIG:
+                        sound = hexen_sfx_pig_active1;
+                        break;
+                    default:
+                        sound = hexen_sfx_None;
+                        break;
+                }
+                S_StartMobjSound(usething, sound);
+            }
+            else if (!heretic)
+            {
+                S_StartSound (usething, sfx_noway);
+            }
 
-    // MBF24: use a thing; TO DO: Troubleshoot why this doesn't work
-    if (in->d.thing)
-    {
-      if (in->d.thing=usething)
-      {
+            // can't use through a wall
+            return false;
+        }
+
+        if (hexen && usething->player)
+        {
+            fixed_t pheight = usething->z + (usething->height / 2);
+            if ((line_opening.top < pheight) || (line_opening.bottom > pheight))
+            {
+                switch (usething->player->pclass)
+                {
+                    case PCLASS_FIGHTER:
+                        sound = hexen_sfx_player_fighter_failed_use;
+                        break;
+                    case PCLASS_CLERIC:
+                        sound = hexen_sfx_player_cleric_failed_use;
+                        break;
+                    case PCLASS_MAGE:
+                        sound = hexen_sfx_player_mage_failed_use;
+                        break;
+                    case PCLASS_PIG:
+                        sound = hexen_sfx_pig_active1;
+                        break;
+                    default:
+                        sound = hexen_sfx_None;
+                        break;
+                }
+                S_StartMobjSound(usething, sound);
+            }
+        }
+
+        // not a special line, but keep checking
+
         return true;
-      }
-      th = in->d.thing;
-      if (th->state->flags & (STATEF_ALLOWUSE) && th->info->usestate > 0)
-        {
-          P_SetMobjState(in->d.thing, in->d.thing->info->usestate);
-          return false;
-        }
     }
-    return true;
-  }
 
   side = 0;
   if (P_PointOnLineSide (usething->x, usething->y, in->d.line) == 1)
@@ -2843,6 +2824,31 @@ dboolean PTR_UseTraverse (intercept_t* in)
   return (!demo_compatibility && ((in->d.line->flags&ML_PASSUSE) || comperr(comperr_passuse)))?//e6y
           true : false;
 }
+
+// PTR_UseThingTraverse
+
+dboolean PTR_UseThingTraverse (intercept_t* in)
+{
+    mobj_t* th;
+
+    if (in->d.thing && in->d.thing != usething)
+    {
+      th = in->d.thing;
+
+      if (th->info->usestate)
+      {
+        if (th->state->flags & STATEF_ALLOWUSE)
+        {
+            P_SetMobjState(th,th->info->usestate);
+            return false;
+        }
+      }
+    }
+
+    return true;
+
+}
+
 
 // Returns false if a "oof" sound should be made because of a blocking
 // linedef. Makes 2s middles which are impassable, as well as 2s uppers
@@ -2895,9 +2901,19 @@ void P_UseLines (player_t*  player)
   //
   // This added test makes the "oof" sound work on 2s lines -- killough:
 
+  if (mbf24_features)
+  {
+    if (P_PathTraverse ( x1, y1, x2, y2, PT_ADDLINES, PTR_UseTraverse ))
+      if (P_PathTraverse (x1, y1, x2, y2, PT_ADDTHINGS, PTR_UseThingTraverse ))
+        if (!comp[comp_sound] && !P_PathTraverse ( x1, y1, x2, y2, PT_ADDLINES, PTR_NoWayTraverse ))
+          S_StartSound (usething, sfx_noway);
+  }
+  else
+  {
   if (P_PathTraverse ( x1, y1, x2, y2, PT_ADDLINES, PTR_UseTraverse ))
     if (!comp[comp_sound] && !P_PathTraverse ( x1, y1, x2, y2, PT_ADDLINES, PTR_NoWayTraverse ))
       S_StartSound (usething, sfx_noway);
+  }
 }
 
 
