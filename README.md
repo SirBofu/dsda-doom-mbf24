@@ -29,8 +29,9 @@ enemies (and are still immune to damage from other Arachnotrons), but will still
 [Floatbob Flag Test](https://www.dropbox.com/scl/fi/5b2n1dptx5jwa0vtynwr3/FloatBobTest.wad?rlkey=qzklrg7kbru7vsqecovrpszul&st=nzp11uyq&dl=0)
 In this simple WAD, the Soulsphere has been modified via DEHACKED and bobs similar to how Hexen powerups bob thanks to the addition of the `BOBFLOAT` flag.
 
-[Deadfloat and Onlyslamsolid Flag Test](https://www.dropbox.com/scl/fi/0xt3ma73r2fp584krnle5/DeadFloatTest.wad?rlkey=l1cusdxz8r23fcq9cj2y76c1r&st=n3gwgfry&dl=0)
+[Deadfloat, Floatbob, and Onlyslamsolid Flag Test](https://www.dropbox.com/scl/fi/0xt3ma73r2fp584krnle5/DeadFloatTest.wad?rlkey=l1cusdxz8r23fcq9cj2y76c1r&st=n3gwgfry&dl=0)
 In this WAD, Pain Elementals have been modified via DEHACKED to have the `DEADFLOAT` flag, which causes them to not fall when they are killed.
+They've also been given the `FLOATBOB` flag to demonstrate it working on moving, no-gravity objects.
 In addition, Lost Souls have been given the `ONLYSLAMSOLID` flag, which prevents them from colliding with non-solid objects and being interrupted.
 
 [Thing Use Frame Test](https://www.dropbox.com/scl/fi/yqxur4y7xo4077awppm3v/UseThingTest.wad?rlkey=w4ayj0yq4s775xsjurcz07gzn&st=ptjrg0pr&dl=0)
