@@ -2828,6 +2828,9 @@ dboolean PTR_UseTraverse (intercept_t* in)
 
 // PTR_UseThingTraverse (MBF24)
 // Checks if the player's use press intercept intersects with a thing.
+// Returns true if no qualifying thing is found. Usable things are treated
+// equally to linedefs in terms of use priority. Unusuable things are
+// completely ignored by this check.
 
 dboolean PTR_UseThingTraverse (intercept_t* in)
 {
@@ -2846,6 +2849,7 @@ dboolean PTR_UseThingTraverse (intercept_t* in)
 
         if (th->info->usestate && th->state->flags & STATEF_ALLOWUSE && P_CheckSight(usething, th))
         {
+            if (th->info->flags3 & MF3_TARGETUSE) th->target = usething;
             P_SetMobjState(th,th->info->usestate);
             return false;
         }

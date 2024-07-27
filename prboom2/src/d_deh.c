@@ -1300,6 +1300,7 @@ static const struct deh_flag_s deh_mobjflags_mbf24[] = {
   {"FLOATBOB",        MF3_FLOATBOB}, // rendering-only float bobbing movement
   {"DEADFLOAT",       MF3_DEADFLOAT}, // thing doesn't drop when killed
   {"TOUCHYTARGET",    MF3_TOUCHYTARGET}, // automatically targets living things that touch it
+  {"TARGETUSE",       MF3_TARGETUSE}, // automatically targets the last thing to trigger its use state
   {"GENERIC1",        MF3_GENERIC1}, // generic flag 1
   {"GENERIC2",        MF3_GENERIC2}, // generic flag 2
   {"GENERIC3",        MF3_GENERIC3}, // generic flag 3
@@ -1613,7 +1614,7 @@ static uint64_t deh_stringToFlags(char *strval, const struct deh_flag_s *flags)
     }
 
     if (!flag->name)
-      deh_log("Could not find MBF21 bit mnemonic %s\n", strval);
+      deh_log("Could not find MBF21/MBF24 bit mnemonic %s\n", strval);
   }
 
   return value;
