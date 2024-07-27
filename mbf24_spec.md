@@ -31,8 +31,8 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
 | NOINFIGHTING     | 0x0000200 | Thing doesn't retaliate against other monsters when damaged                                                            |
 | DONTTHRUST       | 0x0000400 | Thing doesn't get moved by damage                                                                                      |
 | NOPAIN           | 0x0000800 | Thing doesn't enter its pain state when damaged; can be used to temporarily prevent damage from interrupting attacks   |
-| FLOORHUGGER      | 0x0001000 | Missile moves along floor until it hits a solid wall (to be implemented)                                               |
-| STEPMISSILE      | 0x0002000 | Missile can climb up steps (to be implemented)                                                                         |
+| FLOORHUGGER      | 0x0001000 | Missile moves along floor until it hits an obstacle                                                                    |
+| STEPMISSILE      | 0x0002000 | Missile can climb up ledges                                                                                            |
 | RESETONDEATH     | 0x0004000 | Reset thing counters on death                                                                                          |
 | NOBFGSPRAY       | 0x0008000 | Thing is ignored by spray attacks (such as A_BFGSpray)                                                                 |
 | NOHITTHRUST      | 0x0010000 | Thing does not cause thrust when it directly damages another thing (to be implemented)                                 |
