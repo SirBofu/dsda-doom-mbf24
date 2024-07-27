@@ -2139,7 +2139,14 @@ void gld_ProjectSprite(mobj_t* thing, int lightlevel)
   {
     fx = thing->PrevX + FixedMul (tic_vars.frac, thing->x - thing->PrevX);
     fy = thing->PrevY + FixedMul (tic_vars.frac, thing->y - thing->PrevY);
-    fz = thing->PrevZ + FixedMul (tic_vars.frac, thing->z - thing->PrevZ);
+    if (mbf24_features && thing->flags3 & MF3_FLOATBOB) // if this is an MBF24 floatbobber, apply the floatbob offset
+    {
+      fz = thing->PrevZ + FixedMul (tic_vars.frac, thing->z - thing-> PrevZ) +  (mbf24 ? thing->special1.i : 0) + FloatBobRenderOffsets[(thing->floatfactor) & 63];
+    }
+    else
+    {
+      fz = thing->PrevZ + FixedMul (tic_vars.frac, thing->z - thing->PrevZ);
+    }
   }
   else
   {

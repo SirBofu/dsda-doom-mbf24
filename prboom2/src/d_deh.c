@@ -1297,7 +1297,7 @@ static const struct deh_flag_s deh_mobjflags_mbf24[] = {
   {"NOBFGSPRAY",      MF3_NOBFGSPRAY}, // thing is ignored by spray attacks (such as A_BFGSpray)
   {"NOHITTHRUST",     MF3_NOHITTHRUST}, // thing does not cause thrust when it directly damages another thing
   {"UNSTOPPABLE",     MF3_UNSTOPPABLE}, // charging thing does not get interrupted when damaged
-  {"FLOATBOB",        MF3_FLOATBOB}, // use float bobbing z movement
+  {"FLOATBOB",        MF3_FLOATBOB}, // rendering-only float bobbing movement
   {"DEADFLOAT",       MF3_DEADFLOAT}, // thing doesn't drop when killed
   {"TOUCHYTARGET",    MF3_TOUCHYTARGET}, // automatically targets living things that touch it
   {"GENERIC1",        MF3_GENERIC1}, // generic flag 1

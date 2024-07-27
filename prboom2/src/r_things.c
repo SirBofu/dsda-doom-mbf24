@@ -635,6 +635,27 @@ void R_SetClipPlanes(void)
   }
 }
 
+// FloatBobOffsets added for renderer-only floatbobbing
+
+fixed_t FloatBobRenderOffsets[64] = {
+        0, 51389, 102283, 152192,
+        200636, 247147, 291278, 332604,
+        370727, 405280, 435929, 462380,
+        484378, 501712, 514213, 521763,
+        524287, 521763, 514213, 501712,
+        484378, 462380, 435929, 405280,
+        370727, 332604, 291278, 247147,
+        200636, 152192, 102283, 51389,
+        -1, -51390, -102284, -152193,
+        -200637, -247148, -291279, -332605,
+        -370728, -405281, -435930, -462381,
+        -484380, -501713, -514215, -521764,
+        -524288, -521764, -514214, -501713,
+        -484379, -462381, -435930, -405280,
+        -370728, -332605, -291279, -247148,
+        -200637, -152193, -102284, -51389
+};
+
 //
 // R_ProjectSprite
 // Generates a vissprite for a thing if it might be visible.
@@ -680,13 +701,27 @@ static void R_ProjectSprite (mobj_t* thing, int lightlevel)
   {
     fx = thing->PrevX + FixedMul (tic_vars.frac, thing->x - thing->PrevX);
     fy = thing->PrevY + FixedMul (tic_vars.frac, thing->y - thing->PrevY);
-    fz = thing->PrevZ + FixedMul (tic_vars.frac, thing->z - thing->PrevZ);
+    if (mbf24_features && thing ->flags3 & MF3_FLOATBOB)
+    {
+      fz = thing->PrevZ + FixedMul (tic_vars.frac, thing->z - thing-> PrevZ) + (mbf24 ? thing->special1.i : 0) + FloatBobRenderOffsets[(thing->floatfactor) & 63];
+    }
+    else
+    {
+      fz = thing->PrevZ + FixedMul (tic_vars.frac, thing->z - thing->PrevZ);
+    }
   }
   else
   {
     fx = thing->x;
     fy = thing->y;
-    fz = thing->z;
+    if (mbf24_features && thing->flags3 & MF3_FLOATBOB)
+    {
+      fz=thing->z + (mbf24 ? thing->special1.i : 0) + FloatBobRenderOffsets[(thing->floatfactor) & 63];
+    }
+    else
+    {
+      fz = thing->z;
+    }
   }
 
   tr_x = fx - viewx;

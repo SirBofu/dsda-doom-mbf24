@@ -37,7 +37,7 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
 | NOBFGSPRAY       | 0x0008000 | Thing is ignored by spray attacks (such as A_BFGSpray)                                                                 |
 | NOHITTHRUST      | 0x0010000 | Thing does not cause thrust when it directly damages another thing (to be implemented)                                 |
 | UNSTOPPABLE      | 0x0020000 | Charging thing does not stop when taking damage                                                                        |
-| FLOATBOB         | 0x0040000 | Hexen-style float-bobbing Z movement (partially implemented)                                                           |
+| FLOATBOB         | 0x0040000 | Renderer-only floatbobbing movement (GZDoom style)                                                                     |
 | DEADFLOAT        | 0x0080000 | Thing does not drop when killed (such as Lost Souls)                                                                   |
 | TOUCHYTARGET     | 0x0100000 | Thing automatically changes its target to any actor that touches it                                                    |
 | GENERIC1         | 0x0200000 | Generic flag 1                                                                                                         |
@@ -249,7 +249,6 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
   - Fixes an MBF21 bug where the super shotgun could potentially get stuck in the lowered state after firing its last shot (default)
     
 #### In-progress/To-Do
-- Improve handling of FLOATBOB with floating monsters.
 - Additional movement codepointers, such as A_Wander codepointer for aimless monster idle movement.
 - Codepointer to jump to a specified frame if a thing is stuck.
 - Parameterized version of A_SkullAttack that can be used for ground charging enemies.
@@ -261,8 +260,5 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
 #### Potential Additions
 - Secondary attack support for weapons, with secondary optional ammo types.
 - Support for DEHACKED-defined additional weapon and ammo types as well as pickups.
-- Use state for things.
-- Function to capture use presses on things that have use states.
-- State flag indicating whether or not a thing can be used.
 - Teleporter multi-destination support without map format requirements.
 - Allow DEHACKED definition of what weapons and ammunition the player starts with.

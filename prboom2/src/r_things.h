@@ -60,6 +60,8 @@ extern fixed_t pspriteiyscale;
 //e6y: added for GL
 extern float pspritexscale_f;
 extern float pspriteyscale_f;
+//Bofu: added for renderer-only floatbobbers (MBF24)
+fixed_t FloatBobRenderOffsets[64];
 
 void R_DrawMaskedColumn(const rpatch_t *patch,
                         R_DrawColumn_f colfunc,

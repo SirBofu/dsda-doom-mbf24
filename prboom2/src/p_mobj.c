@@ -1296,9 +1296,9 @@ void P_MobjThinker (mobj_t* mobj)
       mobj->z = mobj->floorz +
                 (hexen ? mobj->special1.i : 0) + FloatBobOffsets[(mobj->health++) & 63];
   }
-  else if (mbf24 && mobj->flags3 & MF3_FLOATBOB)
-  {
-    mobj->z = mobj->floorz + (mbf24 ? mobj->special1.i : 0) + FloatBobOffsets[(mobj->floatfactor++) & 63];
+  if (mobj->flags3 & MF3_FLOATBOB)
+  { // This is a render only effect; we just need to increase the floatfactor
+    mobj->floatfactor++;
   }
   else if (mobj->z != mobj->floorz || mobj->momz || BlockingMobj)
   {
