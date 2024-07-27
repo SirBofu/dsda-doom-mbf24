@@ -825,7 +825,10 @@ static void P_KillMobj(mobj_t *source, mobj_t *target)
   if (target->type != MT_SKULL)
   {
     if (!mbf24 || !(target->flags3 & MF3_DEADFLOAT))
+    {
       target->flags &= ~MF_NOGRAVITY;
+      target->flags3 &= ~MF3_FLOATBOB;
+    }
   }
 
   target->flags |= MF_CORPSE|MF_DROPOFF;
