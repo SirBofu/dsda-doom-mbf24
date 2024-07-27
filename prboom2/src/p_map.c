@@ -1609,6 +1609,7 @@ dboolean P_TryMove(mobj_t* thing,fixed_t x,fixed_t y,
 
     if (
       !(thing->flags & MF_TELEPORT) &&
+      !(mbf24 && thing->flags3 & MF3_STEPMISSILE) && // added for stepmissile
       (!heretic || thing->type != HERETIC_MT_MNTRFX2) &&
       tmfloorz - thing->z > 24*FRACUNIT
     )

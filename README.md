@@ -38,3 +38,7 @@ In addition, Lost Souls have been given the `ONLYSLAMSOLID` flag, which prevents
 This WAD demonstrates a simple implementation of the `Use frame` Thing property and `ALLOWUSE` Frame flag.
 The barrels filled with brown liquid don't explode when damaged; instead, they must be primed by pressing the Use key.
 They will play a sound, flash brightly for a couple of seconds, and then explode.
+
+[FloorHugger and StepMissile Test](https://www.dropbox.com/scl/fi/czf9wtm0n84bjjmynxuuv/FloorHuggerTest.wad?rlkey=415bte8jr3ju1160t686qkzbq&st=fzld0aci&dl=0)
+This WAD changes the Archvile's attack to be a series of floor-hugging flames that close in on the player.
+The flames will climb up to any floor, but will still explode on impact with one-sided linedefs, ceilings, or solid things.

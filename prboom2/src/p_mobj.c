@@ -1057,10 +1057,15 @@ floater:
       return;
     }
 
-    if (!raven && (mo->flags & MF_MISSILE) && !(mo->flags & MF_NOCLIP))
+    if (!raven && (mo->flags & MF_MISSILE) && !(mo->flags & MF_NOCLIP) && !(mbf24 && mo->flags3 & MF3_FLOORHUGGER))
     {
       P_ExplodeMissile (mo);
       return;
+    }
+
+    if (mbf24 && mo->flags3 & MF3_FLOORHUGGER)
+    {
+      mo->momz = 0;
     }
   }
   else if (mo->flags2 & MF2_LOGRAV)
@@ -2838,7 +2843,14 @@ mobj_t* P_SpawnMissile(mobj_t* source,mobj_t* dest,mobjtype_t type)
 
   if (!raven)
   {
-    z = source->z + 32 * FRACUNIT;
+    if (mbf24 && (&mobjinfo[type])->flags3 & MF3_FLOORHUGGER)
+    {
+      z = source->z;
+    }
+    else
+    {
+      z = source->z + 32 * FRACUNIT;
+    }
   }
   else
   {
@@ -2903,7 +2915,14 @@ mobj_t* P_SpawnMissile(mobj_t* source,mobj_t* dest,mobjtype_t type)
   if (dist < 1)
     dist = 1;
 
-  th->momz = (dest->z - source->z) / dist;
+  if (mbf24 && th->flags3 & MF3_FLOORHUGGER)
+  {
+    th->momz = 0;
+  }
+  else
+  {
+    th->momz = (dest->z - source->z) / dist;
+  }
 
   if (!raven)
   {
@@ -3259,8 +3278,8 @@ dboolean P_SeekerMissile(mobj_t * actor, mobj_t ** seekTarget, angle_t thresh, a
     angle = actor->angle >> ANGLETOFINESHIFT;
     actor->momx = FixedMul(actor->info->speed, finecosine[angle]);
     actor->momy = FixedMul(actor->info->speed, finesine[angle]);
-    if (actor->z + actor->height < target->z ||
-        target->z + target->height < actor->z || seekcenter)
+    if ((actor->z + actor->height < target->z ||
+        target->z + target->height < actor->z || seekcenter) && !(mbf24 && actor->flags3 & MF3_STEPMISSILE))
     {                           // Need to seek vertically
         dist = P_AproxDistance(target->x - actor->x, target->y - actor->y);
         dist = dist / actor->info->speed;
