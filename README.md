@@ -32,3 +32,8 @@ In this simple WAD, the Soulsphere has been modified via DEHACKED and bobs simil
 [Deadfloat and Onlyslamsolid Flag Test](https://www.dropbox.com/scl/fi/0xt3ma73r2fp584krnle5/DeadFloatTest.wad?rlkey=l1cusdxz8r23fcq9cj2y76c1r&st=n3gwgfry&dl=0)
 In this WAD, Pain Elementals have been modified via DEHACKED to have the `DEADFLOAT` flag, which causes them to not fall when they are killed.
 In addition, Lost Souls have been given the `ONLYSLAMSOLID` flag, which prevents them from colliding with non-solid objects and being interrupted.
+
+[Thing Use Frame Test](https://www.dropbox.com/scl/fi/yqxur4y7xo4077awppm3v/UseThingTest.wad?rlkey=w4ayj0yq4s775xsjurcz07gzn&st=ptjrg0pr&dl=0)
+This WAD demonstrates a simple implementation of the `Use frame` Thing property and `ALLOWUSE` Frame flag.
+The barrels filled with brown liquid don't explode when damaged; instead, they must be primed by pressing the Use key.
+They will play a sound, flash brightly for a couple of seconds, and then explode.
