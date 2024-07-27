@@ -40,10 +40,11 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
 | FLOATBOB         | 0x0040000 | Renderer-only floatbobbing movement (GZDoom style)                                                                     |
 | DEADFLOAT        | 0x0080000 | Thing does not drop when killed (such as Lost Souls)                                                                   |
 | TOUCHYTARGET     | 0x0100000 | Thing automatically changes its target to any actor that touches it                                                    |
-| GENERIC1         | 0x0200000 | Generic flag 1                                                                                                         |
-| GENERIC2         | 0x0400000 | Generic flag 2                                                                                                         |
-| GENERIC3         | 0x0800000 | Generic flag 3                                                                                                         |
-| GENERIC4         | 0x1000000 | Generic flag 4                                                                                                         |
+| TARGETUSE        | 0x0200000 | Thing automatically targets any actor that uses it                                                                     |
+| GENERIC1         | 0x0400000 | Generic flag 1                                                                                                         |
+| GENERIC2         | 0x0800000 | Generic flag 2                                                                                                         |
+| GENERIC3         | 0x1000000 | Generic flag 3                                                                                                         |
+| GENERIC4         | 0x2000000 | Generic flag 4                                                                                                         |
 
 #### Use frame
 
