@@ -1,4 +1,4 @@
-# MBF21 Specification v0.1
+# MBF24 Specification v0.1
 
 MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MBF21.
 
