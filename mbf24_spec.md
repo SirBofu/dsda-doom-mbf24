@@ -4,7 +4,7 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
 
 ## Things
 
-#### Thing Counters (In Progress)
+#### Thing Counters
 - Every actor has four new instanced counters that are not utilized by any existing code.
 - These values initialize to 0 when a thing is spawned.
 - Unless the `RESETONDEATH` flag is set on the thing, its values will persist if it is killed and resurrected (but not when resurrected via Nightmare or when using `-respawn`, as these are new instances of the actor).
@@ -58,6 +58,18 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
 - Add `Use frame = X` in the Thing definition.
 - `X` represents a frame number.
 
+#### Damage dice
+
+- Used on projectiles or charging enemies like Lost Souls. Can be used to parameterize the damage dealt by projectiles.
+- Defaults to 8 if not set.
+- Has no effect on complevels less than MBF24.
+
+#### Flat damage
+
+- Used on projectiles or charging enemies like Lost Souls. Adds a flat damage amount to the randomized damage to the attack when it hits.
+- Defaults to 0 if not set.
+- Has no effect on complevels less than MBF24.
+
 ## Frames
 
 #### Frame Flags
@@ -78,7 +90,7 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
 ##### Actor pointers
 
 - **A_AddFlags(flags, flags2, flags3)**
-    - Adds the specified thing flags to the caller.
+    - Adds the specified thing flags to the caller. This command has been updated to support MBF24 flags.
     - Args:
         - `flags (int)`: Standard actor flag(s) to add
         - `flags2 (int)`: MBF21 actor flag(s) to add
@@ -87,7 +99,7 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
         - If the current complevel is less than MBF24, then `flags3` is ignored. 
 
 - **A_RemoveFlags(flags, flags2, flags3)**
-    - Removes the specified thing flags from the caller.
+    - Removes the specified thing flags from the caller. This command has been updated to support MBF24 flags.
     - Args:
         - `flags (int)`: Standard actor flag(s) to remove
         - `flags2 (int)`: MBF21 actor flag(s) to remove
@@ -96,7 +108,7 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
         - If the current complevel is less than MBF24, then `flags3` is ignored.
 
 - **A_JumpIfFlagsSet(state, flags, flags2, flags3)**
-    - Jumps to a state if caller has the specified thing flags set.
+    - Jumps to a state if caller has the specified thing flags set. This command has been updated to support MBF24 flags.
     - Args:
         - `state (uint)`: State to jump to.
         - `flags (int)`: Standard actor flag(s) to check
@@ -106,9 +118,68 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
         - If multiple flags are specified in a field, jump will only occur if all the flags are set (e.g. AND comparison, not OR)
         - If the current complevel is les than MBF24, then `flags3` is ignored.
 
+- **A_MonsterMeleeAttack(damagebase, damagedice, sound, range, flatdamage)**
+    - Generic monster melee attack. This command has been updated to support an optional flat damage parameter.
+    - Args:
+        - `damagebase (uint)`: Base damage of attack; if not set, defaults to 3
+        - `damagedice (uint)`: Attack damage random multiplier; if not set, defaults to 8
+        - `sound (uint)`: Sound to play if attack hits
+        - `range (fixed)`: Attack range; if not set, defaults to calling actor's melee range property
+        - `flatdamage (uint)`: Flat damage to add to attack; if not set, defaults to 0 
+    - Notes:
+        - Damage formula is: `damage = (damagebase * random(1, damagedice) + flatdamage)`
+        - If the current complevel is less than MBF24, then `flatdamage` is ignored.
+
+- **A_MonsterBulletAttack(hspread, vspread, numbullets, damagebase, damagedice, flatdamage)**
+    - Generic monster bullet attack. This command has been updated to support an optional flat damage parameter.
+    - Args:
+        - `hspread (fixed)`: Horizontal spread (degrees, in fixed point)
+        - `vspread (fixed)`: Vertical spread (degrees, in fixed point)
+        - `numbullets (uint)`: Number of bullets to fire; if not set, defaults to 1
+        - `damagebase (uint)`: Base damage of attack; if not set, defaults to 3
+        - `damagedice (uint)`: Attack damage random multiplier; if not set, defaults to 5
+        - `flatdamage (uint)`: Flat damage to add to attack; if not set, defaults to 0 
+    - Notes:
+        - Damage formula is: `damage = (damagebase * random(1, damagedice) + flatdamage)`
+        - Damage arg defaults are identical to Doom's monster bullet attack damage values.
+        - If the current complevel is less than MBF24, then `flatdamage` is ignored.
+
+##### Weapon pointers
+
+- **A_WeaponBulletAttack(hspread, vspread, numbullets, damagebase, damagedice, flatdamage)**
+    - Generic weapon bullet attack. This command has been updated to support an optional flat damage parameter.
+    - Args:
+        - `hspread (fixed)`: Horizontal spread (degrees, in fixed point)
+        - `vspread (fixed)`: Vertical spread (degrees, in fixed point)
+        - `numbullets (uint)`: Number of bullets to fire; if not set, defaults to 1
+        - `damagebase (uint)`: Base damage of attack; if not set, defaults to 5
+        - `damagedice (uint)`: Attack damage random multiplier; if not set, defaults to 3
+        - `flatdamage (uint)`: Flat damage to add to attack; if not set, defaults to 0
+    - Notes:
+        - Unlike native Doom attack codepointers, this function will not consume ammo, trigger the Flash state, or play a sound.
+        - Damage formula is: `damage = (damagebase * random(1, damagedice) + flatdamage)`
+        - Damage arg defaults are identical to Doom's weapon bullet attack damage values.
+            - Note that these defaults are intentionally different for weapons vs monsters (5d3 vs 3d5) -- yup, Doom did it this way. :P
+        - If the current complevel is less than MBF24, then `flatdamage` is ignored.
+
+- **A_WeaponMeleeAttack(damagebase, damagedice, zerkfactor, sound, range, flatdamage, state)**
+- Generic weapon melee attack. This command has been updated to support an optional flat damage parameter, a state to jump to, and to disable turning the player on hit.
+- Args:
+    - `damagebase (uint)`: Base damage of attack; if not set, defaults to 2
+    - `damagedice (uint)`: Attack damage random multiplier; if not set, defaults to 10
+    - `zerkfactor (fixed)`: Berserk damage multiplier; if not set, defaults to 1.0
+    - `sound (uint)`: Sound index to play if attack hits
+    - `range (fixed)`: Attack range; if not set, defaults to player mobj's melee range property
+    - `flatdamage (uint)`: Flat damage to add to attack; if not set, defaults to 0
+    - `state (uint)`: State to change the weapon to if attack hits
+    - `turnonhit (uint)`: If nonzero, then the player will turn toward the target that was hit on a hit; if not set, defaults to 1
+- Notes:
+    - Damage formula is: `damage = (damagebase * random(1, damagedice) + flatdamage)`; this is then multiplied by `zerkfactor` if the player has Berserk.
+    - If the current complevel is less than MBF24, then `flatdamage`. `state`, and `turnonhit` are ignored. 
+
 #### New DEHACKED Actor Codepointers
 
-#### Actor pointers
+##### Actor pointers
 
 - **A_JumpIfTargetHigher(state, distance, hilo)**
   - Jumps to a state if caller's target's z position is closer than the specified vertical distance.
@@ -229,7 +300,7 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
 
 #### New DEHACKED Weapon Codepointers
 
-#### Weapon pointers
+##### Weapon pointers
 
 - **A_WeaponRemove(removeammo)**
   - Removes the current weapon from the player's inventory and switches to a different weapon.
@@ -246,10 +317,11 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
   - Disables horizontal autoaim for player projectile weapons (default)
   - Note that projectiles that would normally trigger horizontal autoaim will still be aimed vertically, allowing for leading shots.
 
-- comp_ssgautoswitch
+- comp_ssgautoswitch (to be removed)
   - Fixes an MBF21 bug where the super shotgun could potentially get stuck in the lowered state after firing its last shot (default)
     
 #### In-progress/To-Do
+- Remove the SSG autoswitch bugfix, as this is being merged into base MBF21 by both Woof! and DSDA-Doom. 
 - Additional movement codepointers, such as A_Wander codepointer for aimless monster idle movement.
 - Codepointer to jump to a specified frame if a thing is stuck.
 - Parameterized version of A_SkullAttack that can be used for ground charging enemies.
