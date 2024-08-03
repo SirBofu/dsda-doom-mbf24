@@ -712,6 +712,7 @@ static dboolean PIT_CheckThing(mobj_t *thing) // killough 3/26/98: make static
 {
   fixed_t blockdist;
   int damage;
+  int damagedice; // only needed for MBF24 damage parameterization
 
   // killough 11/98: add touchy things
   if (!(thing->flags & (MF_SOLID|MF_SPECIAL|MF_SHOOTABLE|MF_TOUCHY)) && !(thing->flags3 & MF3_TOUCHYTARGET))
@@ -885,7 +886,21 @@ static dboolean PIT_CheckThing(mobj_t *thing) // killough 3/26/98: make static
       }
     }
 
-    damage = ((P_Random(pr_skullfly) % 8) + 1) * tmthing->info->damage;
+    // For MBF24, we want to make use of the damage dice and flat damage parameters, which are stored in the thing
+
+    if (mbf24_features)
+    {
+      if (tmthing->info->damagedice <= 0)
+      {
+        damagedice = 8;
+      }
+      else
+      {
+        damagedice = tmthing->info->damagedice;
+      }
+    }
+
+    damage = mbf24_features ? (((P_Random(pr_skullfly) % damagedice) + 1) * tmthing->info->damage + tmthing->info->flatdamage) : (((P_Random(pr_skullfly) % 8) + 1) * tmthing->info->damage);
 
     P_DamageMobj (thing, tmthing, tmthing, damage);
 
@@ -1139,7 +1154,21 @@ static dboolean PIT_CheckThing(mobj_t *thing) // killough 3/26/98: make static
     // damage / explode
 
     damage = raven ? tmthing->damage : tmthing->info->damage;
-    damage = ((P_Random(pr_damage) % 8) + 1) * damage;
+
+    // For MBF24, we want to make use of the damage dice and flat damage parameters, which are stored in the thing
+
+    if (mbf24_features)
+    {
+      if (tmthing->info->damagedice <= 0)
+      {
+        damagedice = 8;
+      }
+      else
+      {
+        damagedice = tmthing->info->damagedice;
+      }
+    }
+    damage = mbf24_features ? (((P_Random(pr_damage) * damagedice) + 1) * damage + tmthing->info->flatdamage) : (((P_Random(pr_damage) % 8) + 1) * damage);
     if (
       raven &&
       damage &&

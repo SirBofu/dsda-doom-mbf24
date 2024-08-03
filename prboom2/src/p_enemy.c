@@ -3299,10 +3299,11 @@ void A_MonsterProjectile(mobj_t *actor)
 //   args[2]: Number of bullets to fire; if not set, defaults to 1
 //   args[3]: Base damage of attack (e.g. for 3d5, customize the 3); if not set, defaults to 3
 //   args[4]: Attack damage modulus (e.g. for 3d5, customize the 5); if not set, defaults to 5
+//   args[5]: Flat damage amount to deal; if not set, defaults to 0 (MBF24 only)
 //
 void A_MonsterBulletAttack(mobj_t *actor)
 {
-  int hspread, vspread, numbullets, damagebase, damagemod;
+  int hspread, vspread, numbullets, damagebase, damagemod, flatdamage;
   int aimslope, i, damage, angle, slope;
 
   if (!mbf21 || !actor->target)
@@ -3313,6 +3314,7 @@ void A_MonsterBulletAttack(mobj_t *actor)
   numbullets = actor->state->args[2];
   damagebase = actor->state->args[3];
   damagemod  = actor->state->args[4];
+  flatdamage = actor->state->args[5];
 
   A_FaceTarget(actor);
   S_StartMobjSound(actor, actor->info->attacksound);
@@ -3321,7 +3323,7 @@ void A_MonsterBulletAttack(mobj_t *actor)
 
   for (i = 0; i < numbullets; i++)
   {
-    damage = (P_Random(pr_mbf21) % damagemod + 1) * damagebase;
+    damage = (mbf24_features) ? ((P_Random(pr_mbf21) % damagemod + 1) * damagebase + flatdamage) : ((P_Random(pr_mbf21) % damagemod + 1) * damagebase);
     angle = (int)actor->angle + P_RandomHitscanAngle(pr_mbf21, hspread);
     slope = aimslope + P_RandomHitscanSlope(pr_mbf21, vspread);
 
@@ -3336,10 +3338,11 @@ void A_MonsterBulletAttack(mobj_t *actor)
 //   args[1]: Attack damage modulus (e.g. for 3d8, customize the 8); if not set, defaults to 8
 //   args[2]: Sound to play if attack hits
 //   args[3]: Range (fixed point); if not set, defaults to monster's melee range
+//   args[4]: Flat damage amount to deail; if not set, defaults to 0 (MBF24 only)
 //
 void A_MonsterMeleeAttack(mobj_t *actor)
 {
-  int damagebase, damagemod, hitsound, range;
+  int damagebase, damagemod, hitsound, range, flatdamage;
   int damage;
 
   if (!mbf21 || !actor->target)
@@ -3349,6 +3352,7 @@ void A_MonsterMeleeAttack(mobj_t *actor)
   damagemod  = actor->state->args[1];
   hitsound   = actor->state->args[2];
   range      = actor->state->args[3];
+  flatdamage = actor->state->args[4];
 
   if (range == 0)
     range = actor->info->meleerange;
@@ -3361,7 +3365,7 @@ void A_MonsterMeleeAttack(mobj_t *actor)
 
   S_StartMobjSound(actor, hitsound);
 
-  damage = (P_Random(pr_mbf21) % damagemod + 1) * damagebase;
+  damage = (mbf24_features) ? ((P_Random(pr_mbf21) % damagemod + 1) * damagebase + flatdamage) : ((P_Random(pr_mbf21) % damagemod + 1) * damagebase);
   P_DamageMobj(actor->target, actor, actor, damage);
 }
 

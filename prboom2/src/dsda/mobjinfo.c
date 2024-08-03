@@ -153,6 +153,8 @@ static mobjinfo_t zmt_mapspot_info = {
   .visibility = VF_ZDOOM,
   .flags3 = 0,
   .usestate = S_NULL,
+  .damagedice = 0,
+  .flatdamage = 0,
 };
 
 static mobjinfo_t zmt_mapspot_gravity_info = {
@@ -192,6 +194,8 @@ static mobjinfo_t zmt_mapspot_gravity_info = {
   .visibility = VF_ZDOOM,
   .flags3 = 0,
   .usestate = S_NULL,
+  .damagedice = 0,
+  .flatdamage = 0,
 };
 
 static mobjinfo_t zmt_teleportdest2_info = {
@@ -231,6 +235,8 @@ static mobjinfo_t zmt_teleportdest2_info = {
   .visibility = VF_ZDOOM,
   .flags3 = 0,
   .usestate = S_NULL,
+  .damagedice = 0,
+  .flatdamage = 0,
 };
 
 static mobjinfo_t zmt_teleportdest3_info = {
@@ -270,6 +276,8 @@ static mobjinfo_t zmt_teleportdest3_info = {
   .visibility = VF_ZDOOM,
   .flags3 = 0,
   .usestate = S_NULL,
+  .damagedice = 0,
+  .flatdamage = 0,
 };
 
 static mobjinfo_t zmt_ambient_sound = {
@@ -309,6 +317,8 @@ static mobjinfo_t zmt_ambient_sound = {
   .visibility = VF_DOOM,
   .flags3 = 0,
   .usestate = S_NULL,
+  .damagedice = 0,
+  .flatdamage = 0,
 };
 
 typedef struct {

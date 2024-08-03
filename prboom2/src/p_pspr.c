@@ -1286,10 +1286,11 @@ void A_WeaponProjectile(player_t *player, pspdef_t *psp)
 //   args[2]: Number of bullets to fire; if not set, defaults to 1
 //   args[3]: Base damage of attack (e.g. for 5d3, customize the 5); if not set, defaults to 5
 //   args[4]: Attack damage modulus (e.g. for 5d3, customize the 3); if not set, defaults to 3
+//   args[5]: Flat damage to add to attack; if not set, defaults to 0 (MBF24 only)
 //
 void A_WeaponBulletAttack(player_t *player, pspdef_t *psp)
 {
-  int hspread, vspread, numbullets, damagebase, damagemod;
+  int hspread, vspread, numbullets, damagebase, damagemod, flatdamage;
   int i, damage, angle, slope;
 
   CHECK_WEAPON_CODEPOINTER("A_WeaponBulletAttack", player);
@@ -1302,12 +1303,13 @@ void A_WeaponBulletAttack(player_t *player, pspdef_t *psp)
   numbullets = psp->state->args[2];
   damagebase = psp->state->args[3];
   damagemod  = psp->state->args[4];
+  flatdamage = psp->state->args[5];
 
   P_BulletSlope(player->mo);
 
   for (i = 0; i < numbullets; i++)
   {
-    damage = (P_Random(pr_mbf21) % damagemod + 1) * damagebase;
+    damage = mbf24_features ? ((P_Random(pr_mbf21) % damagemod + 1) * damagebase + flatdamage) : ((P_Random(pr_mbf21) % damagemod + 1) * damagebase);
     angle = (int)player->mo->angle + P_RandomHitscanAngle(pr_mbf21, hspread);
     slope = bulletslope + P_RandomHitscanSlope(pr_mbf21, vspread);
 
@@ -1323,10 +1325,13 @@ void A_WeaponBulletAttack(player_t *player, pspdef_t *psp)
 //   args[2]: Berserk damage multiplier (fixed point); if not set, defaults to 1.0 (no change).
 //   args[3]: Sound to play if attack hits
 //   args[4]: Range (fixed point); if not set, defaults to player mobj's melee range
+//   args[5]: Flat damage to add to attack; if not set, defaults to 0 (MBF24 only)
+//   args[6]: State to jump to if attack hits (MBF24 only)
+//   args[7]: If zero, don't turn toward the target on a hit (MBF24 only)
 //
 void A_WeaponMeleeAttack(player_t *player, pspdef_t *psp)
 {
-  int damagebase, damagemod, zerkfactor, hitsound, range;
+  int damagebase, damagemod, zerkfactor, hitsound, range, flatdamage, turnonhit;
   angle_t angle;
   int t, slope, damage;
 
@@ -1340,11 +1345,13 @@ void A_WeaponMeleeAttack(player_t *player, pspdef_t *psp)
   zerkfactor = psp->state->args[2];
   hitsound   = psp->state->args[3];
   range      = psp->state->args[4];
+  flatdamage = psp->state->args[5];
+  turnonhit  = psp->state->args[7];
 
   if (range == 0)
     range = player->mo->info->meleerange;
 
-  damage = (P_Random(pr_mbf21) % damagemod + 1) * damagebase;
+  damage = mbf24_features ? ((P_Random(pr_mbf21) % damagemod + 1) * damagebase + flatdamage) : ((P_Random(pr_mbf21) % damagemod + 1) * damagebase);
   if (player->powers[pw_strength])
     damage = (damage * zerkfactor) >> FRACBITS;
 
@@ -1369,9 +1376,16 @@ void A_WeaponMeleeAttack(player_t *player, pspdef_t *psp)
   // un-missed!
   S_StartMobjSound(player->mo, hitsound);
 
-  // turn to face target
-  player->mo->angle = R_PointToAngle2(player->mo->x, player->mo->y, linetarget->x, linetarget->y);
-  R_SmoothPlaying_Reset(player);
+  // jump the weapon to the specified state if it hits
+
+  if (mbf24_features && psp->state->args[6] != 0) P_SetPspritePtr(player, psp, psp->state->args[6]);
+
+  // turn to face target, but only if not in MBF24 or turn on hit is nonzero
+  if (!mbf24_features || turnonhit != 0)
+  {
+    player->mo->angle = R_PointToAngle2(player->mo->x, player->mo->y, linetarget->x, linetarget->y);
+    R_SmoothPlaying_Reset(player);
+  }
 }
 
 //

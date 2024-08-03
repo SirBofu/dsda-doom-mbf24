@@ -1136,8 +1136,11 @@ static const char *deh_mobjinfo_fields[] =
 
   // misc
   "Blood color",         // .bloodcolor
+
+  // mbf24
   "MBF24 Bits",          // .flags3
   "Use frame",           // .usestate
+  "Flat damage",         // .flatdamage
 
   NULL
 };
@@ -1537,8 +1540,8 @@ static const deh_bexptr deh_bexptrs[] = // CPhipps - static const
   // [XA] New mbf21 codepointers
   {A_SpawnObject,         "A_SpawnObject", 8, {0}, TI_ARGS1},
   {A_MonsterProjectile,   "A_MonsterProjectile", 5, {0}, TI_ARGS1},
-  {A_MonsterBulletAttack, "A_MonsterBulletAttack", 5, {0, 0, 1, 3, 5}},
-  {A_MonsterMeleeAttack,  "A_MonsterMeleeAttack", 4, {3, 8, 0, 0}},
+  {A_MonsterBulletAttack, "A_MonsterBulletAttack", 6, {0, 0, 1, 3, 5, 0}}, // added flatdamage support
+  {A_MonsterMeleeAttack,  "A_MonsterMeleeAttack", 5, {3, 8, 0, 0, 0}}, // added flatdamage support
   {A_RadiusDamage,        "A_RadiusDamage", 2},
   {A_NoiseAlert,          "A_NoiseAlert", 0},
   {A_HealChase,           "A_HealChase", 2},
@@ -1554,8 +1557,8 @@ static const deh_bexptr deh_bexptrs[] = // CPhipps - static const
   {A_AddFlags,            "A_AddFlags", 3}, // incremented by 1 to support MBF24 flags
   {A_RemoveFlags,         "A_RemoveFlags", 3}, // incremented by 1 to support MBF24 flags
   {A_WeaponProjectile,    "A_WeaponProjectile", 5, {0}, TI_ARGS1},
-  {A_WeaponBulletAttack,  "A_WeaponBulletAttack", 5, {0, 0, 1, 5, 3}},
-  {A_WeaponMeleeAttack,   "A_WeaponMeleeAttack", 5, {2, 10, 1 * FRACUNIT, 0, 0}},
+  {A_WeaponBulletAttack,  "A_WeaponBulletAttack", 6, {0, 0, 1, 5, 3, 0}}, // added flatdamage support
+  {A_WeaponMeleeAttack,   "A_WeaponMeleeAttack", 8, {2, 10, 1 * FRACUNIT, 0, 0, 0, 0, 1}}, // added flatdamage, state, and turnonhit support
   {A_WeaponSound,         "A_WeaponSound", 2},
   {A_WeaponAlert,         "A_WeaponAlert", 0},
   {A_WeaponJump,          "A_WeaponJump", 2},
@@ -2053,6 +2056,8 @@ static void setMobjInfoValue(int mobjInfoIndex, int keyIndex, uint64_t value) {
 
     // MBF24
     case 34: mi->usestate = (int)value; return;
+    case 35: mi->damagedice = (int)value; return;
+    case 36: mi->flatdamage = (int)value; return;
 
     default: return;
   }

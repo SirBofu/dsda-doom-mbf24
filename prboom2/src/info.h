@@ -6592,6 +6592,8 @@ typedef struct
   uint64_t flags3;
   int usestate;  /* State to jump to when player presses use on
            the thing. Use presses are ignored if not set. */
+  int damagedice; /* For parameterizing missile damage */
+  int flatdamage; /* Flat damage to add to projectile damage */
 } mobjinfo_t;
 
 #define NO_ALTSPEED -1

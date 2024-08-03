@@ -7,6 +7,11 @@ Documentation of the MBF24 spec as envisioned in this build can be found in mbf2
 
 Test WADs implementing the features so far:
 
+[Flat Damage Test](https://www.dropbox.com/scl/fi/i72ojgtsqxtv0buvpawba/FlatDamageTest.wad?rlkey=k0hx13vdgjmfjy44pppu03qvr&st=8biks5xc&dl=0)
+In this WAD, the damage dealt by Zombiemen, Demons, and Spectres has been reconfigured to demonstrate the flat damage arg for parameterized monster attacks.
+Zombiemen will still deal a minimum of 3 damage and a maximum of 15 as before, but now have a much more granular range (flat damaage of 2 + random(13)*1).
+Demons and spectres still deal a minimum of 4 damage and a maximum of 40 damage as before, but now have a much more granular range (flat damage of 3 + random(37)*1).
+
 [Antitelefrag/Nodamage/Pushable Flag Test](https://www.dropbox.com/scl/fi/0ew1sbdqjf93w87xqczo7/ThingFlagTest.wad?rlkey=vsr9cwgoeare93qbtfrn35ung&st=1ilxe0yg&dl=0)
 In this WAD, the Mancubus in the level is impervious to damage, and if the player attempts to teleport into it, they will be telefragged instantly.
 In addition, there is a pushable office chair prop that is impervious to damage but can be shot. Both have the `NODAMAGE` flag, while the chair has `PUSHABLE` and the Mancubus has `ANTITELEFRAG`.

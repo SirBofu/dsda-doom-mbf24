@@ -253,6 +253,8 @@ static void dsda_InitDoom(void) {
     //mbf24
     mobjinfo[i].flags3     = 0; // not in doom
     mobjinfo[i].usestate   = S_NULL; // not in doom
+    mobjinfo[i].damagedice = 8; // not in doom
+    mobjinfo[i].flatdamage = 0; // not in doom
   }
 
   // don't want to reorganize info.c structure for a few tweaks...
@@ -431,6 +433,8 @@ static void dsda_InitHeretic(void) {
     //misc
     mobjinfo[j].flags3      = 0; // not in heretic
     mobjinfo[j].usestate    = HERETIC_S_NULL; // not in heretic
+    mobjinfo[j].damagedice  = 8; // not in heretic
+    mobjinfo[j].flatdamage  = 0; // not in heretic
   }
 
   // heretic doesn't use "clip" concept
@@ -585,6 +589,8 @@ static void dsda_InitHexen(void) {
     // mbf24
     mobjinfo[j].flags3      = 0; // not in hexen
     mobjinfo[j].usestate    = HEXEN_S_NULL; // not in hexen
+    mobjinfo[j].damagedice  = 8; // not in hexen
+    mobjinfo[j].flatdamage  = 0; // not in hexen
   }
 
   {
