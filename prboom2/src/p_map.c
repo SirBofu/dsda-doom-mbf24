@@ -1170,7 +1170,7 @@ static dboolean PIT_CheckThing(mobj_t *thing) // killough 3/26/98: make static
         damagedice = tmthing->info->damagedice;
       }
     }
-    damage = mbf24_features ? (((P_Random(pr_damage) * damagedice) + 1) * damage + tmthing->info->flatdamage) : (((P_Random(pr_damage) % 8) + 1) * damage);
+    damage = mbf24_features ? (((P_Random(pr_damage) % damagedice) + 1) * damage + tmthing->info->flatdamage) : (((P_Random(pr_damage) % 8) + 1) * damage);
     if (
       raven &&
       damage &&
