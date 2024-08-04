@@ -62,12 +62,46 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
 
 - Used on projectiles or charging enemies like Lost Souls. Can be used to parameterize the damage dealt by projectiles.
 - Defaults to 8 if not set.
+- Add `Damage dice = X` in the Thing definition.
 - Has no effect on complevels less than MBF24.
 
 #### Flat damage
 
 - Used on projectiles or charging enemies like Lost Souls. Adds a flat damage amount to the randomized damage to the attack when it hits.
 - Defaults to 0 if not set.
+- Add `Flat damage = X` in the Thing definition.
+- Has no effect on complevels less than MBF24.
+
+#### Melee threshold
+
+- Taken from Crispy Doom, which allows generalizing the distance in map units at which an enemy will switch from ranged to melee.
+- This is ignored if the thing has the `LONGMELEE` MBF21 Bit set.
+- Defaults to 0 if not set.
+- Add `Melee threshold = X` in the Thing definition.
+- Has no effect on complevels less than MBF24.
+
+#### Max target range
+
+- Taken from Crispy Doom, which allows generalizing the maximum distance in map units at which an enemy will start shooting.
+- This is ignored if the thing has the `SHORTMRANGE` MBF21 Bit set.
+- Defaults to 0 if not set, which means unlimited range.
+- Add `Max target range = X` in the Thing definition.
+- Has no effect on complevels less than MBF24.
+
+#### Min missile chance
+
+- Taken from Crispy Doom, which allows generalizing the minimum likelihood of a missile attack.
+- This is ignored if the thing has the `HIGHERMPROB` MBF21 Bit set.
+- Defaults to 0 if not set, which is interpreted as the default value of 200 for consistency with Crispy Doom.
+- Add `Min missile chance = X` in the Thing definition.
+- Has no effect on complevels less than MBF24.
+
+#### Missile chance multiplier
+
+- Taken from Crispy Doom, which allows generalizing a multiplier (in fixed notation) for missile firing chance.
+- This is ignored if the thing has the `RANGEHALF` MBF21 Bit set.
+- Defaults to 65536 if not set, which is the base multiplier.
+- Add `Missile chance multiplier = X` in the Thing definition.
 - Has no effect on complevels less than MBF24.
 
 ## Frames

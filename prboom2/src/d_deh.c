@@ -1141,6 +1141,10 @@ static const char *deh_mobjinfo_fields[] =
   "MBF24 Bits",          // .flags3
   "Use frame",           // .usestate
   "Flat damage",         // .flatdamage
+  "Melee threshold",     // .meleethreshold
+  "Max target range",    // .maxattackrange
+  "Min missile chance",  // .minmissilechance
+  "Missile chance multiplier", // .missilechancemult
 
   NULL
 };
