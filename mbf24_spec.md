@@ -332,6 +332,15 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
   - Notes:
     - Uses existing position checking codepointers and will not check for a clear path.
 
+- **A_DodgeChase(straferange, strafespeed, strafechance)**
+    - Similar to A_Chase, except at a certain range, the thing has a chance to randomly strafe to one side.
+    - Args:
+        - `straferange (fixed)`: Distance (map units) from its target at which the thing will start strafing.
+        - `strafespeed (int)`: Speed at which the thing will move while it's strafing.
+        - `strafechance (int)`: Probability out of 255 that the thing will start strafing once it's in range.
+    - Notes:
+        - Can be used to recreate multiple movement codepointers in Hexen.
+
 #### New DEHACKED Weapon Codepointers
 
 ##### Weapon pointers

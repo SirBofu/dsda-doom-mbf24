@@ -162,6 +162,7 @@ void A_JumpIfTracerFlagsSet(mobj_t *);
 void A_JumpIfHasTarget(mobj_t *);
 void A_JumpIfHasTracer(mobj_t *);
 void A_JumpIfBlocked(mobj_t *);
+void A_DodgeChase(mobj_t *);
 
 // heretic
 

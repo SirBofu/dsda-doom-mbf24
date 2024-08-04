@@ -4407,6 +4407,154 @@ void A_JumpIfBlocked(mobj_t* actor)
 
 }
 
+//
+// A_DodgeChase
+// Hexen-style chasing where an enemy will chase its target, and at a certain range,
+// potentially strafe to either side.
+//   args[0]: Range (map units, in fixed point) at which the thing will attempt to stay
+//   args[1]: Speed at which the thing will move if it strafes.
+//   args[2]: Chance (out of 255) for a thing to strafe.
+//
+
+void A_DodgeChase(mobj_t* actor)
+{
+    int delta, straferange, strafespeed, strafechance;
+    fixed_t dist;
+    angle_t ang;
+    mobj_t *target;
+
+    if (!mbf24 || !(actor->target)) return;
+
+    straferange = actor->state->args[0];
+    strafespeed = actor->state->args[1];
+    strafechance = actor->state->args[2];
+
+    if (actor->reactiontime)
+    {
+        actor->reactiontime--;
+    }
+
+    // Modify target threshold
+    if (actor->threshold)
+    {
+        actor->threshold--;
+    }
+
+    if (skill_info.flags & SI_FAST_MONSTERS)
+    {                           // Monsters move faster in nightmare mode
+        actor->tics -= actor->tics / 2;
+        if (actor->tics < 3)
+        {
+            actor->tics = 3;
+        }
+    }
+
+    //
+    // turn towards movement direction if not there yet
+    //
+    if (actor->movedir < 8)
+    {
+        actor->angle &= (7 << 29);
+        delta = actor->angle - (actor->movedir << 29);
+        if (delta > 0)
+        {
+            actor->angle -= ANG90 / 2;
+        }
+        else if (delta < 0)
+        {
+            actor->angle += ANG90 / 2;
+        }
+    }
+
+    if (!actor->target || !(actor->target->flags & MF_SHOOTABLE))
+    {                           // look for a new target
+        if (P_LookForPlayers(actor, true))
+        {                       // got a new target
+            return;
+        }
+        P_SetMobjState(actor, actor->info->spawnstate);
+        return;
+    }
+
+    //
+    // don't attack twice in a row
+    //
+    if (actor->flags & MF_JUSTATTACKED)
+    {
+        actor->flags &= ~MF_JUSTATTACKED;
+        if (!(skill_info.flags & SI_FAST_MONSTERS))
+            P_NewChaseDir(actor);
+        return;
+    }
+
+    // Strafe
+    if (actor->special2.i > 0)
+    {
+        actor->special2.i--;
+    }
+    else
+    {
+        target = actor->target;
+        actor->special2.i = 0;
+        actor->momx = actor->momy = 0;
+        dist = P_AproxDistance(actor->x - target->x, actor->y - target->y);
+        if (dist < straferange)
+        {
+
+                if (P_Random(pr_mbf21) < strafechance)
+                {
+                    ang = R_PointToAngle2(actor->x, actor->y,
+                                          target->x, target->y);
+                    if (P_Random(pr_mbf21) < 128)
+                        ang += ANG90;
+                    else
+                        ang -= ANG90;
+                    ang >>= ANGLETOFINESHIFT;
+                    actor->momx = FixedMul(strafespeed * FRACUNIT, finecosine[ang]);
+                    actor->momy = FixedMul(strafespeed * FRACUNIT, finesine[ang]);
+                    actor->special2.i = 3;    // strafe time
+                }
+
+
+        }
+    }
+
+    //
+    // check for missile attack
+    //
+    if (actor->info->missilestate)
+    {
+        if (!(skill_info.flags & SI_FAST_MONSTERS) && actor->movecount)
+            goto nomissile;
+        if (!P_CheckMissileRange(actor))
+            goto nomissile;
+        P_SetMobjState(actor, actor->info->missilestate);
+        actor->flags |= MF_JUSTATTACKED;
+        return;
+    }
+    nomissile:
+
+    //
+    // possibly choose another target
+    //
+    if (netgame && !actor->threshold && !P_CheckSight(actor, actor->target))
+    {
+        if (P_LookForPlayers(actor, true))
+            return;             // got a new target
+    }
+
+    //
+    // chase towards player
+    //
+    if (!actor->special2.i)
+    {
+        if (--actor->movecount < 0 || !P_Move(actor, false))
+        {
+            P_NewChaseDir(actor);
+        }
+    }
+}
+
 // heretic
 
 #include "heretic/def.h"
@@ -8777,6 +8925,8 @@ void A_BounceCheck(mobj_t * actor)
     }
 }
 
+// A_FastChase: This has been exposed to Dehacked in MBF24. The code's already there, so why not? - bofu
+
 #define CLASS_BOSS_STRAFE_RANGE	64*10*FRACUNIT
 
 void A_FastChase(mobj_t * actor)
@@ -8857,8 +9007,10 @@ void A_FastChase(mobj_t * actor)
         dist = P_AproxDistance(actor->x - target->x, actor->y - target->y);
         if (dist < CLASS_BOSS_STRAFE_RANGE)
         {
-            if (P_Random(pr_hexen) < 100)
+            if (!mbf24_features)
             {
+              if (P_Random(pr_hexen) < 100)
+              {
                 ang = R_PointToAngle2(actor->x, actor->y,
                                       target->x, target->y);
                 if (P_Random(pr_hexen) < 128)
@@ -8869,6 +9021,24 @@ void A_FastChase(mobj_t * actor)
                 actor->momx = FixedMul(13 * FRACUNIT, finecosine[ang]);
                 actor->momy = FixedMul(13 * FRACUNIT, finesine[ang]);
                 actor->special2.i = 3;    // strafe time
+              }
+            }
+            else
+            {
+                if (P_Random(pr_mbf21) < 100)
+                {
+                    ang = R_PointToAngle2(actor->x, actor->y,
+                                          target->x, target->y);
+                    if (P_Random(pr_mbf21) < 128)
+                        ang += ANG90;
+                    else
+                        ang -= ANG90;
+                    ang >>= ANGLETOFINESHIFT;
+                    actor->momx = FixedMul(13 * FRACUNIT, finecosine[ang]);
+                    actor->momy = FixedMul(13 * FRACUNIT, finesine[ang]);
+                    actor->special2.i = 3;    // strafe time
+                }
+
             }
         }
     }
