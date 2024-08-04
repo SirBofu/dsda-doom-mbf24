@@ -254,20 +254,50 @@ static dboolean P_CheckMissileRange(mobj_t *actor)
     if (dist > 14*64)
       return false;     // too far away
 
+  // MBF24 - implementing generalized attack range from Crispy Doom
+
+  if (mbf24_features && actor->info->maxattackrange > 0 && !(actor->flags2 & MF2_SHORTMRANGE))
+  {
+    if (dist > actor->info->maxattackrange)
+      return false;
+  }
+
   if (actor->flags2 & MF2_LONGMELEE)
   {
     if (dist < 196)
       return false;   // close for fist attack
   }
 
+  // MBF24 - implementing generalized melee threshold from Crispy Doom
+
+  if (mbf24_features && actor->info->meleethreshold > 0 && !(actor->flags2 & MF2_LONGMELEE))
+  {
+    if (dist < actor->info->meleethreshold)
+      return false;   // close for melee attack
+  }
+
   if (actor->flags2 & MF2_RANGEHALF)
     dist >>= 1;
+
+  // MBF24 - implementing generalized missile chance
+
+  if (mbf24_features && actor->info->missilechancemult != FRACUNIT && !(actor->flags2 & MF2_RANGEHALF))
+  {
+    dist = FixedMul(dist, actor->info->missilechancemult);
+  }
 
   if (dist > 200)
     dist = 200;
 
   if (actor->flags2 & MF2_HIGHERMPROB && dist > 160)
     dist = 160;
+
+  // MBF24 - implementing generalized min missile chance from Crispy
+
+  if (mbf24_features && actor->info->minmissilechance && !(actor->flags2 & MF2_HIGHERMPROB))
+  {
+    dist = actor->info->minmissilechance;
+  }
 
   if (P_Random(pr_missrange) < dist)
     return false;

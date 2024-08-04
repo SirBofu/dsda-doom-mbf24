@@ -6594,6 +6594,10 @@ typedef struct
            the thing. Use presses are ignored if not set. */
   int damagedice; /* For parameterizing missile damage */
   int flatdamage; /* Flat damage to add to projectile damage */
+  int meleethreshold;
+  int maxattackrange;
+  int minmissilechance;
+  int missilechancemult;
 } mobjinfo_t;
 
 #define NO_ALTSPEED -1
