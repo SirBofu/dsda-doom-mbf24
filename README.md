@@ -47,3 +47,7 @@ They will play a sound, flash brightly for a couple of seconds, and then explode
 [FloorHugger and StepMissile Test](https://www.dropbox.com/scl/fi/czf9wtm0n84bjjmynxuuv/FloorHuggerTest.wad?rlkey=415bte8jr3ju1160t686qkzbq&st=fzld0aci&dl=0)
 This WAD changes the Archvile's attack to be a series of floor-hugging flames that close in on the player.
 The flames will climb up to any floor, but will still explode on impact with one-sided linedefs, ceilings, or solid things.
+
+[DodgeChase Test](https://www.dropbox.com/scl/fi/1ucenkqf5kxhbozjdh12h/DodgeChaseTest.wad?rlkey=mmqluq1afobl1xpxx72q83roh&st=ocx6o2zk&dl=0)
+This WAD demonstrates the A_DodgeChase codepointer. Zombiemen, shotgunners, chaingunners, imps, pain elementals, and cacodemons have all had their chase sequences altered.
+Each enemy has slightly different parameters for how often it'll dodge, how quickly it'll dodge, or at what distance it will dodge.
