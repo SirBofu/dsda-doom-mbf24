@@ -1416,7 +1416,10 @@ static const char *deh_misc[] = // CPhipps - static const*
   "IDKFA Armor",       // idkfa_armor
   "IDKFA Armor Class", // idkfa_armor_class
   "BFG Cells/Shot",    // BFGCELLS
-  "Monsters Infight"   // Unknown--not a specific number it seems, but
+  "Monsters Infight",  // Unknown--not a specific number it seems, but
+  "Initial Shells",    // initial_shells
+  "Initial Missiles",   // initial_missiles
+  "Initial Cells"     // initial_cells
   // the logic has to be here somewhere or
   // it'd happen always
 };
@@ -2867,6 +2870,13 @@ static void deh_procMisc(DEHFILE *fpin, char *line) // done
 
       /* No such switch in DOOM - nop */ //e6y ;
     }
+    // MBF24 starting ammo
+    else if (!deh_strcasecmp(key, deh_misc[16]))  // Initial Bullets
+        initial_shells = (int)value;
+    else if (!deh_strcasecmp(key, deh_misc[17]))  // Initial Bullets
+        initial_missiles = (int)value;
+    else if (!deh_strcasecmp(key, deh_misc[18]))  // Initial Bullets
+        initial_cells = (int)value;
     else
       deh_log("Invalid misc item string index for '%s'\n", key);
   }

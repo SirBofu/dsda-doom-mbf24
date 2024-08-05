@@ -389,6 +389,19 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
 
 - comp_ssgautoswitch (to be removed)
   - Fixes an MBF21 bug where the super shotgun could potentially get stuck in the lowered state after firing its last shot (default)
+
+#### DEHACKED Starting Ammunition
+
+- **Initial Shells, Initial Missiles, Initial Cells**
+  - Allows definition in the `Misc` block for the player's starting shell, missile, and cell ammunition.
+  - Include `Initial Shells = X`, `Initial Missiles = X`, and/or `Initial Cells = X` in the `Misc` block.
+  - Example:
+     ```
+     Misc[0]
+     Initial Shells = 8
+     Initial Missiles = 2
+     Initial Cells = 20
+     ```
     
 #### In-progress/To-Do
 - Remove the SSG autoswitch bugfix, as this is being merged into base MBF21 by both Woof! and DSDA-Doom. 
@@ -403,4 +416,4 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
 - Secondary attack support for weapons, with secondary optional ammo types.
 - Support for DEHACKED-defined additional weapon and ammo types as well as pickups.
 - Teleporter multi-destination support without map format requirements.
-- Allow DEHACKED definition of what weapons and ammunition the player starts with.
+- Allow DEHACKED definition of what weapons the player starts with.

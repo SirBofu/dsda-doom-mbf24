@@ -1146,6 +1146,12 @@ static void G_SetInitialInventory(player_t *p)
       p->ammo[am_goldwand] = 50;
     else
       p->ammo[am_clip] = initial_bullets; // Ty 03/12/98 - use dehacked values
+      if (mbf24_features)
+      {
+        p->ammo[am_shell] = initial_shells;
+        p->ammo[am_misl] = initial_missiles;
+        p->ammo[am_cell] = initial_cells;
+      }
   }
 
   for (i = 0; i < NUMAMMO; i++)
