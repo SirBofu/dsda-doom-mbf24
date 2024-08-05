@@ -49,5 +49,12 @@ This WAD changes the Archvile's attack to be a series of floor-hugging flames th
 The flames will climb up to any floor, but will still explode on impact with one-sided linedefs, ceilings, or solid things.
 
 [DodgeChase Test](https://www.dropbox.com/scl/fi/1ucenkqf5kxhbozjdh12h/DodgeChaseTest.wad?rlkey=mmqluq1afobl1xpxx72q83roh&st=ocx6o2zk&dl=0)
-This WAD demonstrates the A_DodgeChase codepointer. Zombiemen, shotgunners, chaingunners, imps, pain elementals, and cacodemons have all had their chase sequences altered.
+This WAD demonstrates the `A_DodgeChase` codepointer. Zombiemen, shotgunners, chaingunners, imps, pain elementals, and cacodemons have all had their chase sequences altered.
 Each enemy has slightly different parameters for how often it'll dodge, how quickly it'll dodge, or at what distance it will dodge.
+
+[MonsterChargeAttack and MonsterSpawnAttack Test](https://www.dropbox.com/scl/fi/t36axdoojewxr58ft06yr/ChargeSpawnTest.wad?rlkey=1tnej6548bxpwajvltdwj8kd7&st=3wc7ol7f&dl=0)
+This WAD demonstrates the parameterized `A_MonsterChargeAttack`, `A_MonsterSpawnAttack`, and `A_MonsterSpawnDie` codepointers, as well as various flags enabled on the new Lost Soul-like enemy used througout.
+The new Lost Soul (not a replacement, but a whole new monster) uses A_DodgeChase and is faster but less tough than normal Lost Souls.
+They also don't infight with other monsters, focusing solely on their target thanks to `NOINFIGHTING`, and their charge can't be interrupted by damage thanks to the `UNSTOPPABLE` flag.
+They also have various improvements over normal Lost Souls, such as having `KEEPCHARGETARGET` and `ONLYSLAMSOLID` enabled.
+Pain Elementals now spawn two of these enemies at once at slight offsets, and when they die, they spawn five of them at once.

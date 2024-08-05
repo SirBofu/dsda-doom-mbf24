@@ -4261,6 +4261,7 @@ void A_ClearTarget(mobj_t *actor)
         return;
 
     actor->target = NULL;
+    actor->lastenemy = NULL;
 }
 
 //
@@ -4553,6 +4554,182 @@ void A_DodgeChase(mobj_t* actor)
             P_NewChaseDir(actor);
         }
     }
+}
+
+//
+// A_MonsterShootSkull
+// Not directly exposed to Dehacked, but is used by other generalized codepointers.
+//
+
+static void A_MonsterShootSkull(mobj_t *actor, angle_t angle, int type, int frameoffset)
+{
+    fixed_t       x,y,z;
+    mobj_t        *newmobj;
+    angle_t       an;
+    int           prestep;
+    mobjinfo_t    typeinfo;
+
+// We skip the Lost Soul compatibility flag here because we might not be spawning
+// Lost Souls, and this is going to be MBF24+.
+
+    an = angle >> ANGLETOFINESHIFT;
+
+    prestep = 4*FRACUNIT + 3*(actor->info->radius + mobjinfo[type].radius)/2;
+
+    x = actor->x + FixedMul(prestep, finecosine[an]);
+    y = actor->y + FixedMul(prestep, finesine[an]);
+    z = actor->z + 8*FRACUNIT;
+
+    if (comp[comp_skull])   /* killough 10/98: compatibility-optioned */
+        newmobj = P_SpawnMobj(x, y, z, type);                     // phares
+    else                                                            //   V
+    {
+        // Check whether the Lost Soul is being fired through a 1-sided
+        // wall or an impassible line, or a "monsters can't cross" line.
+        // If it is, then we don't allow the spawn. This is a bug fix, but
+        // it should be considered an enhancement, since it may disturb
+        // existing demos, so don't do it in compatibility mode.
+
+        if (Check_Sides(actor,x,y))
+            return;
+
+        newmobj = P_SpawnMobj(x, y, z, type);
+
+        // Check to see if the new Lost Soul's z value is above the
+        // ceiling of its new sector, or below the floor. If so, kill it.
+
+        if ((newmobj->z >
+             (newmobj->subsector->sector->ceilingheight - newmobj->height)) ||
+            (newmobj->z < newmobj->subsector->sector->floorheight))
+        {
+            // kill it immediately
+            P_DamageMobj(newmobj,actor,actor,10000);
+            return;                                                 //   ^
+        }                                                         //   |
+    }                                                            // phares
+
+    /* killough 7/20/98: PEs shoot lost souls with the same friendliness */
+    newmobj->flags = (newmobj->flags & ~MF_FRIEND) | (actor->flags & MF_FRIEND);
+
+    /* killough 8/29/98: add to appropriate thread */
+    P_UpdateThinker(&newmobj->thinker);
+
+    // Check for movements.
+    // killough 3/15/98: don't jump over dropoffs:
+
+    if (!P_TryMove(newmobj, newmobj->x, newmobj->y, false))
+    {
+        // kill it immediately
+        P_DamageMobj(newmobj, actor, actor, 10000);
+        return;
+    }
+
+    P_SetTarget(&newmobj->target, actor->target);
+
+    newmobj->angle = actor->angle+an;
+
+    // Here, instead of using A_SkullAttack to launch the spawned enemy, we will jump to its attack sequence instead,
+    // but we apply an offset.
+
+
+    P_SetMobjState(newmobj, newmobj->info->missilestate+frameoffset);
+}
+
+//
+// A_MonsterSpawnAttack
+// Parameterized Pain Elemental attack. Spawns the defined monster and launches it at the target.
+//   args[0]: Thing to spawn.
+//   args[1]: Number of frames relative to the thing's missile attack that it should be spawned at.
+//   args[2]: Angle relative the caller's angle.
+//
+
+void A_MonsterSpawnAttack(mobj_t *actor)
+{
+    int     type, frameoffset, angle;
+
+    type        = actor->state->args[0] - 1;
+    frameoffset = actor->state->args[1];
+    angle       = actor->state->args[2];
+
+    if (!mbf24_features || !actor->target || !type)
+        return;
+    A_FaceTarget(actor);
+    A_MonsterShootSkull(actor, (actor->angle + (unsigned int)(((int64_t)angle << 16) / 360)), type, frameoffset);
+}
+
+//
+// A_MonsterSpawnDie
+// Parameterized Pain Elemental death sequence. Spawns the number of defined things and launches it at the target.
+//   args[0]: Thing to spawn.
+//   args[1]: Number of frames relative to the thing's missile attack that it should be spawned at.
+//   args[2]: Number of things to spawn. Currently sets a max value of 5, as things tend to fail to spawn after that.
+//
+
+void A_MonsterSpawnDie(mobj_t *actor)
+{
+    int type, frameoffset, number;
+    angle_t currentangle;
+
+    const angle_t spawnangles[5][5] =
+            {
+                    { ANG180, 0, 0, 0, 0 },
+                    { ANG135, ANG225, 0, 0, 0 },
+                    { ANG90, ANG180, ANG270, 0, 0 },
+                    { ANG90, ANG225, ANG135, ANG270, 0 },
+                    { ANG90, ANG225, ANG180, ANG135, ANG270 }
+            };
+
+    type = actor->state->args[0] - 1;
+    frameoffset = actor->state->args[1];
+    number = actor->state->args[2];
+    if (number > 5) number = 5; // trust me, I tried this with 6 things, and it doesn't really work
+
+    if (!mbf24_features || !type || number <= 0)
+      return;
+
+    A_FaceTarget(actor);
+    A_Fall(actor);
+
+    for(int i = 0; i < number; i++)
+    {
+      currentangle = spawnangles[(number - 1)][i];
+      A_MonsterShootSkull(actor, actor->angle+currentangle, type, frameoffset);
+    }
+
+}
+
+//
+// A_MonsterChargeAttack
+// Custom version of A_SkullAttack that accepts an angle offset and can also be tweaked for ground-based chargers.
+//   args[0]: offset at which to charge
+//   args[1]: speed at which to charge
+//
+
+void A_MonsterChargeAttack(mobj_t *actor)
+{
+    mobj_t  *dest;
+    angle_t an;
+    int     speed, dist, angle;
+
+    angle = actor->state->args[0];
+    speed = actor->state->args[1];
+
+    if (!actor->target || !mbf24_features || speed == 0)
+        return;
+
+    dest = actor->target;
+    actor->flags |= MF_SKULLFLY;
+
+    S_StartMobjSound(actor, actor->info->attacksound);
+    an = (actor->angle + (unsigned int)(((int64_t)angle << 16) / 360)) >> ANGLETOFINESHIFT;
+    actor->momx = FixedMul((speed * FRACUNIT), finecosine[an]);
+    actor->momy = FixedMul((speed * FRACUNIT), finesine[an]);
+    dist = P_AproxDistance(dest->x - actor->x, dest->y - actor->y);
+    dist = dist / (speed * FRACUNIT);
+
+    if (dist < 1)
+        dist = 1;
+    actor->momz = (dest->z+(dest->height>>1) - actor->z) / dist;
 }
 
 // heretic

@@ -335,12 +335,39 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
 - **A_DodgeChase(straferange, strafespeed, strafechance)**
     - Similar to A_Chase, except at a certain range, the thing has a chance to randomly strafe to one side.
     - Args:
-        - `straferange (fixed)`: Distance (map units) from its target at which the thing will start strafing.
-        - `strafespeed (int)`: Speed at which the thing will move while it's strafing.
-        - `strafechance (int)`: Probability out of 255 that the thing will start strafing once it's in range.
+        - `straferange (fixed)`: Distance (map units) from its target at which the thing will start strafing
+        - `strafespeed (int)`: Speed at which the thing will move while it's strafing
+        - `strafechance (int)`: Probability out of 255 that the thing will start strafing once it's in range
     - Notes:
         - Can be used to recreate multiple movement codepointers in Hexen.
 
+- **A_MonsterSpawnAttack(type, frameoffset)**
+    - Similar to A_PainAttack in that it fires an actor, but parameterized to allow firing of custom actors.
+    - Args:
+        - `type (int)`: Thing number to spawn
+        - `frameoffset (int)`: Number of frames to skip in the spawned thing's attack sequence as it spawns; defaults to 0 if not set
+        - `angle (fixed)`: Angle (degrees), relative to calling actor's angle
+    - Notes:
+        - The frameoffset can be used to skip, for instance, the A_FaceTarget call that often occurs in the first frame of a monster's attack sequence.
+
+- **A_MonsterSpawnDie(type, frameoffset, number)**
+    - Similar to A_PainDie in that it kills the caller and then fires a number of a specified actor, but parameterized to allow defining the number and the type.
+    - Args:
+        - `type (int)`: Thing number to spawn
+        - `frameoffset (int)`: Number of frames to skip in the spawned thing's attack sequence as it spawns; defaults to 0 if not set
+        - `number (int)`: Number of things to attempt to spawn (maximum of 5); defaults to 3 if not set 
+    - Notes:
+        - This uses a hard-coded array of angles at which to spawn the `type` based on the amount that need to be spawned. This ensures that typically-sized monsters will have room to spawn.
+        - If more granular control over the angle is desired, use a zero-tic A_MonsterSpawnAttack as part of the death sequence instead.
+
+- **A_MonsterChargeAttack(angle, speed)**
+    - Generalized version of A_SkullAttack. 
+    - Args:
+        - `angle (fixed)`: Angle (degrees), relative to calling actor's angle
+        - `speed (int)`: Speed at which the thing will launch itself; defaults to 20 if not set
+    - Notes:
+        - Can be used to recreate multiple movement codepointers in Hexen. 
+    
 #### New DEHACKED Weapon Codepointers
 
 ##### Weapon pointers
@@ -371,7 +398,6 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
 - Parameterized version of A_VileAttack.
 - Parameterized version of A_BFGSpray.
 - A_SetTracerState and A_SetTargetState.
-- Add support for Crispy Doom's `Melee threshold`, `Max target range`, `Min missile chance`, and `Missile chance multiplier` values.
 
 #### Potential Additions
 - Secondary attack support for weapons, with secondary optional ammo types.

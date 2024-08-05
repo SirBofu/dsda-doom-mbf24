@@ -1275,8 +1275,8 @@ void P_DamageMobj(mobj_t *target,mobj_t *inflictor, mobj_t *source, int damage)
   if (target->flags & MF_SKULLFLY)
   {
     if (heretic && target->type == HERETIC_MT_MINOTAUR) return;
-    if (mbf24 && target->flags3 & MF3_UNSTOPPABLE) return;
-    target->momx = target->momy = target->momz = 0;
+    if (!mbf24_features || !(target->flags3 & MF3_UNSTOPPABLE))
+      target->momx = target->momy = target->momz = 0;
   }
 
   if (target->flags2 & MF2_DORMANT)
