@@ -74,6 +74,13 @@ extern int monsters_infight; // e6y: Dehacked support - monsters infight
 extern int initial_shells; // MBF24
 extern int initial_missiles; // MBF24
 extern int initial_cells; // MBF24
+extern int spawn_sgun; // MBF24
+extern int spawn_cgun; // MBF24
+extern int spawn_misl; // MBF24
+extern int spawn_plas; // MBF24
+extern int spawn_bfg; // MBF24
+extern int spawn_csaw; // MBF24
+extern int spawn_ssg; // MBF24
 extern int maxammo[], clipammo[];
 
 // heretic

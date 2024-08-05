@@ -1418,8 +1418,16 @@ static const char *deh_misc[] = // CPhipps - static const*
   "BFG Cells/Shot",    // BFGCELLS
   "Monsters Infight",  // Unknown--not a specific number it seems, but
   "Initial Shells",    // initial_shells
-  "Initial Missiles",   // initial_missiles
-  "Initial Cells"     // initial_cells
+  "Initial Missiles",  // initial_missiles
+  "Initial Cells",     // initial_cells
+  "Spawn Shotgun",     // spawn_sgun
+  "Spawn Chaingun",     // spawn_cgun
+  "Spawn Missile Launcher", // spawn_misl
+  "Spawn Plasma Rifle", // spawn_plas
+  "Spawn BFG9000",     // spawn_bfg
+  "Spawn SSG",         // spawn_ssg
+  "Spawn Chainsaw"     // initial_csaw
+
   // the logic has to be here somewhere or
   // it'd happen always
 };
@@ -2871,12 +2879,26 @@ static void deh_procMisc(DEHFILE *fpin, char *line) // done
       /* No such switch in DOOM - nop */ //e6y ;
     }
     // MBF24 starting ammo
-    else if (!deh_strcasecmp(key, deh_misc[16]))  // Initial Bullets
+    else if (!deh_strcasecmp(key, deh_misc[16]))  // Initial Shells
         initial_shells = (int)value;
-    else if (!deh_strcasecmp(key, deh_misc[17]))  // Initial Bullets
+    else if (!deh_strcasecmp(key, deh_misc[17]))  // Initial Missiles
         initial_missiles = (int)value;
-    else if (!deh_strcasecmp(key, deh_misc[18]))  // Initial Bullets
+    else if (!deh_strcasecmp(key, deh_misc[18]))  // Initial Cells
         initial_cells = (int)value;
+    else if (!deh_strcasecmp(key, deh_misc[19]))  // Spawn Shotgun
+        spawn_sgun = 1;
+    else if (!deh_strcasecmp(key, deh_misc[20]))  // Spawn Chaingun
+        spawn_cgun = 1;
+    else if (!deh_strcasecmp(key, deh_misc[21]))  // Spawn Missile Launcher
+        spawn_misl = 1;
+    else if (!deh_strcasecmp(key, deh_misc[22]))  // Spawn Plasma Rifle
+        spawn_plas = 1;
+    else if (!deh_strcasecmp(key, deh_misc[23]))  // Spawn BFG
+        spawn_bfg = 1;
+    else if (!deh_strcasecmp(key, deh_misc[24]))  // Spawm Chainsaw
+        spawn_csaw = 1;
+    else if (!deh_strcasecmp(key, deh_misc[25]))  // Spawn SSG
+        spawn_ssg = 1;
     else
       deh_log("Invalid misc item string index for '%s'\n", key);
   }

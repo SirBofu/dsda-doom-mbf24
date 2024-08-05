@@ -58,3 +58,6 @@ The new Lost Soul (not a replacement, but a whole new monster) uses A_DodgeChase
 They also don't infight with other monsters, focusing solely on their target thanks to `NOINFIGHTING`, and their charge can't be interrupted by damage thanks to the `UNSTOPPABLE` flag.
 They also have various improvements over normal Lost Souls, such as having `KEEPCHARGETARGET` and `ONLYSLAMSOLID` enabled.
 Pain Elementals now spawn two of these enemies at once at slight offsets, and when they die, they spawn five of them at once.
+
+[Initial Weapons and Ammo Test](https://www.dropbox.com/scl/fi/9pmv8plm70xemxw80gl3p/InitialAmmoTest.wad?rlkey=5u97ijbkbjkxzuyvq89kqpuax&st=a0f8086x&dl=0)
+This WAD makes the player start with 8 shells, 2 rockets, 40 cells, the shotgun, the chaingun, the super shotgun, and the chainsaw, demonstrating the ability to define these in the DEHACKED lump. Note that these options are only consumed in MBF24, which means that if you load up a demo in a different complevel, it should sync perfectly.
