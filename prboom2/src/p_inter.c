@@ -88,6 +88,11 @@ int idkfa_armor_class = 2;
 int bfgcells = 40;      // used in p_pspr.c
 int monsters_infight = 0; // e6y: Dehacked support - monsters infight
 // Ty 03/07/98 - end deh externals
+// MBF24 - additional externals
+int initial_shells = 0;
+int initial_missiles = 0;
+int initial_cells = 0;
+// end additional externals
 
 // a weapon is found with two clip loads,
 // a big item has five clip loads

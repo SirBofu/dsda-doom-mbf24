@@ -71,6 +71,9 @@ extern int soul_health;
 extern int mega_health;
 extern int bfgcells;
 extern int monsters_infight; // e6y: Dehacked support - monsters infight
+extern int initial_shells; // MBF24
+extern int initial_missiles; // MBF24
+extern int initial_cells; // MBF24
 extern int maxammo[], clipammo[];
 
 // heretic
