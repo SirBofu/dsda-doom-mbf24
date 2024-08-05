@@ -163,6 +163,9 @@ void A_JumpIfHasTarget(mobj_t *);
 void A_JumpIfHasTracer(mobj_t *);
 void A_JumpIfBlocked(mobj_t *);
 void A_DodgeChase(mobj_t *);
+void A_MonsterSpawnAttack(mobj_t *);
+void A_MonsterSpawnDie(mobj_t *);
+void A_MonsterChargeAttack(mobj_t *);
 
 // heretic
 
