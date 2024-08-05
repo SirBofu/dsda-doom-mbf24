@@ -402,6 +402,17 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
      Initial Missiles = 2
      Initial Cells = 20
      ```
+- **Spawn Weapons**
+  - Allows definition in the `Misc` block for defining additional weapons for the player to spawn with.
+  - Include `Spawn Shotgun = 1`, `Spawn Chaingun = 1`, `Spawn Missile Launcher = 1`, `Spawn Plasma Rifle = 1`, `Spawn BFG9000 = 1`, `Spawn Chainsaw = 1`, or `Spawn SSG = 1` in the `Misc` block.
+  - Example:
+    ```
+    Misc[0]
+    Spawn Shotgun = 1
+    Spawn SSG = 1
+    Spawn Chaingun = 1
+    ```
+  - Does not allow removing of the pistol or fists, as there is no way to pick those weapons up and could put the player in a bad state.   
     
 #### In-progress/To-Do
 - Remove the SSG autoswitch bugfix, as this is being merged into base MBF21 by both Woof! and DSDA-Doom. 

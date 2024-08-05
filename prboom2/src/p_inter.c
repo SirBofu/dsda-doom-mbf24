@@ -92,6 +92,13 @@ int monsters_infight = 0; // e6y: Dehacked support - monsters infight
 int initial_shells = 0;
 int initial_missiles = 0;
 int initial_cells = 0;
+int spawn_sgun = 0;
+int spawn_cgun = 0;
+int spawn_misl = 0;
+int spawn_plas = 0;
+int spawn_bfg = 0;
+int spawn_csaw = 0;
+int spawn_ssg = 0;
 // end additional externals
 
 // a weapon is found with two clip loads,
