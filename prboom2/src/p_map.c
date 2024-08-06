@@ -3305,7 +3305,17 @@ dboolean PIT_ChangeSector (mobj_t* thing)
     }
     else
     {
-      if (!heretic && !mbf24 || (mbf24 && (thing->flags3 & MF3_NOCRUSH))) P_SetMobjState (thing, S_GIBS);
+      if (!heretic && !mbf24 || (mbf24 && !(thing->flags3 & MF3_NOCRUSH)))
+      {
+        if (mbf24_features && thing->info->crushstate != 0)
+        {
+          P_SetMobjState (thing, thing->info->crushstate);
+        }
+        else
+        {
+          P_SetMobjState (thing, S_GIBS);
+        }
+      }
 
       if (compatibility_level != doom_12_compatibility)
       {

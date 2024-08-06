@@ -1140,11 +1140,13 @@ static const char *deh_mobjinfo_fields[] =
   // mbf24
   "MBF24 Bits",          // .flags3
   "Use frame",           // .usestate
+  "Damage dice",         // .damagedice
   "Flat damage",         // .flatdamage
   "Melee threshold",     // .meleethreshold
   "Max target range",    // .maxattackrange
   "Min missile chance",  // .minmissilechance
   "Missile chance multiplier", // .missilechancemult
+  "Crush frame",         // .crushstate
 
   NULL
 };
@@ -2086,6 +2088,11 @@ static void setMobjInfoValue(int mobjInfoIndex, int keyIndex, uint64_t value) {
     case 34: mi->usestate = (int)value; return;
     case 35: mi->damagedice = (int)value; return;
     case 36: mi->flatdamage = (int)value; return;
+    case 37: mi->meleethreshold = (int)value; return;
+    case 38: mi->maxattackrange = (int)value; return;
+    case 39: mi->minmissilechance = (int)value; return;
+    case 40: mi->missilechancemult = (int)value; return;
+    case 41: mi->crushstate = (int)value; return;
 
     default: return;
   }
