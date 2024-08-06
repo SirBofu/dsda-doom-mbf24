@@ -104,6 +104,13 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
 - Add `Missile chance multiplier = X` in the Thing definition.
 - Has no effect on complevels less than MBF24.
 
+#### Crush frame
+
+- Sets the state for the thing to jump to if it's a corpse and has been crushed.
+- A value of 0 defaults to `S_GIBS`, which is equivalent to 895.
+- Add `Crush frame = X` in the Thing definition.
+- `X` represents a frame number.
+
 ## Frames
 
 #### Frame Flags
