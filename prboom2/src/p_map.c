@@ -900,9 +900,20 @@ static dboolean PIT_CheckThing(mobj_t *thing) // killough 3/26/98: make static
       {
         damagedice = tmthing->info->damagedice;
       }
-    }
 
-    damage = mbf24_features ? (((P_Random(pr_skullfly) % damagedice) + 1) * tmthing->info->damage + tmthing->info->flatdamage) : (((P_Random(pr_skullfly) % 8) + 1) * tmthing->info->damage);
+      if (tmthing->info->damage > 0)
+      {
+        damage = (((P_Random(pr_skullfly) % damagedice) + 1) * tmthing->info->damage + tmthing->info->flatdamage);
+      }
+      else
+      {
+        damage = tmthing->info->flatdamage;
+      }
+    }
+    else
+    {
+      damage = (((P_Random(pr_skullfly) % 8) + 1) * tmthing->info->damage);
+    }
 
     P_DamageMobj (thing, tmthing, tmthing, damage);
 
@@ -1163,14 +1174,26 @@ static dboolean PIT_CheckThing(mobj_t *thing) // killough 3/26/98: make static
     {
       if (tmthing->info->damagedice <= 0)
       {
-        damagedice = 8;
+        damagedice = 8; //  8 is what's used by default in Doom, so we should assume it as default; there is no use case for 0
       }
       else
       {
         damagedice = tmthing->info->damagedice;
       }
+      if (damage > 0)
+      {
+        damage = ((P_Random(pr_damage) % damagedice) + 1) * damage + tmthing->info->flatdamage;
+      }
+      else
+      {
+        damage = tmthing->info->flatdamage; // no reason to call P_Random if there's nothing to randomize
+      }
     }
-    damage = mbf24_features ? (((P_Random(pr_damage) % damagedice) + 1) * damage + tmthing->info->flatdamage) : (((P_Random(pr_damage) % 8) + 1) * damage);
+    else
+    {
+      damage = (((P_Random(pr_damage) % 8) + 1) * damage);
+    }
+
     if (
       raven &&
       damage &&

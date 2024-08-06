@@ -469,6 +469,12 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
    
 ## Miscellaneous
 
+#### Flat damage
+
+Existing MBF21 codepointers and things have been updated to support flat damage parameters.
+Flat damage can be combined with normal, randomized damage, used on its own, or omitted completely.
+If an attack's base damage is set to 0 but it has a flat damage amount, it will not make a `P_Random` call.
+
 #### New comp flags
 
 - comp_nohorizontalautoaim:

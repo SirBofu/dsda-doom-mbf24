@@ -3364,7 +3364,21 @@ void A_MonsterBulletAttack(mobj_t *actor)
 
   for (i = 0; i < numbullets; i++)
   {
-    damage = (mbf24_features) ? ((P_Random(pr_mbf21) % damagemod + 1) * damagebase + flatdamage) : ((P_Random(pr_mbf21) % damagemod + 1) * damagebase);
+    if (mbf24_features)
+    {
+      if (damagebase > 0)
+      {
+        damage = ((P_Random(pr_mbf21) % damagemod + 1) * damagebase + flatdamage);
+      }
+      else
+      {
+        damage = flatdamage; // skip the P_Random check if there's no need to randomize it
+      }
+    }
+    else
+    {
+      damage = ((P_Random(pr_mbf21) % damagemod + 1) * damagebase);
+    }
     angle = (int)actor->angle + P_RandomHitscanAngle(pr_mbf21, hspread);
     slope = aimslope + P_RandomHitscanSlope(pr_mbf21, vspread);
 
@@ -3406,7 +3420,21 @@ void A_MonsterMeleeAttack(mobj_t *actor)
 
   S_StartMobjSound(actor, hitsound);
 
-  damage = (mbf24_features) ? ((P_Random(pr_mbf21) % damagemod + 1) * damagebase + flatdamage) : ((P_Random(pr_mbf21) % damagemod + 1) * damagebase);
+  if (mbf24_features)
+  {
+    if (damagebase > 0)
+    {
+      damage = ((P_Random(pr_mbf21) % damagemod + 1) * damagebase + flatdamage);
+    }
+    else
+    {
+      damage = flatdamage; // skip the P_Random check if there's no need to randomize it
+    }
+  }
+  else
+  {
+    damage = ((P_Random(pr_mbf21) % damagemod + 1) * damagebase);
+  }
   P_DamageMobj(actor->target, actor, actor, damage);
 }
 
