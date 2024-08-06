@@ -4850,6 +4850,120 @@ void A_RemoveTracerFlags(mobj_t* actor)
     actor->tracer->flags3 &= ~flags3;
 }
 
+//
+// A_MonsterZapTarget
+// Generic A_VileTarget that allows declaring a custom object.
+//   args[0]: TID of the thing to spawn.
+//
+
+void A_MonsterZapTarget(mobj_t *actor)
+{
+    int type;
+    mobj_t *fog;
+
+    if (!mbf24_features || !actor->target)
+        return;
+
+    type = actor->state->args[0];
+
+    A_FaceTarget(actor);
+
+    fog = P_SpawnMobj(actor->target->x,actor->target->y, actor->target->z,type - 1);
+
+    P_SetTarget(&actor->tracer, fog);
+    P_SetTarget(&fog->target, actor);
+    P_SetTarget(&fog->tracer, actor->target);
+    A_Fire(fog);
+}
+
+//
+// A_MonsterZapAttack
+// Paramterized version of A_VileAttack that deals damage if the actor has its tracer set. Allows optional randomization, flat damage, or both, as well as neutralization of thrust and/or radius damage.
+//   args[0]: Base damage of the hitscan attack
+//   args[1]: Damage mod of the hitscan attack
+//   args[2]: Flat damage of the hitscan attack
+//   args[3]: Blast damage of the explosion
+//   args[4]: Blast radius of the explosion
+//   args[5]: Upward momentum to apply to the victim
+//   args[6]: If nonzero, treats the victim's mass as this value
+//   args[7]: Sound to play if attack occurs
+//
+
+void A_MonsterZapAttack(mobj_t *actor)
+{
+    mobj_t *fire;
+    int    damagebase, damagedice, flatdamage, blastdamage, blastradius, thrust, forcedmass, sound, an;
+
+    if (!mbf24_features || !actor->target)
+        return;
+
+    damagebase  = actor->state->args[0];
+    damagedice  = actor->state->args[1];
+    flatdamage  = actor->state->args[2];
+    blastdamage = actor->state->args[3];
+    blastradius = actor->state->args[4];
+    thrust      = actor->state->args[5];
+    forcedmass  = actor->state->args[6];
+    sound       = actor->state->args[7];
+
+    A_FaceTarget(actor);
+
+    if (!P_CheckSight(actor, actor->target))
+        return;
+
+    if (sound > 0) S_StartMobjSound(actor, sound);
+    if (damagebase > 0 || damagedice > 0 || flatdamage > 0 ) P_DamageMobj(actor->target, actor, actor, (damagebase > 0 && damagedice > 0) ? ((P_Random(pr_mbf21) % damagedice + 1) * damagebase + flatdamage) : flatdamage);
+    if (thrust > 0) actor->target->momz = (forcedmass == 0) ? thrust*FRACUNIT/actor->target->info->mass : thrust*FRACUNIT/forcedmass;
+
+    an = actor->angle >> ANGLETOFINESHIFT;
+
+    fire = actor->tracer;
+
+    if (!fire)
+        return;
+
+    // move the fire between the vile and the player
+    fire->x = actor->target->x - FixedMul (24*FRACUNIT, finecosine[an]);
+    fire->y = actor->target->y - FixedMul (24*FRACUNIT, finesine[an]);
+    if (blastdamage > 0 && blastradius > 0) P_RadiusAttack(fire, actor, blastdamage, blastradius, BF_DAMAGESOURCE | BF_HORIZONTAL);
+}
+
+//
+// A_SetTargetState
+// Sets the caller's target's state to the specified value. Use with caution!
+//   args[0]: State to set target to
+//
+
+void A_SetTargetState(mobj_t *actor)
+{
+  int state;
+
+  state = actor->state->args[0];
+
+  if (!mbf24_features || !(actor->target) || state == 0)
+    return;
+
+  P_SetMobjState(actor->target, state);
+}
+
+//
+// A_SetTracerState
+// Sets the caller's tracer's state to the specified value. Use with caution!
+//   args[0]: State to set tracer to
+//
+
+void A_SetTracerState(mobj_t *actor)
+{
+    int state;
+
+    state = actor->state->args[0];
+
+    if (!mbf24_features || !(actor->tracer) || state == 0)
+        return;
+
+    P_SetMobjState(actor->tracer, state);
+}
+
 // heretic
 
 #include "heretic/def.h"
