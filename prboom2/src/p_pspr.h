@@ -139,6 +139,7 @@ void A_GunFlashTo();
 // MBF24
 
 void A_WeaponRemove();
+void A_ProjectileSpray();
 
 // heretic
 

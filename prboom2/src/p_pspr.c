@@ -1578,6 +1578,58 @@ void A_WeaponRemove(player_t *player, pspdef_t *psp)
 }
 
 //
+// A_ProjectileSpray
+// Parameterized A_BFGSpray.
+//   args[0]: Maximum range (in map units) from the caller's target at which damage occurs
+//   args[1]: Base damage
+//   args[2]: Damage modulus
+//   args[3]: Flat damage
+//   args[4]: TID to spawn over things hit by damage; if 0, will spawn nothing
+//
+
+void A_ProjectileSpray(mobj_t *mo)
+{
+    int i;
+
+    for (i=0 ; i<40 ; i++)  // offset angles from its attack angle
+    {
+        int j, calcdamage, range, damagebase, damagedice, flatdamage, splashthing;
+        mobj_t *newmobj;
+
+        if (!mbf24_features) return;
+
+        range       = mo->state->args[0];
+        damagebase  = mo->state->args[1];
+        damagedice  = mo->state->args[2];
+        flatdamage  = mo->state->args[3];
+        splashthing = mo->state->args[4];
+
+        angle_t an = mo->angle - ANG90/2 + ANG90/40*i;
+
+        // mo->target is the originator (player) of the missile
+
+        if (P_AimSprayAttack(mo->target, an, range*FRACUNIT, MF_FRIEND),
+                    !linetarget)
+            P_AimSprayAttack(mo->target, an, range*FRACUNIT, 0);
+
+        if (!linetarget)
+            continue;
+
+        if (splashthing > 0)
+        {
+        newmobj = P_SpawnMobj(linetarget->x, linetarget->y,
+                    linetarget->z + (linetarget->height>>2), splashthing - 1);
+                    newmobj->target = mo->target;
+                    newmobj->tracer = linetarget;
+        }
+
+        calcdamage = ((P_Random(pr_damage) % damagedice) + 1) * damagebase + flatdamage;
+
+        P_DamageMobj(linetarget, mo->target, mo->target, calcdamage);
+    }
+}
+
+//
 // P_SetupPsprites
 // Called at start of level for each player.
 //
