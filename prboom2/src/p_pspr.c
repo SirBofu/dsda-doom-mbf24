@@ -429,13 +429,6 @@ dboolean P_CheckAmmo(player_t *player)
       // Now set appropriate weapon overlay.
       P_SetPsprite(player,ps_weapon,weaponinfo[player->readyweapon].downstate);
     }
-  else
-    {
-      if (comp[comp_ssgautoswitch] && player->pendingweapon > wp_supershotgun)
-      {
-        player->pendingweapon = P_SwitchWeaponMBF21(player);
-      }
-    }
 
   return false;
 }
@@ -718,6 +711,11 @@ void A_Lower(player_t *player, pspdef_t *psp)
   {      // Player is dead, so keep the weapon off screen.
     P_SetPsprite(player,  ps_weapon, g_s_null);
     return;
+  }
+
+  if (player->pendingweapon < NUMWEAPONS || !mbf21)
+  {
+    player->readyweapon = player->pendingweapon;
   }
 
   player->readyweapon = player->pendingweapon;
