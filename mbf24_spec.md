@@ -405,17 +405,57 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
     - Notes:
         - No-ops if the calling actor has no tracer.
 
-- **A_ProjectileSpray(range, damagebase, damagedice, flatdamage, splashthing**
+- **A_ProjectileSpray(range, damagebase, damagedice, flatdamage, splashthing)**
     - Parameterized version of A_BFGSpray that allows defining damage, range, and the thing that appears over enemies hit by the splash.
     - Args:
         - `range (uint)`: Maximum range (in map units) from the caller's target at which to deal damage; defaults to 1024 if not set
         - `damagebase (uint)`: Base damage of attack; if not set, defaults to 7
         - `damagedice (uint)`: Attack damage random multiplier; if not set, defaults to 7
         - `flatdamage (uint)`: Flat damage to add to attack; if not set, defaults to 40
-        - `splashthing (int)`: TID of the thing to spawn over things hit by the attack; if not set, defaults to 0
+        - `splashthing (uint)`: TID of the thing to spawn over things hit by the attack; if not set, defaults to 0
     - Notes:
         - Ignores things with the `NOBFGSPRAY` flag set.
+
+- **A_MonsterZapTarget(type)**
+  - Parameterized version of `A_VileTarget` that allows choosing what thing gets spawned as the fire.
+  - Args:
+    - `type (uint)`: TID of the thing to spawn over the monster's target if in line of sight.
+  - Notes:
+    - Otherwise identical to `A_VileTarget`.
+
+- **A_MonsterZapAttack(damagebase, damagedice, flatdamage, blastdamage, blastradius, thrust, forcedmass, sound)**
+  - Paramterized version of `A_VileAttack` that allows defining damage.
+  - Args:
+    - `damagebase (uint)`: Base damage of the hitscan attack; if not set, defaults to 0
+    - `damagedice (uint)`: Hitscan damage random multiplier; if not set, defaults to 0
+    - `flatdamage (uint)`: Flat damage to add to attack; if not set, defaults to 20
+    - `blastdamage (uint)`: Maximum blast damage to do if tracer is present; if not set, defaults to 70
+    - `blastradius (uint)`: Blast radius if tracer is present; if not set, defaults to 70
+    - `thrust (int)`: Amount of vertical momentum to apply. Defaults to 1000 if not set, identical to an Archvile jump.
+    - `forcedmass (int)`: If not set to zero, this value is passed as the mass of the target being launched instead of its actual mass.
+    - `sound (uint)`: Sound to play if attack succeeds; if not set, defaults to 0 (no sound)
+  - Notes:
+    - Requires line of sight to the caller's target to do any damage.
+    - The explosion damage is reliant on the presence of a tracer for the calling actor.  
+    - If either `damagebase` or `damagedice` are set to 0, then only `flatdamage` is dealt.
+    - If either `blastdamage` or `blastradius` are set to 0, then no blast damage is dealt.
+    - If `thrust` is set to 0, then no jump effect occurs. 
+
+- **A_SetTargetState(state)**
+  - Forces caller's target state to the specified state. Use with caution.
+  - Args:
+    - `state (uint)`: State for the caller's target to jump to
+  - Notes:
+    - No-ops if the caller has no target.
+
+- **A_SetTracerState(state)**
+    - Forces caller's tracer state to the specified state. Use with caution.
+    - Args:
+        - `state (uint)`: State for the caller's tracer to jump to
+    - Notes:
+        - No-ops if the caller has no tracer.
     
+
 #### New DEHACKED Weapon Codepointers
 
 ##### Weapon pointers

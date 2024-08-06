@@ -170,6 +170,10 @@ void A_AddTargetFlags(mobj_t *);
 void A_AddTracerFlags(mobj_t *);
 void A_RemoveTargetFlags(mobj_t *);
 void A_RemoveTracerFlags(mobj_t *);
+void A_MonsterZapTarget(mobj_t *);
+void A_MonsterZapAttack(mobj_t *);
+void A_SetTargetState(mobj_t *);
+void A_SetTracerState(mobj_t *);
 
 // heretic
 
