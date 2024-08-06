@@ -259,6 +259,7 @@ static void dsda_InitDoom(void) {
     mobjinfo[i].maxattackrange = 0; // not in doom, defaults to 0
     mobjinfo[i].minmissilechance = 0; // not in doom, defaults to 160
     mobjinfo[i].missilechancemult = FRACUNIT; // not in doom, defaults to 65536
+    mobjinfo[i].crushstate = S_GIBS; // default
   }
 
   // don't want to reorganize info.c structure for a few tweaks...
@@ -445,6 +446,7 @@ static void dsda_InitHeretic(void) {
     mobjinfo[j].maxattackrange  = 0; // not in heretic
     mobjinfo[j].minmissilechance  = 0; // not in heretic
     mobjinfo[j].missilechancemult  = FRACUNIT; // not in heretic
+    mobjinfo[j].crushstate  = HERETIC_S_NULL; // not in heretic
   }
 
   // heretic doesn't use "clip" concept
@@ -601,10 +603,11 @@ static void dsda_InitHexen(void) {
     mobjinfo[j].usestate    = HEXEN_S_NULL; // not in hexen
     mobjinfo[j].damagedice  = 8; // not in hexen
     mobjinfo[j].flatdamage  = 0; // not in hexen
-    mobjinfo[j].meleethreshold  = 0; // not in heretic
-    mobjinfo[j].maxattackrange  = 0; // not in heretic
-    mobjinfo[j].minmissilechance  = 0; // not in heretic
-    mobjinfo[j].missilechancemult  = FRACUNIT; // not in heretic
+    mobjinfo[j].meleethreshold  = 0; // not in hexen
+    mobjinfo[j].maxattackrange  = 0; // not in hexen
+    mobjinfo[j].minmissilechance  = 0; // not in hexen
+    mobjinfo[j].missilechancemult  = FRACUNIT; // not in hexen
+    mobjinfo[j].crushstate  = HEXEN_S_NULL; // not in hexen
   }
 
   {

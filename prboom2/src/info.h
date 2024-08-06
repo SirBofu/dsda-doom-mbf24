@@ -6598,6 +6598,7 @@ typedef struct
   int maxattackrange;
   int minmissilechance;
   int missilechancemult;
+  int crushstate;  /* State to jump to when crushed. */
 } mobjinfo_t;
 
 #define NO_ALTSPEED -1
