@@ -367,7 +367,43 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
         - `angle (fixed)`: Angle (degrees), relative to calling actor's angle
         - `speed (int)`: Speed at which the thing will launch itself; defaults to 20 if not set
     - Notes:
-        - Can be used to recreate multiple movement codepointers in Hexen. 
+        - Can be used to recreate multiple movement codepointers in Hexen.
+
+- **A_AddTargetFlags(flags, flags2, flags3)**
+    - Adds the specified thing flags to the caller's target.
+    - Args:
+        - `flags (int)`: Standard actor flag(s) to add
+        - `flags2 (int)`: MBF21 actor flag(s) to add
+        - `flags3 (int)`: MBF24 actor flag(s) to add
+    - Notes:
+        - No-ops if the calling actor has no target.
+
+- **A_AddTracerFlags(flags, flags2, flags3)**
+    - Adds the specified thing flags to the caller's tracer.
+    - Args:
+        - `flags (int)`: Standard actor flag(s) to add
+        - `flags2 (int)`: MBF21 actor flag(s) to add
+        - `flags3 (int)`: MBF24 actor flag(s) to add
+    - Notes:
+        - No-ops if the calling actor has no tracer.
+
+- **A_RemoveTargetFlags(flags, flags2, flags3)**
+    - Removes the specified thing flags from the caller's target.
+    - Args:
+        - `flags (int)`: Standard actor flag(s) to add
+        - `flags2 (int)`: MBF21 actor flag(s) to add
+        - `flags3 (int)`: MBF24 actor flag(s) to add
+    - Notes:
+        - No-ops if the calling actor has no target.
+
+- **A_RemoveTracerFlags(flags, flags2, flags3)**
+    - Removes the specified thing flags from the caller's tracer.
+    - Args:
+        - `flags (int)`: Standard actor flag(s) to add
+        - `flags2 (int)`: MBF21 actor flag(s) to add
+        - `flags3 (int)`: MBF24 actor flag(s) to add
+    - Notes:
+        - No-ops if the calling actor has no tracer.
     
 #### New DEHACKED Weapon Codepointers
 

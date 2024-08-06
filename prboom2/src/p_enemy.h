@@ -166,6 +166,10 @@ void A_DodgeChase(mobj_t *);
 void A_MonsterSpawnAttack(mobj_t *);
 void A_MonsterSpawnDie(mobj_t *);
 void A_MonsterChargeAttack(mobj_t *);
+void A_AddTargetFlags(mobj_t *);
+void A_AddTracerFlags(mobj_t *);
+void A_RemoveTargetFlags(mobj_t *);
+void A_RemoveTracerFlags(mobj_t *);
 
 // heretic
 

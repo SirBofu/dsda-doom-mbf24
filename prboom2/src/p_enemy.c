@@ -3672,6 +3672,7 @@ void A_AddFlags(mobj_t* actor)
 // Removes the specified thing flags from the caller.
 //   args[0]: Flag(s) to remove
 //   args[1]: MBF21 Flag(s) to remove
+//   args[2]: MBF24 Flag(s) to remove
 //
 void A_RemoveFlags(mobj_t* actor)
 {
@@ -4726,6 +4727,98 @@ void A_MonsterChargeAttack(mobj_t *actor)
     if (dist < 1)
         dist = 1;
     actor->momz = (dest->z+(dest->height>>1) - actor->z) / dist;
+}
+
+//
+// A_AddTargetFlags
+// Adds the specified thing flags to the caller's target.
+//   args[0]: Standard Flag(s) to add
+//   args[1]: MBF21 Flag(s) to add
+//   args[2]: MBF24 Flag(s) to add
+//
+void A_AddTargetFlags(mobj_t* actor)
+{
+    uint64_t flags, flags2, flags3;
+
+    if (!mbf24 || !actor || !(actor->target))
+        return;
+
+    flags  = actor->state->args[0];
+    flags2 = actor->state->args[1];
+    flags3 = actor->state->args[2];
+
+    actor->target->flags  |= flags;
+    actor->target->flags2 |= flags2;
+    actor->target->flags3 |= flags3;
+}
+
+//
+// A_AddTracerFlags
+// Adds the specified thing flags to the caller's tracer
+//   args[0]: Standard Flag(s) to add
+//   args[1]: MBF21 Flag(s) to add
+//   args[2]: MBF24 Flag(s) to add
+//
+void A_AddTracerFlags(mobj_t* actor)
+{
+    uint64_t flags, flags2, flags3;
+
+    if (!mbf24 || !actor || !(actor->tracer))
+        return;
+
+    flags  = actor->state->args[0];
+    flags2 = actor->state->args[1];
+    flags3 = actor->state->args[2];
+
+    actor->tracer->flags  |= flags;
+    actor->tracer->flags2 |= flags2;
+    actor->tracer->flags3 |= flags3;
+}
+
+//
+// A_RemoveTargetFlags
+// Removes the specified thing flags from the caller.
+//   args[0]: Flag(s) to remove
+//   args[1]: MBF21 Flag(s) to remove
+//   args[2]: MBF24 Flag(s) to remove
+//
+void A_RemoveTargetFlags(mobj_t* actor)
+{
+    uint64_t flags, flags2, flags3;
+
+    if (!mbf24 || !actor | !(actor->target))
+        return;
+
+    flags  = actor->state->args[0];
+    flags2 = actor->state->args[1];
+    flags3 = actor->state->args[2];
+
+    actor->target->flags  &= ~flags;
+    actor->target->flags2 &= ~flags2;
+    actor->target->flags3 &= ~flags3;
+}
+
+//
+// A_RemoveTracerFlags
+// Removes the specified thing flags from the caller.
+//   args[0]: Flag(s) to remove
+//   args[1]: MBF21 Flag(s) to remove
+//   args[2]: MBF24 Flag(s) to remove
+//
+void A_RemoveTracerFlags(mobj_t* actor)
+{
+    uint64_t flags, flags2, flags3;
+
+    if (!mbf24 || !actor | !(actor->tracer))
+        return;
+
+    flags  = actor->state->args[0];
+    flags2 = actor->state->args[1];
+    flags3 = actor->state->args[2];
+
+    actor->tracer->flags  &= ~flags;
+    actor->tracer->flags2 &= ~flags2;
+    actor->tracer->flags3 &= ~flags3;
 }
 
 // heretic
