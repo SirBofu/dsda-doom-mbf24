@@ -429,13 +429,6 @@ dboolean P_CheckAmmo(player_t *player)
       // Now set appropriate weapon overlay.
       P_SetPsprite(player,ps_weapon,weaponinfo[player->readyweapon].downstate);
     }
-  else
-    {
-      if (comp[comp_ssgautoswitch] && player->pendingweapon > wp_supershotgun)
-      {
-        player->pendingweapon = P_SwitchWeaponMBF21(player);
-      }
-    }
 
   return false;
 }
@@ -724,6 +717,8 @@ void A_Lower(player_t *player, pspdef_t *psp)
   {
     player->readyweapon = player->pendingweapon;
   }
+
+  player->readyweapon = player->pendingweapon;
 
   P_BringUpWeapon(player);
 }
@@ -1023,7 +1018,7 @@ static void P_BulletSlope(mobj_t *mo)
 {
   aim_t aim;
 
-  dsda_PlayerAimBad(mo, mo->angle, &aim, mbf_features ? MF_FRIEND : 0);
+  dsda_PlayerAim(mo, mo->angle, &aim, mbf_features ? MF_FRIEND : 0);
 
   bulletslope = aim.slope;
 }
@@ -2480,15 +2475,15 @@ void A_GauntletAttack(player_t * player, pspdef_t * psp)
 void P_RepositionMace(mobj_t * mo)
 {
     int spot;
-    sector_t *sec;
+    subsector_t *ss;
 
     P_UnsetThingPosition(mo);
     spot = P_Random(pr_heretic) % MaceSpotCount;
     mo->x = MaceSpots[spot].x;
     mo->y = MaceSpots[spot].y;
-    sec = R_PointInSector(mo->x, mo->y);
-    mo->z = mo->floorz = sec->floorheight;
-    mo->ceilingz = sec->ceilingheight;
+    ss = R_PointInSubsector(mo->x, mo->y);
+    mo->z = mo->floorz = ss->sector->floorheight;
+    mo->ceilingz = ss->sector->ceilingheight;
     P_SetThingPosition(mo);
 }
 

@@ -388,9 +388,6 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
   - Disables horizontal autoaim for player projectile weapons (default)
   - Note that projectiles that would normally trigger horizontal autoaim will still be aimed vertically, allowing for leading shots.
 
-- comp_ssgautoswitch (to be removed)
-  - Fixes an MBF21 bug where the super shotgun could potentially get stuck in the lowered state after firing its last shot (default)
-
 #### DEHACKED Starting Ammunition
 
 - **Initial Shells, Initial Missiles, Initial Cells**
