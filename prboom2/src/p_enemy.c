@@ -4008,12 +4008,12 @@ void A_JumpIfCounterGreater(mobj_t* actor)
 //
 // A_LaunchTarget
 // Launches the caller's target upward a specified distance.
-// Requires line of sight.
 //   args[0]: Amount of upward thrust to inflict; default is 1000 (Archvile jump)
+//   args[1]: If nonzero, substitutes the thing's mass with this value for determining upward momentum
 //
 void A_LaunchTarget(mobj_t *actor)
 {
-    int    thrust;
+    int    thrust, forcedmass;
 
     if (!mbf24)
         return;
@@ -4021,14 +4021,10 @@ void A_LaunchTarget(mobj_t *actor)
     if (!actor->target)
         return;
 
-    thrust = actor->state->args[0];
+    thrust =     actor->state->args[0];
+    forcedmass = actor->state->args[1];
 
-    A_FaceTarget(actor);
-
-    if (!P_CheckSight(actor, actor->target))
-        return;
-
-    actor->target->momz = thrust*FRACUNIT/actor->target->info->mass;
+    actor->target->momz = (forcedmass == 0) ? thrust*FRACUNIT/actor->target->info->mass : thrust*FRACUNIT/forcedmass;
 
     if ((actor->target->flags3 & ~MF3_JUMPED || actor->target->flags & ~MF_NOGRAVITY) && (actor->target->type != MT_PLAYER))
       actor->target->flags3 &= MF3_JUMPED;

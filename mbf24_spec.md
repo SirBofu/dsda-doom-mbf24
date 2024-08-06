@@ -268,6 +268,7 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
     - Launches caller's target upward vertically.
     - Args:
         - `thrust (int)`: Amount of vertical momentum to apply. Defaults to 1000 if not set, identical to an Archvile jump.
+        - `forcedmass (int)`: If not set to zero, this value is passed as the mass of the target being launched instead of its actual mass. 
 
 - **A_SetHealth(sethealth)**
     - Sets caller's health to the specified value. Has no effect if currently health is 0 or lower.

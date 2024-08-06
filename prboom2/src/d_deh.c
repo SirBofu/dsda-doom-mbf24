@@ -1590,7 +1590,7 @@ static const deh_bexptr deh_bexptrs[] = // CPhipps - static const
   {A_AddCounter,           "A_AddCounter", 2},
   {A_JumpIfCounterEquals,  "A_JumpIfCounterEquals", 3},
   {A_JumpIfCounterGreater, "A_JumpIfCounterGreater", 4},
-  {A_LaunchTarget,         "A_LaunchTarget", 1, {1000}},
+  {A_LaunchTarget,         "A_LaunchTarget", 2, {1000, 0}},
   {A_SetHealth,            "A_SetHealth", 1},
   {A_RegainHealth,         "A_RegainHealth", 2},
   {A_ChaseNoAttack,        "A_ChaseNoAttack", 2},
