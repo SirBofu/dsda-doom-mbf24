@@ -404,6 +404,17 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
         - `flags3 (int)`: MBF24 actor flag(s) to add
     - Notes:
         - No-ops if the calling actor has no tracer.
+
+- **A_ProjectileSpray(range, damagebase, damagedice, flatdamage, splashthing**
+    - Parameterized version of A_BFGSpray that allows defining damage, range, and the thing that appears over enemies hit by the splash.
+    - Args:
+        - `range (uint)`: Maximum range (in map units) from the caller's target at which to deal damage; defaults to 1024 if not set
+        - `damagebase (uint)`: Base damage of attack; if not set, defaults to 7
+        - `damagedice (uint)`: Attack damage random multiplier; if not set, defaults to 7
+        - `flatdamage (uint)`: Flat damage to add to attack; if not set, defaults to 40
+        - `splashthing (int)`: TID of the thing to spawn over things hit by the attack; if not set, defaults to 0
+    - Notes:
+        - Ignores things with the `NOBFGSPRAY` flag set.
     
 #### New DEHACKED Weapon Codepointers
 
