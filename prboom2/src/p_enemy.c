@@ -294,7 +294,7 @@ static dboolean P_CheckMissileRange(mobj_t *actor)
 
   // MBF24 - implementing generalized min missile chance from Crispy
 
-  if (mbf24_features && actor->info->minmissilechance && !(actor->flags2 & MF2_HIGHERMPROB))
+  if (mbf24_features && actor->info->minmissilechance && !(actor->flags2 & MF2_HIGHERMPROB) && dist > actor->info->minmissilechance)
   {
     dist = actor->info->minmissilechance;
   }
