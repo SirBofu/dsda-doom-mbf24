@@ -320,15 +320,21 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
         - If multiple flags are specified in a field, jump will only occur if all the flags are set (e.g. AND comparison, not OR)
         - If the caller has no tracer, then has no effect.
 
-- **A_JumpIfHasTarget(state)**
-  - Jumps to a state if caller has a target.
+- **A_JumpIfHasTarget(state, type)**
+  - Jumps to a state if caller has a target. Can optionally check to make sure that the target has a specific thing ID.
+  - Args:
+    - `state (uint)`: State to jump to
+    - `type (uint)`: Thing ID to check for; if not set, defaults to 0
+  - Notes:
+    - A `type` value of 0 skips the check for the target's TID.  
+
+- **A_JumpIfHasTracer(state, type)**
+  - Jumps to a state if caller has a tracer. Can optionally check to make sure that the tracer has a specific thing ID.
   - Args:
     - `state (uint)`: State to jump to.
-
-- **A_JumpIfHasTracer(state)**
-    - Jumps to a state if caller has a tracer.
-    - Args:
-        - `state (uint)`: State to jump to.
+    - `type (uint)`: Thing ID to check for; if not set, defaults to 0
+  - Notes:
+    - A `type` value of 0 skips the check for the tracer's TID.   
 
 - **A_JumpIfBlocked(state, angle, ofs_x, ofs_y)**
   - Jumps to a state if caller's position or relative position is blocked.
@@ -461,6 +467,15 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
         - `state (uint)`: State for the caller's tracer to jump to
     - Notes:
         - No-ops if the caller has no tracer.
+
+- **A_DropThing(type, isdropped, target)**
+  - Causes a thing to spawn with randomized momentum from the caller in the same manner as if the thing had been dropped.
+  - Args:
+    - `type (uint)`: TID of the thing to drop
+    - `isdropped (uint)`: If nonzero, adds the `DROPPED` flag to the thing that's been dropped
+    - `target (uint)`: If 1, sets the dropped thing's target to the caller's target; if higher than 1, sets the dropped thing's target to the caller
+  - Notes:
+    - Has no effect if `type` is not provided.  
     
 
 #### New DEHACKED Weapon Codepointers
@@ -470,7 +485,7 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
 - **A_WeaponRemove(removeammo)**
   - Removes the current weapon from the player's inventory and switches to a different weapon.
   - Args:
-    - `removeammo (int)`: If nonzero, also removes all ammunition of the weapon's ammo type.
+    - `removeammo (int)`: If nonzero, also removes all ammunition of the weapon's ammo type
   - Notes:
     - Does nothing if the calling weapon is the pistol or fist (or DEHACKED replacements). This may change in the future.
    

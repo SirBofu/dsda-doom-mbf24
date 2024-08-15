@@ -4370,33 +4370,43 @@ void A_JumpIfTracerFlagsSet(mobj_t* actor)
 
 //
 // A_JumpIfHasTarget
-// Jumps to a state if caller has a valid target.
+// Jumps to a state if caller has a valid target. Can optionally also check if the target has the specified thing ID.
 //   args[0]: State to jump to
+//   args[1]: Thing ID to check; if 0, just check if there is a target
 //
 void A_JumpIfHasTarget(mobj_t* actor)
 {
-  int state;
+  int state, type;
 
   if (!mbf24 || !actor || !actor->target)
     return;
 
   state = actor->state->args[0];
+  type  = actor->state->args[1] - 1;
+
+  if (type > 0 && (actor->target->type) != type) return;
+
   P_SetMobjState(actor, state);
 }
 
 //
 // A_JumpIfHasTracer
-// Jumps to a state if caller has a valid tracer.
+// Jumps to a state if caller has a valid tracer. Can optionally also check if the tracer has the specified thing ID.
 //   args[0]: State to jump to
+//   args[1]: Thing ID to check; if 0, just check if there is a tracer
 //
 void A_JumpIfHasTracer(mobj_t* actor)
 {
-    int state;
+    int state, type;
 
     if (!mbf24 || !actor || !actor->tracer)
         return;
 
     state = actor->state->args[0];
+    type  = actor->state->args[1] - 1;
+
+    if (type > 0 && (actor->tracer->type) != type) return;
+
     P_SetMobjState(actor, state);
 }
 
@@ -4961,6 +4971,33 @@ void A_SetTracerState(mobj_t *actor)
         return;
 
     P_SetMobjState(actor->tracer, state);
+}
+
+//
+// A_DropThing
+// Drops the specified thing similar to how a corpse drops things.
+//   args[0]: TID of the thing to drop
+//   args[1]: If nonzero, set the DROPPED flag on the new thing
+//   args[2]: If 1, sets dropped thing's target to the caller's target; if 2 or higher, sets to caller instead
+//
+void A_DropThing(mobj_t* actor)
+{
+    mobj_t *mo;
+    int type;
+
+    if (!mbf24_features || !actor->state->args[0])
+      return;
+
+    type = actor->state->args[0] - 1;
+
+    mo = P_SpawnMobj(actor->x, actor->y,
+                     actor->z + (actor->height >> 1), type);
+    mo->momx = P_SubRandom() << 8;
+    mo->momy = P_SubRandom() << 8;
+    mo->momz = FRACUNIT * 5 + (P_Random(pr_heretic) << 10);
+    if (actor->state->args[1] > 0) mo->flags |= MF_DROPPED;
+    if (actor->state->args[2] == 1) mo->target = actor->target;
+    if (actor->state->args[2] > 1) mo->target = actor;
 }
 
 // heretic

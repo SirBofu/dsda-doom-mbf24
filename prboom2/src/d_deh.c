@@ -1601,8 +1601,8 @@ static const deh_bexptr deh_bexptrs[] = // CPhipps - static const
   {A_MonsterJump,          "A_MonsterJump", 1},
   {A_JumpIfTargetFlagsSet, "A_JumpIfTargetFlagsSet", 4},
   {A_JumpIfTracerFlagsSet, "A_JumpIfTracerFlagsSet", 4},
-  {A_JumpIfHasTarget,      "A_JumpIfHasTarget", 1},
-  {A_JumpIfHasTracer,      "A_JumpIfHasTracer", 1},
+  {A_JumpIfHasTarget,      "A_JumpIfHasTarget", 2, {0, 0}, TI_ARGS2},
+  {A_JumpIfHasTracer,      "A_JumpIfHasTracer", 2, {0, 0}, TI_ARGS2},
   {A_JumpIfBlocked,        "A_JumpIfBlocked", 4, {0,0,0,0}},
   {A_DodgeChase,           "A_DodgeChase", 3},
   {A_MonsterSpawnAttack,   "A_MonsterSpawnAttack", 3, {0, 0, 0}, TI_ARGS1},
@@ -1616,6 +1616,7 @@ static const deh_bexptr deh_bexptrs[] = // CPhipps - static const
   {A_MonsterZapAttack,     "A_MonsterZapAttack", 8, {0, 0, 20, 70, 70, 1000, 0, 0}},
   {A_SetTargetState,       "A_SetTargetState", 1},
   {A_SetTracerState,       "A_SetTracerState", 1},
+  {A_DropThing,            "A_DropThing", 3, {0}, TI_ARGS1},
 
   {A_WeaponRemove,         "A_WeaponRemove", 1},
   {A_ProjectileSpray,      "A_ProjectileSpray", 5, {1024, 7, 7, 40, 0}, TI_ARGS4},
