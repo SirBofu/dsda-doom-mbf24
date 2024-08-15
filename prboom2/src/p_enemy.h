@@ -174,6 +174,7 @@ void A_MonsterZapTarget(mobj_t *);
 void A_MonsterZapAttack(mobj_t *);
 void A_SetTargetState(mobj_t *);
 void A_SetTracerState(mobj_t *);
+void A_DropThing(mobj_t *);
 
 // heretic
 
