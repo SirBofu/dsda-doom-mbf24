@@ -479,11 +479,20 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
 - **A_DropThing(type, isdropped, target)**
   - Causes a thing to spawn with randomized momentum from the caller in the same manner as if the thing had been dropped.
   - Args:
-    - `type (uint)`: TID of the thing to drop
+    - `type (int)`: TID of the thing to drop
     - `isdropped (uint)`: If nonzero, adds the `DROPPED` flag to the thing that's been dropped
     - `target (uint)`: If 1, sets the dropped thing's target to the caller's target; if higher than 1, sets the dropped thing's target to the caller
   - Notes:
-    - Has no effect if `type` is not provided.  
+    - Has no effect if `type` is not provided.
+
+- **A_SetSectorBrightness(brightness, tag, change)**
+  - Alters the light level of all sectors with a given tag in the map. Can set either absolute or relative values.
+  - Args:
+    - `brightness (uint)`: Absolute value to set the sector(s) light level to. This is ignored if `change` is supplied.
+    - `tag (int)`: Sector tag to change. If -1, uses the tag of the sector the thing is currently in instead.
+    - `change (int)`: Relative value to change the light level by. Has no effect if zero.
+  - Notes:
+    - Should be used with care.      
     
 
 #### New DEHACKED Weapon Codepointers

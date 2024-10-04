@@ -1618,6 +1618,7 @@ static const deh_bexptr deh_bexptrs[] = // CPhipps - static const
   {A_SetTargetState,       "A_SetTargetState", 1},
   {A_SetTracerState,       "A_SetTracerState", 1},
   {A_DropThing,            "A_DropThing", 3, {0}, TI_ARGS1},
+  {A_SetSectorBrightness,  "A_SetSectorBrightness", 3},
 
   {A_WeaponRemove,         "A_WeaponRemove", 1},
   {A_ProjectileSpray,      "A_ProjectileSpray", 5, {1024, 7, 7, 40, 0}, TI_ARGS4},

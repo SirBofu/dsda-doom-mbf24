@@ -176,6 +176,7 @@ void A_MonsterZapAttack(mobj_t *);
 void A_SetTargetState(mobj_t *);
 void A_SetTracerState(mobj_t *);
 void A_DropThing(mobj_t *);
+void A_SetSectorBrightness(mobj_t *);
 
 // heretic
 

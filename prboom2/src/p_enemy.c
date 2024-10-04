@@ -5053,6 +5053,46 @@ void A_DropThing(mobj_t* actor)
     if (actor->state->args[2] > 1) mo->target = actor;
 }
 
+//
+// A_SetSectorBrightness(brightness, tag, change)
+// Changes the sector of all sectors with the specified tag to the given value.
+//   args[0]: The level of brightness to set. This is overridden if args[2] is nonzero.
+//   args[1]: The tag of the sector(s) to change. If -1, will change all sectors with the thing's sector tag.
+//   args[2]: Amount to change the brightness level by.
+//
+
+void A_SetSectorBrightness(mobj_t* actor)
+{
+    int brightness, tag, change;
+
+    if (!mbf24_features || !actor)
+      return;
+
+    brightness = actor->state->args[0];
+    tag        = actor->state->args[1];
+    change     = actor->state->args[2];
+
+    if (tag == -1)
+      tag = actor->subsector->sector->tag;
+
+    if (brightness < 0)
+      brightness = 0;
+
+    if (brightness > 256)
+      brightness = 256;
+
+    if (change == 0)
+    {
+      EV_LightSet(tag, brightness);
+    }
+    else
+    {
+      EV_LightChange(tag, change);
+    }
+}
+
+
+
 // heretic
 
 #include "heretic/def.h"
