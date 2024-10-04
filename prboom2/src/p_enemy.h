@@ -144,6 +144,7 @@ void A_RemoveFlags(mobj_t *);
 
 // New MBF24 codepointers
 
+void A_LineEffect2(mobj_t *);
 void A_JumpIfTargetHigher(mobj_t *);
 void A_JumpIfTracerHigher(mobj_t *);
 void A_SetCounter(mobj_t *);

@@ -404,8 +404,7 @@ int GetPairForSwitchTexture(side_t *side)
 // Passed the thing using the line, the line being used, and the side used
 // Returns true if a thinker was created
 //
-dboolean
-P_UseSpecialLine
+dboolean P_UseSpecialLine
 ( mobj_t*       thing,
   line_t*       line,
   int           side,

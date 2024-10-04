@@ -3750,6 +3750,30 @@ void A_RemoveFlags(mobj_t* actor)
 // MBF24
 
 //
+// A_LineEffect2
+// A much more reliable variant of A_LineEffect.
+//   args[0]: Linedef special to execute.
+//   args[1]: Sector tag to use.
+//
+
+void A_LineEffect2(mobj_t *mo)
+{
+    if (!mbf24_features || !mo)
+        return;
+
+    if (map_format.zdoom)
+        I_Error("MBF24 A_LineEffect2 actions are incompatible with this map format (use A_UDMFLineEffect");
+
+    static line_t junk;
+    junk.special = (short) mo->state->args[0];
+    junk.tag     = (short) mo->state->args[1];
+
+    if (!P_UseSpecialLine(mo, &junk, 0, true))
+        map_format.cross_special_line(&junk, 0, mo, true);
+
+}
+
+//
 // A_JumpIfTargetHigher
 // Jumps to a state if caller's target's z position is closer than the specified distance.
 //   args[0]: State to jump to
