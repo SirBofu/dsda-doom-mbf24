@@ -3692,7 +3692,7 @@ void A_JumpIfFlagsSet(mobj_t* actor)
 //
 void A_AddFlags(mobj_t* actor)
 {
-  uint64_t flags, flags2;
+  uint64_t flags, flags2, flags3;
   dboolean update_blockmap;
 
   if (!mbf21 || !actor)
@@ -3724,7 +3724,7 @@ void A_AddFlags(mobj_t* actor)
 //
 void A_RemoveFlags(mobj_t* actor)
 {
-  uint64_t flags, flags2;
+  uint64_t flags, flags2, flags3;
   dboolean update_blockmap;
 
   if (!mbf21 || !actor)

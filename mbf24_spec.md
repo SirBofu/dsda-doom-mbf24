@@ -222,6 +222,14 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
 
 ##### Actor pointers
 
+- **A_LineEffect2(special, tag)**
+  - Remotely executes a Doom or parameterized Boom linedef special.
+  - Args:
+    - `special (uint)`: Linedef special to execute.
+    - `tag (uint)`: Sector tag to execute the special against.
+  - Notes:
+    - Will error out if map format is UDMF. UDMF will get its own codepointer.   
+
 - **A_JumpIfTargetHigher(state, distance, hilo)**
   - Jumps to a state if caller's target's z position is closer than the specified vertical distance.
   - Args:

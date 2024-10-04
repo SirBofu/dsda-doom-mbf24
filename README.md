@@ -1,4 +1,4 @@
-# dsda-doom-mbf24 v0.27.5
+# dsda-doom-mbf24 v0.28.1
 
 This is a heavily WIP, mostly proof of concept build of DSDA-Doom that focuses on building a new complevel, MBF24.
 Its implementation is pretty simple so far.
