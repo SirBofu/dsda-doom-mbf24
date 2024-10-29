@@ -5161,6 +5161,44 @@ void A_JumpIfSkill(mobj_t* actor)
     }
 }
 
+//
+// A_MonsterRefire(chance)
+// Parameterized refire command for monsters.
+//   args[0]: The chance for the monster to continue firing if its target is no longer in line of sight.
+//   args[1]: The state to jump to when refire conditions are not met. If 0, jump to the see state.
+//
+
+void A_MonsterRefire(mobj_t *actor)
+{
+    if (!mbf24_features || !actor)
+      return;
+
+    int chance, state;
+    chance = actor->state->args[0];
+    state  = actor->state->args[1];
+
+    if (state == 0)
+      state = actor->info->seestate;
+
+    // keep firing unless target got out of sight
+    A_FaceTarget(actor);
+
+    /* killough 12/98: Stop firing if a friend has gotten in the way */
+    if (P_HitFriend(actor))
+        goto stop;
+
+    /* killough 11/98: prevent refiring on friends continuously */
+    if (P_Random(pr_mbf21) < chance) {
+        if (actor->target && actor->flags & actor->target->flags & MF_FRIEND)
+            goto stop;
+        else
+            return;
+    }
+
+    if (!actor->target || actor->target->health <= 0
+        || !P_CheckSight(actor, actor->target))
+        stop:  P_SetMobjState(actor, state);
+}
 
 // heretic
 

@@ -509,7 +509,7 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
   - Notes:
     - Should be used with care.
 
-- **A_JumpIfSkill(skillnum, frame)**
+- **A_JumpIfSkill(skillnum, state)**
   - Jumps to the specified frame if the current skill level is equal to or greater than the current value.
   - Args:
     - `skillnum (uint)`: ID of the skill to check for. 0 = ITYTD, 1 = HNTR, 2 = HMP, 3 = UV, 4 = Nightmare.
@@ -517,7 +517,14 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
   - Notes:
     - If custom skills are defined, it is based off of the ID of the skill as defined in UMAPINFO.
     - As ZMAPINFO defines skills by name and not by ID, IDs will correlate to the skills in the order defined.
-    
+
+- **A_MonsterRefire(chance, state)**
+  - Parameterized monster refire codepointer. Allows defintion of both a chance to continue firing when the target is out of line-of-sight as well as the frame to jump to when refire conditions are not met.
+  - Args:
+    - `chance (uint)`: Chance out of 256 to continue to the `Next frame` when the target is out of line of sight.
+    - `state (uint)`: State to jump to when refire conditions are not met. If set to zero, defaults to the monster's See state. 
+  - Notes:
+    - Will cause the monster to stop firing if its target is dead, as with vanilla refire codepointers.
 
 #### New DEHACKED Weapon Codepointers
 
