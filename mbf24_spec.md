@@ -492,7 +492,16 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
     - `tag (int)`: Sector tag to change. If -1, uses the tag of the sector the thing is currently in instead.
     - `change (int)`: Relative value to change the light level by. Has no effect if zero.
   - Notes:
-    - Should be used with care.      
+    - Should be used with care.
+
+- **A_JumpIfSkill(skillnum, frame)**
+  - Jumps to the specified frame if the current skill level is equal to or greater than the current value.
+  - Args:
+    - `skillnum (uint)`: ID of the skill to check for. 0 = ITYTD, 1 = HNTR, 2 = HMP, 3 = UV, 4 = Nightmare.
+    - `state (uint)`: State to jump to if conditions are met.
+  - Notes:
+    - If custom skills are defined, it is based off of the ID of the skill as defined in UMAPINFO.
+    - As ZMAPINFO defines skills by name and not by ID, IDs will correlate to the skills in the order defined.
     
 
 #### New DEHACKED Weapon Codepointers

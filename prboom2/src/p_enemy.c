@@ -5091,6 +5091,32 @@ void A_SetSectorBrightness(mobj_t* actor)
     }
 }
 
+//
+// A_JumpIfSkill(skillnum, frame)
+// Jumps to the specified frame if the current skill level is equal to or greater than the current value.
+// This codepointer relies on the Skill ID, either as default or as defined in UMAPINFO.
+//   args[0]: The skill level to check for. 0 = ITYTD, 4 = Nightmare!
+//   args[1]: The frame to jump to if the condition is true.
+//
+
+void A_JumpIfSkill(mobj_t* actor)
+{
+    int skillnum, state;
+
+    if (!mbf24_features || ! actor)
+      return;
+
+    skillnum = actor->state->args[0];
+    state    = actor->state->args[1];
+
+    if (skillnum == 0)
+      return;
+
+    if (gameskill >= skillnum)
+    {
+        P_SetMobjState(actor,state);
+    }
+}
 
 
 // heretic

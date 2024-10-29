@@ -69,3 +69,11 @@ In addition, by using `A_SetTracerState`, the Warpvile's attack fog dissipates i
 
 [Initial Weapons and Ammo Test](https://www.dropbox.com/scl/fi/9pmv8plm70xemxw80gl3p/InitialAmmoTest.wad?rlkey=5u97ijbkbjkxzuyvq89kqpuax&st=a0f8086x&dl=0)
 This WAD makes the player start with 8 shells, 2 rockets, 40 cells, the shotgun, the chaingun, the super shotgun, and the chainsaw, demonstrating the ability to define these in the DEHACKED lump. Note that these options are only consumed in MBF24, which means that if you load up a demo in a different complevel, it should sync perfectly.
+
+[JumpIfSkill Test](https://www.dropbox.com/scl/fi/ongk5p5i6ykct5n3fgnr3/JumpIfSkillTest.wad?rlkey=21iaht9wys68uyatsrhezdwgp&st=4snbptmg&dl=0)
+This WAD demonstrates the `A_JumpIfSkill` codepointer.
+If the difficulty is ITYTD, Zombiemen fire normally.
+If the difficulty is HNTR, Zombiemen fire like shotgunners.
+If the difficulty is HMP, Zombiemen fire like chaingunners.
+If the difficulty is UV, Zombiemen fire plasma.
+If the difficulty is Nightmare, Zombiemen fire rockets.
