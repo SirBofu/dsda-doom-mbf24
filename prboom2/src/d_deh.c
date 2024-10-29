@@ -1587,6 +1587,8 @@ static const deh_bexptr deh_bexptrs[] = // CPhipps - static const
   // MBF24 codepointers
 
   {A_LineEffect2,          "A_LineEffect2", 2},
+  {A_UDMFLineEffect,       "A_UDMFLineEffect", 2},
+  {A_JumpIfUDMF,           "A_JumpIfUDMF", 1},
   {A_JumpIfTargetHigher,   "A_JumpIfTargetHigher", 3},
   {A_JumpIfTracerHigher,   "A_JumpIfTracerHigher", 3},
   {A_SetCounter,           "A_SetCounter", 2},

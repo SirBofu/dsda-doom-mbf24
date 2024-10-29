@@ -3750,7 +3750,7 @@ void A_RemoveFlags(mobj_t* actor)
 // MBF24
 
 //
-// A_LineEffect2
+// A_LineEffect2(special, tag)
 // A much more reliable variant of A_LineEffect.
 //   args[0]: Linedef special to execute.
 //   args[1]: Sector tag to use.
@@ -3774,7 +3774,50 @@ void A_LineEffect2(mobj_t *mo)
 }
 
 //
-// A_JumpIfTargetHigher
+// A_UDMFLineEffect(special, tag)
+// A UDMF-friendly version of A_LineEffect2. In actuality, the point of this codepointer is to encourage use of A_JumpIfUDMF.
+//   args[0]: Linedef special to execute.
+//   args[1]: Sector tag to use.
+//
+
+void A_UDMFLineEffect(mobj_t *mo)
+{
+    if (!mbf24_features || !mo)
+        return;
+
+    if (!map_format.zdoom)
+        I_Error("MBF24 A_UDMFLineEffect actions are only compatible with UDMF (use A_LineEffect2)");
+
+    static line_t junk;
+    junk.special = (short) mo->state->args[0];
+    junk.tag     = (short) mo->state->args[1];
+
+    if (!P_UseSpecialLine(mo, &junk, 0, true))
+        map_format.cross_special_line(&junk, 0, mo, true);
+
+}
+
+//
+// A_JumpIfUDMF(state)
+// Jumps to the specified state if the current map format is UDMF.
+//   args[0]: State to jump to if current map format is UDMF.
+//
+
+void A_JumpIfUDMF(mobj_t *mo)
+{
+    if (!mbf24_features || !mo)
+        return;
+
+    int state;
+    state = mo->state->args[0];
+
+    if (map_format.zdoom)
+        P_SetMobjState(mo, state);
+}
+
+
+//
+// A_JumpIfTargetHigher(state,distance,hilo)
 // Jumps to a state if caller's target's z position is closer than the specified distance.
 //   args[0]: State to jump to
 //   args[1]: Distance threshold
