@@ -552,11 +552,12 @@ void P_RemoveMonsters(void);
 #define MF3_DEADFLOAT         0x00080000ull // thing doesn't drop when killed
 #define MF3_TOUCHYTARGET      0x00100000ull // automatically targets living things that touch it
 #define MF3_TARGETUSE         0x00200000ull // automatically targets the last thing to use it
-#define MF3_GENERIC1          0x00400000ull // generic flag 1
-#define MF3_GENERIC2          0x00800000ull // generic flag 2
-#define MF3_GENERIC3          0x01000000ull // generic flag 3
-#define MF3_GENERIC4          0x02000000ull // generic flag 4
-#define MF3_JUMPED            0x04000000ull // thing has just jumped/been launched
+#define MF3_FASTPROJECTILE    0x00400000ull // fast projectile (move and check for collision multiple times per tic)
+#define MF3_GENERIC1          0x00800000ull // generic flag 1
+#define MF3_GENERIC2          0x01000000ull // generic flag 2
+#define MF3_GENERIC3          0x02000000ull // generic flag 3
+#define MF3_GENERIC4          0x04000000ull // generic flag 4
+#define MF3_JUMPED            0x08000000ull // thing has just jumped/been launched
 
 #define AMMO_GWND_WIMPY 10
 #define AMMO_GWND_HEFTY 50

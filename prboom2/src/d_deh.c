@@ -1310,6 +1310,7 @@ static const struct deh_flag_s deh_mobjflags_mbf24[] = {
   {"DEADFLOAT",       MF3_DEADFLOAT}, // thing doesn't drop when killed
   {"TOUCHYTARGET",    MF3_TOUCHYTARGET}, // automatically targets living things that touch it
   {"TARGETUSE",       MF3_TARGETUSE}, // automatically targets the last thing to trigger its use state
+  {"FASTPROJECTILE",  MF3_FASTPROJECTILE}, // projectile that moves quickly
   {"GENERIC1",        MF3_GENERIC1}, // generic flag 1
   {"GENERIC2",        MF3_GENERIC2}, // generic flag 2
   {"GENERIC3",        MF3_GENERIC3}, // generic flag 3

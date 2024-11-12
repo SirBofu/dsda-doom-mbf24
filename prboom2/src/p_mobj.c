@@ -244,7 +244,31 @@ void P_ApplyHereticSectorMovementSpecial(mobj_t *mo, int special)
 static void P_XYMovement (mobj_t* mo)
 {
   player_t *player;
-  fixed_t xmove, ymove;
+  fixed_t xmove, ymove, xspeed, yspeed, maxactormove;
+
+
+
+  //MBF25
+
+  maxactormove = mo->radius - 1;
+  int moveiterations = 1;
+  xspeed = abs(mo->momx);
+  yspeed = abs(mo->momy);
+
+  if (mbf24_features && mo->flags3 & MF3_FASTPROJECTILE)
+  {
+    if (xspeed > yspeed)
+    {
+      moveiterations = 1 + (xspeed / maxactormove);
+    }
+    else
+    {
+      if (yspeed > xspeed)
+      {
+        moveiterations = 1 + (yspeed / maxactormove);
+      }
+    }
+  }
 
   //e6y
   fixed_t   oldx,oldy; // phares 9/10/98: reducing bobbing/momentum on ice
@@ -277,14 +301,14 @@ static void P_XYMovement (mobj_t* mo)
 
   player = mo->player;
 
-  if (mo->momx > MAXMOVE)
+  if (mo->momx > MAXMOVE && moveiterations == 1)
     mo->momx = MAXMOVE;
-  else if (mo->momx < -MAXMOVE)
+  else if (mo->momx < -MAXMOVE && moveiterations == 1)
     mo->momx = -MAXMOVE;
 
-  if (mo->momy > MAXMOVE)
+  if (mo->momy > MAXMOVE && moveiterations == 1)
     mo->momy = MAXMOVE;
-  else if (mo->momy < -MAXMOVE)
+  else if (mo->momy < -MAXMOVE && moveiterations == 1)
     mo->momy = -MAXMOVE;
 
   xmove = mo->momx;
@@ -305,6 +329,14 @@ static void P_XYMovement (mobj_t* mo)
     // to pass through walls.
     // CPhipps - compatibility optioned
 
+    if (mbf24_features && moveiterations > 1)
+    {
+      ptryx = mo->x + xmove / moveiterations;
+      ptryy = mo->y + ymove / moveiterations;
+      xmove = xmove - (xmove / moveiterations);
+      ymove = ymove - (ymove / moveiterations);
+      moveiterations--;
+    }
     if (xmove > MAXMOVE / 2 ||
         ymove > MAXMOVE / 2 ||
         (!comp[comp_moveblock] && (xmove < -MAXMOVE/2 || ymove < -MAXMOVE/2)))
