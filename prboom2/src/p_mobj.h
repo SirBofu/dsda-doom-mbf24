@@ -416,6 +416,7 @@ typedef struct mobj_s
     int counter2;               // MBF24 generic counter 2
     int counter3;               // MBF24 generic counter 3
     int counter4;               // MBF24 generic counter 4
+    struct mobj_s* lastripped;  // Last thing hit by the thing if it's a ripper projectile, to prevent damage from escalating
 
     // SEE WARNING ABOVE ABOUT POINTER FIELDS!!!
 } mobj_t;

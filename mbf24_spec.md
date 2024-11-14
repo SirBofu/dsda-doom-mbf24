@@ -229,22 +229,7 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
     - `special (uint)`: Linedef special to execute.
     - `tag (uint)`: Sector tag to execute the special against.
   - Notes:
-    - Will error out if map format is UDMF. Use a `A_JumpIfUDMF` gate that jumps to `A_UDMFLineEffect` instead.
-
-- **A_UDMFLineEffect(special, tag)**
-  - Remotely executes a UDMF linedef special.
-  - Args:
-    - `special (uint)`: UDMF linedef special to execute.
-    - `tag (uint)`: Sector tag to execute the special against.
-  - Notes:
-    - Will error out if map format is not UDMF. Use a `A_JumpIfUDMF` gate to jump to this codepointer or use `A_LineEffect2` instead.
-
-- **A_JumpIfUDMF(state)**
-  - Jumps to a state if the current map format is UDMF.
-  - Args:
-    - `state (uint)`: State to jump to if UDMF is enabled.
-  - Notes:
-    - While primarily useful for gating `A_UDMFLineEffect` and `A_LineEffect2`, this can technically be used for other purposes as well.  
+    - Name may possibly change (may end up becoming a complevel-gated version of `A_LineEffect` instead).
 
 - **A_JumpIfTargetHigher(state, distance, hilo)**
   - Jumps to a state if caller's target's z position is closer than the specified vertical distance.
@@ -580,13 +565,8 @@ If an attack's base damage is set to 0 but it has a flat damage amount, it will 
 - Remove the SSG autoswitch bugfix, as this is being merged into base MBF21 by both Woof! and DSDA-Doom. 
 - Additional movement codepointers, such as A_Wander codepointer for aimless monster idle movement.
 - Codepointer to jump to a specified frame if a thing is stuck.
-- Parameterized version of A_SkullAttack that can be used for ground charging enemies.
-- Parameterized version of A_VileAttack.
 - Parameterized version of A_BFGSpray.
-- A_SetTracerState and A_SetTargetState.
 
 #### Potential Additions
-- Secondary attack support for weapons, with secondary optional ammo types.
-- Support for DEHACKED-defined additional weapon and ammo types as well as pickups.
+- Support for additional weapon and ammo types as well as pickups.
 - Teleporter multi-destination support without map format requirements.
-- Allow DEHACKED definition of what weapons the player starts with.
