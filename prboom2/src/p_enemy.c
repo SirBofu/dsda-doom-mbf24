@@ -4828,6 +4828,7 @@ void A_MonsterChargeAttack(mobj_t *actor)
 void A_AddTargetFlags(mobj_t* actor)
 {
     uint64_t flags, flags2, flags3;
+    dboolean update_blockmap;
 
     if (!mbf24 || !actor || !(actor->target))
         return;
@@ -4835,6 +4836,14 @@ void A_AddTargetFlags(mobj_t* actor)
     flags  = actor->state->args[0];
     flags2 = actor->state->args[1];
     flags3 = actor->state->args[2];
+
+    // unlink/relink the thing from the blockmap if
+    // the NOBLOCKMAP or NOSECTOR flags are added
+    update_blockmap = ((flags & MF_NOBLOCKMAP) && !(actor->flags & MF_NOBLOCKMAP))
+                      || ((flags & MF_NOSECTOR) && !(actor->flags & MF_NOSECTOR));
+
+    if (update_blockmap)
+        P_UnsetThingPosition(actor);
 
     actor->target->flags  |= flags;
     actor->target->flags2 |= flags2;
@@ -4851,6 +4860,7 @@ void A_AddTargetFlags(mobj_t* actor)
 void A_AddTracerFlags(mobj_t* actor)
 {
     uint64_t flags, flags2, flags3;
+    dboolean update_blockmap;
 
     if (!mbf24 || !actor || !(actor->tracer))
         return;
@@ -4858,6 +4868,14 @@ void A_AddTracerFlags(mobj_t* actor)
     flags  = actor->state->args[0];
     flags2 = actor->state->args[1];
     flags3 = actor->state->args[2];
+
+    // unlink/relink the thing from the blockmap if
+    // the NOBLOCKMAP or NOSECTOR flags are added
+    update_blockmap = ((flags & MF_NOBLOCKMAP) && !(actor->flags & MF_NOBLOCKMAP))
+                      || ((flags & MF_NOSECTOR) && !(actor->flags & MF_NOSECTOR));
+
+    if (update_blockmap)
+        P_UnsetThingPosition(actor);
 
     actor->tracer->flags  |= flags;
     actor->tracer->flags2 |= flags2;
@@ -4874,6 +4892,7 @@ void A_AddTracerFlags(mobj_t* actor)
 void A_RemoveTargetFlags(mobj_t* actor)
 {
     uint64_t flags, flags2, flags3;
+    dboolean update_blockmap;
 
     if (!mbf24 || !actor | !(actor->target))
         return;
@@ -4881,6 +4900,14 @@ void A_RemoveTargetFlags(mobj_t* actor)
     flags  = actor->state->args[0];
     flags2 = actor->state->args[1];
     flags3 = actor->state->args[2];
+
+    // unlink/relink the thing from the blockmap if
+    // the NOBLOCKMAP or NOSECTOR flags are removed
+    update_blockmap = ((flags & MF_NOBLOCKMAP) && (actor->flags & MF_NOBLOCKMAP))
+                      || ((flags & MF_NOSECTOR) && (actor->flags & MF_NOSECTOR));
+
+    if (update_blockmap)
+        P_UnsetThingPosition(actor);
 
     actor->target->flags  &= ~flags;
     actor->target->flags2 &= ~flags2;
@@ -4897,6 +4924,7 @@ void A_RemoveTargetFlags(mobj_t* actor)
 void A_RemoveTracerFlags(mobj_t* actor)
 {
     uint64_t flags, flags2, flags3;
+    dboolean update_blockmap;
 
     if (!mbf24 || !actor | !(actor->tracer))
         return;
@@ -4904,6 +4932,14 @@ void A_RemoveTracerFlags(mobj_t* actor)
     flags  = actor->state->args[0];
     flags2 = actor->state->args[1];
     flags3 = actor->state->args[2];
+
+    // unlink/relink the thing from the blockmap if
+    // the NOBLOCKMAP or NOSECTOR flags are removed
+    update_blockmap = ((flags & MF_NOBLOCKMAP) && (actor->flags & MF_NOBLOCKMAP))
+                      || ((flags & MF_NOSECTOR) && (actor->flags & MF_NOSECTOR));
+
+    if (update_blockmap)
+        P_UnsetThingPosition(actor);
 
     actor->tracer->flags  &= ~flags;
     actor->tracer->flags2 &= ~flags2;
