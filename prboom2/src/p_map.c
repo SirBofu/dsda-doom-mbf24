@@ -1142,7 +1142,17 @@ static dboolean PIT_CheckThing(mobj_t *thing) // killough 3/26/98: make static
       }
       else
       {
-        damage = ((P_Random(pr_mbf21) & 3) + 2) * tmthing->info->damage;
+        if (mbf24_features && tmthing->flags3 & MF3_TUNNEL)
+        {
+          uint32_t hash = (uint32_t)(long long)thing;
+
+          if (tmthing->tunnel_hash_[0] == hash || tmthing->tunnel_hash_[1] == hash)
+            return true;
+
+          tmthing->tunnel_hash_[0] = tmthing->tunnel_hash_[1];
+          tmthing->tunnel_hash_[1] = hash;
+        }
+        damage = mbf24_features ? ((P_Random(pr_mbf21) & 3) + 2) * tmthing->info->damage + tmthing->info->flatdamage : ((P_Random(pr_mbf21) & 3) + 2) * tmthing->info->damage;
         if (!(thing->flags & MF_NOBLOOD))
           P_SpawnBlood(tmthing->x, tmthing->y, tmthing->z, damage, thing);
         if (tmthing->info->ripsound)

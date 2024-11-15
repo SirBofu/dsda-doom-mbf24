@@ -2708,8 +2708,6 @@ void G_Compatibility(void)
     comp[comp_ouchface] = 0;
     comp[comp_maxhealth] = 0;
     comp[comp_translucency] = 0;
-    // MBF24
-    comp[comp_nohorizontalautoaim] = 0;
   }
 
   e6y_G_Compatibility();//e6y

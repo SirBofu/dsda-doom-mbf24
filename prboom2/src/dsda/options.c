@@ -148,6 +148,56 @@ static const dsda_options_t default_mbf21_options = {
         .comp_friendlyspawn = 1,
         .comp_voodooscroller = 0,
         .comp_reservedlineflag = 1,
+        .comp_nohorizontalautoaim = 0,
+};
+
+static const dsda_options_t default_mbf24_options = {
+        .weapon_recoil = 0,
+        .monsters_remember = 1,
+        .monster_infighting = 1,
+        .monster_backing = 0,
+        .monster_avoid_hazards = 1,
+        .monkeys = 0,
+        .monster_friction = 1,
+        .help_friends = 0,
+        .player_helpers = 0,
+        .friend_distance = 128,
+        .dog_jumping = 1,
+
+        .comp_telefrag = 0,
+        .comp_dropoff = 0,
+        .comp_vile = 0,
+        .comp_pain = 0,
+        .comp_skull = 0,
+        .comp_blazing = 0,
+        .comp_doorlight = 0,
+        .comp_model = 0,
+        .comp_god = 0,
+        .comp_falloff = 0,
+        .comp_floors = 0,
+        .comp_skymap = 0,
+        .comp_pursuit = 1,
+        .comp_doorstuck = 0,
+        .comp_staylift = 0,
+        .comp_zombie = 1,
+        .comp_stairs = 0,
+        .comp_infcheat = 0,
+        .comp_zerotags = 0,
+
+        .comp_moveblock = 0,
+        .comp_respawn = 0,
+        .comp_sound = 0,
+        .comp_666 = 0,
+        .comp_soul = 0,
+        .comp_maskedanim = 0,
+        .comp_ouchface = 0,
+        .comp_maxhealth = 0,
+        .comp_translucency = 0,
+        .comp_ledgeblock = 1,
+        .comp_friendlyspawn = 1,
+        .comp_voodooscroller = 0,
+        .comp_reservedlineflag = 1,
+        .comp_nohorizontalautoaim = 1,
 };
 
 static const dsda_options_t default_latest_options = {
@@ -359,6 +409,8 @@ static const dsda_options_t* dsda_MBFOptions(void) {
     mbf_options = default_mbf_options;
   else if (compatibility_level == mbf21_compatibility)
     mbf_options = default_mbf21_options;
+  else if (compatibility_level == mbf24_compatibility)
+    mbf_options = default_mbf24_options;
   else
     mbf_options = default_latest_options;
 

@@ -196,6 +196,435 @@ void P_ExplodeMissile (mobj_t* mo)
   }
 }
 
+fixed_t P_MobjGravity(mobj_t* mo)
+{
+    return FixedMul(mo->subsector->sector->gravity, mo->gravity);
+}
+
+void P_AutoCorrectLookDir(player_t* player)
+{
+    if (allow_incompatibility && dsda_MouseLook())
+    {
+        return;
+    }
+
+    player->centering = true;
+}
+
+static void P_FastZMovement (mobj_t* mo, int stepcount)
+{
+    fixed_t gravity = P_MobjGravity(mo);
+
+    /* killough 7/11/98:
+     * BFG fireballs bounced on floors and ceilings in Pre-Beta Doom
+     * killough 8/9/98: added support for non-missile objects bouncing
+     * (e.g. grenade, mine, pipebomb)
+     */
+
+    if (mo->flags & MF_BOUNCES && mo->momz)
+    {
+        mo->z += (mo->momz/stepcount);
+        if (mo->z <= mo->floorz)                /* bounce off floors */
+        {
+            mo->z = mo->floorz;
+            if (mo->momz < 0)
+            {
+                mo->momz = -mo->momz;
+                if (!(mo->flags & MF_NOGRAVITY)) /* bounce back with decay */
+                {
+                    mo->momz = mo->flags & MF_FLOAT ?   // floaters fall slowly
+                               mo->flags & MF_DROPOFF ? // DROPOFF indicates rate
+                               FixedMul(mo->momz, (fixed_t)(FRACUNIT*.85/stepcount)) :
+                               FixedMul(mo->momz, (fixed_t)(FRACUNIT*.70/stepcount)) :
+                               FixedMul(mo->momz, (fixed_t)(FRACUNIT*.45/stepcount)) ;
+
+                    /* Bring it to rest below a certain speed */
+                    if (D_abs(mo->momz) <= mo->info->mass * (gravity * 4 / 256))
+                        mo->momz = 0;
+                }
+
+                /* killough 11/98: touchy objects explode on impact */
+                if (mo->flags & MF_TOUCHY && mo->intflags & MIF_ARMED
+                    && mo->health > 0)
+                    P_DamageMobj(mo, NULL, NULL, mo->health);
+                else if (mo->flags & MF_FLOAT && sentient(mo))
+                    goto floater;
+                return;
+            }
+        }
+        else if (mo->z >= mo->ceilingz - mo->height)
+        {
+            /* bounce off ceilings */
+            mo->z = mo->ceilingz - mo->height;
+            if (mo->momz > 0)
+            {
+                if (mo->subsector->sector->ceilingpic != skyflatnum)
+                    mo->momz = -mo->momz;    /* always bounce off non-sky ceiling */
+                else if (mo->flags & MF_MISSILE)
+                    P_RemoveMobj(mo);        /* missiles don't bounce off skies */
+                else if (mo->flags & MF_NOGRAVITY)
+                    mo->momz = -mo->momz; // bounce unless under gravity
+
+                if (mo->flags & MF_FLOAT && sentient(mo))
+                    goto floater;
+
+                return;
+            }
+        }
+        else
+        {
+            if (!(mo->flags & MF_NOGRAVITY))      /* free-fall under gravity */
+                mo->momz -= (mo->info->mass * (gravity / 256)/stepcount);
+
+            if (mo->flags & MF_FLOAT && sentient(mo)) goto floater;
+            return;
+        }
+
+        /* came to a stop */
+        mo->momz = 0;
+
+        if (mo->flags & MF_MISSILE)
+        {
+            if (ceilingline &&
+                ceilingline->backsector &&
+                ceilingline->backsector->ceilingpic == skyflatnum &&
+                mo->z > ceilingline->backsector->ceilingheight)
+                P_RemoveMobj(mo);  /* don't explode on skies */
+            else
+                P_ExplodeMissile(mo);
+        }
+
+        if (mo->flags & MF_FLOAT && sentient(mo)) goto floater;
+        return;
+    }
+
+    /* killough 8/9/98: end bouncing object code */
+
+    // check for smooth step up
+
+    if (mo->player && //e6y: restoring original visual behaviour for demo_compatibility
+        (demo_compatibility || mo->player->mo == mo) &&  // killough 5/12/98: exclude voodoo dolls
+        mo->z < mo->floorz)
+    {
+        mo->player->viewheight -= mo->floorz - mo->z;
+        mo->player->deltaviewheight = (g_viewheight - mo->player->viewheight) >> 3;
+    }
+
+    // adjust altitude
+
+    mo->z += (mo->momz/stepcount);
+
+    floater:
+    if ((mo->flags & MF_FLOAT) && mo->target)
+
+        // float down towards target if too close
+
+        if (!(mo->flags & MF_SKULLFLY) && !(mo->flags & MF_INFLOAT))
+        {
+            fixed_t delta;
+            if (P_AproxDistance(mo->x - mo->target->x, mo->y - mo->target->y) <
+                D_abs(delta = mo->target->z + (mo->height >> 1) - mo->z) * 3)
+                mo->z += delta < 0 ? -FLOATSPEED : FLOATSPEED;
+        }
+
+    if (mo->player && (mo->flags & MF_FLY) && (mo->z > mo->floorz))
+    {
+        mo->z += finesine[(FINEANGLES/80*gametic)&FINEMASK]/8;
+        mo->momz = FixedMul (mo->momz, FRICTION_FLY);
+    }
+
+    if (mo->player && mo->flags2 & MF2_FLY && !(mo->z <= mo->floorz)
+        && leveltime & 2)
+    {
+        mo->z += finesine[(FINEANGLES / 20 * leveltime >> 2) & FINEMASK];
+    }
+
+    // clip movement
+
+    if (mo->z <= mo->floorz)
+    {
+        // hit the floor
+
+        // MBF24 - remove the jumped flag if momentum is zero or negative
+        if (mbf24 && mo->flags3 & MF3_JUMPED && mo->momz <= 0)
+        {
+            mo->flags3 = ~MF3_JUMPED;
+        }
+
+        if (raven)
+        {
+            if (mo->flags & MF_MISSILE)
+            {
+                mo->z = mo->floorz;
+                if (mo->flags2 & MF2_FLOORBOUNCE)
+                {
+                    P_FloorBounceMissile(mo);
+                    return;
+                }
+                else if (
+                        raven && (
+                                mo->type == HERETIC_MT_MNTRFX2 ||
+                                mo->type == HEXEN_MT_MNTRFX2 ||
+                                mo->type == HEXEN_MT_LIGHTNING_FLOOR
+                        )
+                        )
+                {                   // Minotaur floor fire can go up steps
+                    return;
+                }
+                else if (hexen && mo->type == HEXEN_MT_HOLY_FX)
+                {                   // The spirit struck the ground
+                    mo->momz = 0;
+                    P_HitFloor(mo);
+                    return;
+                }
+                else
+                {
+                    if (hexen)
+                        P_HitFloor(mo);
+                    P_ExplodeMissile(mo);
+                    return;
+                }
+            }
+
+            if (hexen && mo->flags & MF_COUNTKILL)   // Blasted mobj falling
+            {
+                if (mo->momz < -(23 * FRACUNIT))
+                {
+                    P_DamageMobj(mo, NULL, NULL, 10000);
+                }
+            }
+
+            if (mo->z - mo->momz > mo->floorz)
+            {                       // Spawn splashes, etc.
+                P_HitFloor(mo);
+            }
+        }
+
+        /* Note (id):
+         *  somebody left this after the setting momz to 0,
+         *  kinda useless there.
+         * cph - This was the a bug in the linuxdoom-1.10 source which
+         *  caused it not to sync Doom 2 v1.9 demos. Someone
+         *  added the above comment and moved up the following code. So
+         *  demos would desync in close lost soul fights.
+         * cph - revised 2001/04/15 -
+         * This was a bug in the Doom/Doom 2 source; the following code
+         *  is meant to make charging lost souls bounce off of floors, but it
+         *  was incorrectly placed after momz was set to 0.
+         *  However, this bug was fixed in Doom95, Final/Ultimate Doom, and
+         *  the v1.10 source release (which is one reason why it failed to sync
+         *  some Doom2 v1.9 demos)
+         * I've added a comp_soul compatibility option to make this behavior
+         *  selectable for PrBoom v2.3+. For older demos, we do this here only
+         *  if we're in a compatibility level above Doom 2 v1.9 (in which case we
+         *  mimic the bug and do it further down instead)
+         */
+
+        if (
+                mo->flags & MF_SKULLFLY &&
+                (
+                        !comp[comp_soul] ||
+                        (
+                                compatibility_level > doom2_19_compatibility &&
+                                compatibility_level < prboom_4_compatibility
+                        )
+                )
+                )
+            mo->momz = -mo->momz; // the skull slammed into something
+
+        if (!hexen) mo->z = mo->floorz;
+        if (mo->momz < 0)
+        {
+            /* killough 11/98: touchy objects explode on impact */
+            if (mo->flags & MF_TOUCHY && mo->intflags & MIF_ARMED && mo->health > 0)
+                P_DamageMobj(mo, NULL, NULL, mo->health);
+            else
+            {
+                if (mo->flags2 & MF2_ICEDAMAGE && mo->momz < -gravity * 8)
+                {
+                    mo->tics = 1;
+                    mo->momx = 0;
+                    mo->momy = 0;
+                    mo->momz = 0;
+                    return;
+                }
+                // heretic_note: probably not necessary?
+                if (!heretic && mo->player)
+                    mo->player->jumpTics = 7;
+                if (
+                        mo->player && /* killough 5/12/98: exclude voodoo dolls */
+                        // e6y
+                        // Restoring original visual behaviour for demo_compatibility.
+                        // Viewheight of consoleplayer should be decreased for a moment
+                        // after voodoo doll hits the ground.
+                        // This additional condition makes sense only for plutonia complevel
+                        // when voodoo doll falls down after teleporting,
+                        // but can be applied globally for all demo_compatibility complevels,
+                        // because original sources do not exclude voodoo dolls from condition above,
+                        // but Boom does it.
+                        (demo_compatibility || mo->player->mo == mo) &&
+                        mo->momz < -gravity * 8 &&
+                        !(mo->flags2 & MF2_FLY)
+                        )
+                {
+                    // Squat down.
+                    // Decrease viewheight for a moment
+                    // after hitting the ground (hard),
+                    // and utter appropriate sound.
+
+                    mo->player->deltaviewheight = mo->momz >> 3;
+
+                    if (heretic)
+                    {
+                        S_StartMobjSound(mo, heretic_sfx_plroof);
+                        P_AutoCorrectLookDir(mo->player);
+                    }
+                    else if (hexen)
+                    {
+                        if (mo->momz < -23 * FRACUNIT)
+                        {
+                            P_FallingDamage(mo->player);
+                            P_NoiseAlert(mo, mo);
+                        }
+                        else if (mo->momz < -gravity * 12 && !mo->player->morphTics)
+                        {
+                            S_StartMobjSound(mo, hexen_sfx_player_land);
+                            switch (mo->player->pclass)
+                            {
+                                case PCLASS_FIGHTER:
+                                    S_StartMobjSound(mo, hexen_sfx_player_fighter_grunt);
+                                    break;
+                                case PCLASS_CLERIC:
+                                    S_StartMobjSound(mo, hexen_sfx_player_cleric_grunt);
+                                    break;
+                                case PCLASS_MAGE:
+                                    S_StartMobjSound(mo, hexen_sfx_player_mage_grunt);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        else if (P_GetThingFloorType(mo) < FLOOR_LIQUID && !mo->player->morphTics)
+                        {
+                            S_StartMobjSound(mo, hexen_sfx_player_land);
+                        }
+                        P_AutoCorrectLookDir(mo->player);
+                    }
+                        //e6y: compatibility optioned
+                    else if (comp[comp_sound] || (mo->health > 0)) /* cph - prevent "oof" when dead */
+                        S_StartSound (mo, sfx_oof);
+                }
+                else if (hexen && mo->type >= HEXEN_MT_POTTERY1 && mo->type <= HEXEN_MT_POTTERY3)
+                {
+                    P_DamageMobj(mo, NULL, NULL, 25);
+                }
+            }
+            mo->momz = 0;
+        }
+        if (!hexen) mo->z = mo->floorz;
+
+        /* cph 2001/04/15 -
+         * This is the buggy lost-soul bouncing code referenced above.
+         * We've already set momz = 0 normally by this point, so it's useless.
+         * However we might still have upward momentum, in which case this will
+         * incorrectly reverse it, so we might still need this for demo sync
+         */
+        if (mo->flags & MF_SKULLFLY &&
+            compatibility_level <= doom2_19_compatibility)
+            mo->momz = -mo->momz; // the skull slammed into something
+
+        if (mo->info->crashstate && (mo->flags & MF_CORPSE) && !(mo->flags2 & MF2_ICEDAMAGE))
+        {
+            P_SetMobjState(mo, mo->info->crashstate);
+            return;
+        }
+
+        if (!raven && (mo->flags & MF_MISSILE) && !(mo->flags & MF_NOCLIP) && !(mbf24 && mo->flags3 & MF3_FLOORHUGGER))
+        {
+            P_ExplodeMissile (mo);
+            return;
+        }
+
+        if (mbf24 && mo->flags3 & MF3_FLOORHUGGER)
+        {
+            mo->momz = 0;
+        }
+    }
+    else if (mo->flags2 & MF2_LOGRAV)
+    {
+        if (mo->momz == 0)
+            mo->momz = -(gravity >> 3) * 2;
+        else
+            mo->momz -= gravity >> 3;
+    }
+    else if (!(mo->flags & MF_NOGRAVITY))
+    {
+        if (mo->momz == 0)
+            mo->momz = -gravity;
+        mo->momz -= gravity;
+    }
+
+    if (mo->z + mo->height > mo->ceilingz)
+    {
+        /* cph 2001/04/15 -
+         * Lost souls were meant to bounce off of ceilings;
+         *  new comp_soul compatibility option added
+         */
+        if (!comp[comp_soul] && mo->flags & MF_SKULLFLY)
+            mo->momz = -mo->momz; // the skull slammed into something
+
+        // hit the ceiling
+
+        if (mo->momz > 0)
+            mo->momz = 0;
+
+        mo->z = mo->ceilingz - mo->height;
+
+        if (hexen && mo->flags2 & MF2_FLOORBOUNCE)
+        {
+            if (mo->info->seesound)
+            {
+                S_StartMobjSound(mo, mo->info->seesound);
+            }
+            return;
+        }
+
+        /* cph 2001/04/15 -
+         * We might have hit a ceiling but had downward momentum (e.g. ceiling is
+         *  lowering on us), so for old demos we must still do the buggy
+         *  momentum reversal here
+         */
+        if (comp[comp_soul] && mo->flags & MF_SKULLFLY)
+            mo->momz = -mo->momz; // the skull slammed into something
+
+        if ((mo->flags & MF_MISSILE) && (hexen || !(mo->flags & MF_NOCLIP)))
+        {
+            if (hexen && mo->type == HEXEN_MT_LIGHTNING_CEILING)
+            {
+                return;
+            }
+            if (raven && mo->subsector->sector->ceilingpic == skyflatnum)
+            {
+                if (mo->type == g_skullpop_mt)
+                {
+                    mo->momx = mo->momy = 0;
+                    mo->momz = -FRACUNIT;
+                }
+                else if (mo->type == HEXEN_MT_HOLY_FX)
+                {
+                    P_ExplodeMissile(mo);
+                }
+                else
+                {
+                    P_RemoveMobj(mo);
+                }
+                return;
+            }
+            P_ExplodeMissile (mo);
+            return;
+        }
+    }
+}
 
 //
 // P_XYMovement
@@ -252,6 +681,7 @@ static void P_XYMovement (mobj_t* mo)
 
   maxactormove = mo->radius - 1;
   int moveiterations = 1;
+  int stepcount;
   xspeed = abs(mo->momx);
   yspeed = abs(mo->momy);
 
@@ -269,6 +699,8 @@ static void P_XYMovement (mobj_t* mo)
       }
     }
   }
+
+  stepcount = moveiterations;
 
   //e6y
   fixed_t   oldx,oldy; // phares 9/10/98: reducing bobbing/momentum on ice
@@ -320,7 +752,7 @@ static void P_XYMovement (mobj_t* mo)
 
   do
   {
-    fixed_t ptryx, ptryy;
+    fixed_t ptryx, ptryy, ptryz;
     angle_t angle;
 
     // killough 8/9/98: fix bug in original Doom source:
@@ -337,20 +769,23 @@ static void P_XYMovement (mobj_t* mo)
       ymove = ymove - (ymove / moveiterations);
       moveiterations--;
     }
-    if (xmove > MAXMOVE / 2 ||
-        ymove > MAXMOVE / 2 ||
-        (!comp[comp_moveblock] && (xmove < -MAXMOVE/2 || ymove < -MAXMOVE/2)))
-    {
-      ptryx = mo->x + xmove / 2;
-      ptryy = mo->y + ymove / 2;
-      xmove >>= 1;
-      ymove >>= 1;
-    }
     else
     {
-      ptryx = mo->x + xmove;
-      ptryy = mo->y + ymove;
-      xmove = ymove = 0;
+      if (xmove > MAXMOVE / 2 ||
+          ymove > MAXMOVE / 2 ||
+          (!comp[comp_moveblock] && (xmove < -MAXMOVE/2 || ymove < -MAXMOVE/2)))
+      {
+        ptryx = mo->x + xmove / 2;
+        ptryy = mo->y + ymove / 2;
+        xmove >>= 1;
+        ymove >>= 1;
+      }
+      else
+      {
+        ptryx = mo->x + xmove;
+        ptryy = mo->y + ymove;
+        xmove = ymove = 0;
+      }
     }
 
     // killough 3/15/98: Allow objects to drop off
@@ -554,6 +989,7 @@ static void P_XYMovement (mobj_t* mo)
         mo->momx = mo->momy = 0;
       }
     }
+    if (mo->flags3 & MF3_FASTPROJECTILE) P_FastZMovement(mo, stepcount); // MBF25: if a fast projectile, do Z Movement check after each X/Y movement check
   } while (xmove || ymove);
 
   /* no friction for missiles or skulls ever, no friction when airborne */
@@ -741,12 +1177,12 @@ static void P_XYMovement (mobj_t* mo)
   }
 }
 
-fixed_t P_MobjGravity(mobj_t* mo)
+fixed_t P_MobjGravity2(mobj_t* mo)
 {
   return FixedMul(mo->subsector->sector->gravity, mo->gravity);
 }
 
-void P_AutoCorrectLookDir(player_t* player)
+void P_AutoCorrectLookDir2(player_t* player)
 {
   if (allow_incompatibility && dsda_MouseLook())
   {
@@ -1420,7 +1856,7 @@ void P_MobjThinker (mobj_t* mobj)
       }
     }
     else
-      P_ZMovement(mobj);
+      if (!(mobj->flags3 & MF3_FASTPROJECTILE)) P_ZMovement(mobj);
     if (mobj->thinker.function != P_MobjThinker) // cph - Must've been removed
       return;       // killough - mobj was removed
   }
@@ -2835,7 +3271,7 @@ dboolean P_CheckMissileSpawn (mobj_t* th)
   // move a little forward so an angle can
   // be computed if it immediately explodes
 
-  if (heretic && th->type == HERETIC_MT_BLASTERFX1) {
+  if ((heretic && th->type == HERETIC_MT_BLASTERFX1) || mbf24_features && th->flags3 & MF3_FASTPROJECTILE ) {
     // Ultra-fast ripper spawning missile
     th->x += (th->momx >> 3);
     th->y += (th->momy >> 3);
