@@ -356,6 +356,19 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
   - Notes:
     - Uses existing position checking codepointers and will not check for a clear path.
 
+- **A_Wander**
+  - Generic roaming monster codepointer. Looks for a target and calls `A_Look`.
+  - No args.
+  - Notes:
+    - Has a random chance to turn movement speed slightly.
+
+- **A_Patrol**
+  - Codepointer that causes a monster to move in its current direction and calling `A_Look`.
+  - No args.
+  - Notes:
+    - It's recommended to keep movement speed below 24 for monsters using this codepointer. 
+        The monster will change its direction while patrolling if it touches an `MT_PATROL_POINT` object, jump to the `MT_PATROL_POINT` object's X and Y position, change its direction to that of the `MT_PATROL_POINT` object.
+
 - **A_DodgeChase(straferange, strafespeed, strafechance)**
     - Similar to A_Chase, except at a certain range, the thing has a chance to randomly strafe to one side.
     - Args:

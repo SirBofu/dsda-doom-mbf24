@@ -77,3 +77,11 @@ If the difficulty is HNTR, Zombiemen fire like shotgunners.
 If the difficulty is HMP, Zombiemen fire like chaingunners.
 If the difficulty is UV, Zombiemen fire plasma.
 If the difficulty is Nightmare, Zombiemen fire rockets.
+
+[Wander Test](https://www.dropbox.com/scl/fi/utf5typxzzbiezuro8mfm/WanderTest.wad?rlkey=vvtns884sk59l86tqsidk1hw3&st=q16d5mn0&dl=0)
+This WAD demonstrates the `A_Wander` codepointer.
+Zombiemen, Shotgunners, and Imps all wander aimlessly on spawn until they spot a player.
+
+[Patrol Test](https://www.dropbox.com/scl/fi/w5590x3961k4z3kofr2ti/PatrolTest.wad?rlkey=ks2me143e0gppj1riuwrcnpo2&st=5upmrlf1&dl=0)
+This WAD demonstrates the `A_Patrol` codepointer.
+Zombiemen, Shotgunners, and Imps all move along set points until they spot a player.

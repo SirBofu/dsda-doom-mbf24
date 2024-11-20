@@ -164,6 +164,8 @@ void A_JumpIfHasTarget(mobj_t *);
 void A_JumpIfHasTracer(mobj_t *);
 void A_JumpIfBlocked(mobj_t *);
 void A_DodgeChase(mobj_t *);
+void A_Wander(mobj_t *);
+void A_Patrol(mobj_t *);
 void A_MonsterSpawnAttack(mobj_t *);
 void A_MonsterSpawnDie(mobj_t *);
 void A_MonsterChargeAttack(mobj_t *);
@@ -178,6 +180,10 @@ void A_SetTracerState(mobj_t *);
 void A_DropThing(mobj_t *);
 void A_SetSectorBrightness(mobj_t *);
 void A_JumpIfSkill(mobj_t *);
+void A_JumpIfMapNum(mobj_t *);
+void A_SetVelocity(mobj_t *);
+void A_AddVelocity(mobj_t *);
+void A_MultiplyVelocity(mobj_t *);
 void A_MonsterRefire(mobj_t *);
 
 // heretic

@@ -5926,6 +5926,8 @@ typedef enum {
 
   MT_MUSICSOURCE, /* MUSINFO lump */
 
+  MT_PATROL_POINT, // MBF25
+
   DOOM_NUMMOBJTYPES,
 
   // heretic

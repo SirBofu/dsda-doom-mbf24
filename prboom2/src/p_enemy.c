@@ -4161,6 +4161,100 @@ void A_RegainHealth(mobj_t *actor)
 }
 
 //
+// A_Wander
+// A_Look, but has a monster move around at random.
+//
+
+void FaceWanderDirection(mobj_t * actor)
+{
+    switch (actor->movedir)
+    {
+        case DI_EAST:
+            actor->angle = 0 << 24;
+            break;
+        case DI_NORTHEAST:
+            actor->angle = 32 << 24;
+            break;
+        case DI_NORTH:
+            actor->angle = 64 << 24;
+            break;
+        case DI_NORTHWEST:
+            actor->angle = 96 << 24;
+            break;
+        case DI_WEST:
+            actor->angle = 128 << 24;
+            break;
+        case DI_SOUTHWEST:
+            actor->angle = 160 << 24;
+            break;
+        case DI_SOUTH:
+            actor->angle = 192 << 24;
+            break;
+        case DI_SOUTHEAST:
+            actor->angle = 224 << 24;
+            break;
+    }
+}
+
+
+void A_Wander(mobj_t *actor)
+{
+  A_Look(actor);
+  if (!mbf24_features || actor->target) return;
+
+  if (P_Random(pr_mbf21) < 6)
+  {
+    //Choose new direction
+    actor->movedir = P_Random(pr_mbf21) % 8;
+    FaceWanderDirection(actor);
+  }
+  if (!P_SmartMove(actor))
+  {
+    // Turn
+    if (P_Random(pr_mbf21) & 1)
+      actor->movedir = (actor->movedir + 1) % 8;
+    else
+      actor->movedir = (actor->movedir + 7) % 8;
+    FaceWanderDirection(actor);
+  }
+  else
+  {
+    FaceWanderDirection(actor);
+  }
+}
+
+void A_Patrol(mobj_t *actor)
+{
+  if (!mbf24_features || actor->target)
+  {
+    A_Look(actor);
+    return;
+  }
+
+  actor->flags3 |= MF3_PATROL; // We will use this internal-only flag to help check for collisions - but we also need to turn this flag off when not in patrol
+  if (actor->angle >= 224 << 24)
+    actor->movedir = DI_SOUTHEAST;
+  if (actor->angle >= 192 << 24 && actor->angle < 224 << 24)
+    actor->movedir = DI_SOUTH;
+  if (actor->angle >= 160 << 24 && actor->angle < 192 << 24)
+    actor->movedir = DI_SOUTHWEST;
+  if (actor->angle >= 128 << 24 && actor->angle < 160 << 24)
+    actor->movedir = DI_WEST;
+  if (actor->angle >= 96 << 24 && actor->angle < 128 << 24)
+    actor->movedir = DI_NORTHWEST;
+  if (actor->angle >= 64 << 24 && actor->angle < 96 << 24)
+    actor->movedir = DI_NORTH;
+  if (actor->angle >= 32 << 24 && actor->angle < 64 << 24)
+    actor->movedir = DI_NORTHEAST;
+  if (actor->angle < 32 << 24)
+    actor->movedir = DI_EAST;
+  FaceWanderDirection(actor);   // Face in the direction of movement
+  P_SmartMove(actor);           // Actually move
+  actor->flags3 &= ~MF3_PATROL; // We only need this flag to be on during the actual movement
+  A_Look(actor);                // Look for targets
+}
+
+//
 // A_ChaseNoAttack
 // Similar to A_Chase, but doesn't allow the creature to attack.
 //   args[0]: If 0, decreases reaction time as with A_Chase.
@@ -4437,6 +4531,8 @@ void A_JumpIfHasTarget(mobj_t* actor)
 
   if (type > 0 && (actor->target->type) != type) return;
 
+  if (actor->target->health <= 0) return;
+
   P_SetMobjState(actor, state);
 }
 
@@ -4457,6 +4553,8 @@ void A_JumpIfHasTracer(mobj_t* actor)
     type  = actor->state->args[1] - 1;
 
     if (type > 0 && (actor->tracer->type) != type) return;
+
+    if (actor->tracer->health <= 0) return;
 
     P_SetMobjState(actor, state);
 }
@@ -5127,7 +5225,7 @@ void A_SetSectorBrightness(mobj_t* actor)
 
 //
 // A_JumpIfSkill(skillnum, frame)
-// Jumps to the specified frame if the current skill level is equal to or greater than the current value.
+// Jumps to the specified frame if the current skill level is equal to or greater than the given value.
 // This codepointer relies on the Skill ID, either as default or as defined in UMAPINFO.
 //   args[0]: The skill level to check for. 0 = ITYTD, 4 = Nightmare!
 //   args[1]: The frame to jump to if the condition is true.
@@ -5137,7 +5235,7 @@ void A_JumpIfSkill(mobj_t* actor)
 {
     int skillnum, state;
 
-    if (!mbf24_features || ! actor)
+    if (!mbf24_features || !actor)
       return;
 
     skillnum = actor->state->args[0];
@@ -5149,6 +5247,226 @@ void A_JumpIfSkill(mobj_t* actor)
     if (gameskill >= skillnum)
     {
         P_SetMobjState(actor,state);
+    }
+}
+
+//
+// A_JumpIfMapNum(mapnum, frame, mode)
+// Jumps to the specified frame if the current map is equal to (or optionally greater than) the given value.
+// This codepointer relies on the mapnum from UMAPINFO.
+//   args[0]: The map number to check for.
+//   args[1]: The frame to jump to if the condition is true.
+//   args[2]: Comparison mode.
+//     0 = must be an exact match.
+//     1 (or nonzero) = must be greater than or equal to.
+//
+
+void A_JumpIfMapNum(mobj_t* actor)
+{
+  int mapnum, state, mode;
+
+  if (!mbf24_features || !actor)
+    return;
+
+  mapnum = actor->state->args[0];
+  state  = actor->state->args[1];
+  mode   = actor->state->args[2];
+
+  switch (mode)
+  {
+    case 0:
+      if (gamemap == mapnum)
+        P_SetMobjState(actor, state);
+    case 1:
+    default:
+      if (gamemap >= mapnum)
+        P_SetMobjState(actor, state);
+  }
+}
+
+//
+// A_SetVelocity
+// Changes the calling actor's velocity (or the velocity of its target or tracer) on each axis.
+// Sets absolute values. Borrowed from GZDoom.
+//   args[0]: The velocity to set on the X axis (forward/backward).
+//   args[1]: The velocity to set on the Y axis (left/right).
+//   args[2]: The velocity to set on the Z axis (up/down).
+//   args[3]: If 0, uses relative axes. If nonzero, uses absolute axes.
+//   args[4]: If 0, applies to calling actor. If 1, applies to target. If 2, applies to tracer.
+//   args[5]: If 0, ignores values of 0. If nonzero, will apply values of 0.
+//
+
+void A_SetVelocity(mobj_t *actor)
+{
+  if (!mbf24_features || !actor)
+    return;
+
+  int xvel, yvel, zvel, mode, ptr, zero;
+  angle_t an;
+  mobj_t *object;
+
+  xvel   = actor->state->args[0];
+  yvel   = actor->state->args[1];
+  zvel   = actor->state->args[2];
+  mode   = actor->state->args[3];
+  ptr    = actor->state->args[4];
+  zero   = actor->state->args[5];
+  object = actor;
+
+  an = (actor->angle) >> ANGLETOFINESHIFT;
+
+  switch (ptr)
+  {
+      case 0:
+      default:
+        break;
+      case 1:
+        if (!actor->target)
+          return;
+        object = actor->target;
+        break;
+      case 2:
+        if (!actor->tracer)
+          return;
+        object = actor->tracer;
+        break;
+  }
+
+  if (zero || zvel != 0)
+    object->momz = zvel; // Z velocity orientation is never altered by a thing's facing
+  if (zero || xvel != 0)
+  {
+    if (mode)
+    {
+      object->momx = xvel;
+    }
+    else
+    {
+      object->momx = FixedMul((xvel * FRACUNIT), finecosine[an]);
+    }
+  }
+  if (zero || yvel != 0)
+  {
+    if (mode)
+    {
+      object->momy = yvel;
+    }
+    else
+    {
+      object->momy = FixedMul((yvel * FRACUNIT), finesine[an]);
+    }
+  }
+}
+
+//
+// A_AddVelocity
+// Alters the calling actor's velocity (or the velocity of its target or tracer) on each axis by a flat amount.
+// Sets absolute values. Borrowed from GZDoom.
+//   args[0]: The velocity to set on the X axis (forward/backward).
+//   args[1]: The velocity to set on the Y axis (left/right).
+//   args[2]: The velocity to set on the Z axis (up/down).
+//   args[3]: If 0, uses relative axes. If nonzero, uses absolute axes.
+//   args[4]: If 0, applies to calling actor. If 1, applies to target. If 2, applies to tracer.
+//
+
+void A_AddVelocity(mobj_t *actor)
+{
+    if (!mbf24_features || !actor)
+        return;
+
+    int xvel, yvel, zvel, mode, ptr;
+    angle_t an;
+    mobj_t *object;
+
+    xvel   = actor->state->args[0];
+    yvel   = actor->state->args[1];
+    zvel   = actor->state->args[2];
+    mode   = actor->state->args[3];
+    ptr    = actor->state->args[4];
+    object = actor;
+
+    an = (actor->angle) >> ANGLETOFINESHIFT;
+
+    switch (ptr)
+    {
+        case 0:
+        default:
+            break;
+        case 1:
+            if (!actor->target)
+                return;
+            object = actor->target;
+            break;
+        case 2:
+            if (!actor->tracer)
+                return;
+            object = actor->tracer;
+            break;
+    }
+
+    object->momz += zvel; // Z velocity orientation is never altered by a thing's facing
+    if (mode)
+    {
+      object->momx += xvel;
+      object->momy += yvel;
+    }
+    else
+    {
+      object->momx += FixedMul((xvel * FRACUNIT), finecosine[an]);
+      object->momx += FixedMul((yvel * FRACUNIT), finesine[an]);
+      object->momy += FixedMul((yvel * FRACUNIT), finecosine[an]);
+      object->momy += FixedMul((xvel * FRACUNIT), finesine[an]);
+    }
+}
+
+void A_MultiplyVelocity(mobj_t *actor)
+{
+    if (!mbf24_features || !actor)
+        return;
+
+    uint64_t xvel, yvel, zvel;
+    int mode, ptr;
+    angle_t an;
+    mobj_t *object;
+
+    xvel   = actor->state->args[0];
+    yvel   = actor->state->args[1];
+    zvel   = actor->state->args[2];
+    mode   = actor->state->args[3];
+    ptr    = actor->state->args[4];
+    object = actor;
+
+    an = (actor->angle) >> ANGLETOFINESHIFT;
+
+    switch (ptr)
+    {
+        case 0:
+        default:
+            break;
+        case 1:
+            if (!actor->target)
+                return;
+            object = actor->target;
+            break;
+        case 2:
+            if (!actor->tracer)
+                return;
+            object = actor->tracer;
+            break;
+    }
+
+    object->momz += zvel; // Z velocity orientation is never altered by a thing's facing
+    if (mode)
+    {
+        object->momx *= (xvel / FRACUNIT);
+        object->momy *= (yvel / FRACUNIT);
+    }
+    else
+    {
+        object->momx += FixedMul((xvel * FRACUNIT), finecosine[an]);
+        object->momx += FixedMul((yvel * FRACUNIT), finesine[an]);
+        object->momy += FixedMul((yvel * FRACUNIT), finecosine[an]);
+        object->momy += FixedMul((xvel * FRACUNIT), finesine[an]);
     }
 }
 

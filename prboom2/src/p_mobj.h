@@ -560,6 +560,7 @@ void P_RemoveMonsters(void);
 #define MF3_GENERIC3          0x04000000ull // generic flag 3
 #define MF3_GENERIC4          0x08000000ull // generic flag 4
 #define MF3_JUMPED            0x10000000ull // thing has just jumped/been launched
+#define MF3_PATROL            0x20000000ull // thing is patrolling
 
 #define AMMO_GWND_WIMPY 10
 #define AMMO_GWND_HEFTY 50

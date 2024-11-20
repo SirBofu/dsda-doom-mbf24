@@ -1607,6 +1607,8 @@ static const deh_bexptr deh_bexptrs[] = // CPhipps - static const
   {A_JumpIfHasTarget,      "A_JumpIfHasTarget", 2, {0, 0}, TI_ARGS2},
   {A_JumpIfHasTracer,      "A_JumpIfHasTracer", 2, {0, 0}, TI_ARGS2},
   {A_JumpIfBlocked,        "A_JumpIfBlocked", 4, {0,0,0,0}},
+  {A_Wander,               "A_Wander", 0},
+  {A_Patrol,               "A_Patrol", 0},
   {A_DodgeChase,           "A_DodgeChase", 3},
   {A_MonsterSpawnAttack,   "A_MonsterSpawnAttack", 3, {0, 0, 0}, TI_ARGS1},
   {A_MonsterSpawnDie,      "A_MonsterSpawnDie", 3, {0, 0, 3}, TI_ARGS1},
@@ -1622,6 +1624,9 @@ static const deh_bexptr deh_bexptrs[] = // CPhipps - static const
   {A_DropThing,            "A_DropThing", 3, {0}, TI_ARGS1},
   {A_SetSectorBrightness,  "A_SetSectorBrightness", 3},
   {A_JumpIfSkill,          "A_JumpIfSkill", 2},
+  {A_JumpIfMapNum,         "A_JumpIfMapNum", 3},
+  {A_SetVelocity,          "A_ChangeVelocity", 6},
+  {A_AddVelocity,          "A_AddVelocity", 5},
   {A_MonsterRefire,        "A_MonsterRefire", 2},
 
   {A_WeaponRemove,         "A_WeaponRemove", 1},

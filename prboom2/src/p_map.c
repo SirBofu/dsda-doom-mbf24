@@ -717,7 +717,7 @@ static dboolean PIT_CheckThing(mobj_t *thing) // killough 3/26/98: make static
   int damagedice; // only needed for MBF24 damage parameterization
 
   // killough 11/98: add touchy things
-  if (!(thing->flags & (MF_SOLID|MF_SPECIAL|MF_SHOOTABLE|MF_TOUCHY)) && !(thing->flags3 & MF3_TOUCHYTARGET))
+  if (!(thing->flags & (MF_SOLID|MF_SPECIAL|MF_SHOOTABLE|MF_TOUCHY)) && !(thing->flags3 & MF3_TOUCHYTARGET) && (thing->type != MT_PATROL_POINT || !(tmthing->flags3 & MF3_PATROL)) && (tmthing->type != MT_PATROL_POINT || !(thing->flags3 & MF3_PATROL)))
     return true;
 
   blockdist = thing->radius + tmthing->radius;
@@ -767,7 +767,7 @@ static dboolean PIT_CheckThing(mobj_t *thing) // killough 3/26/98: make static
   // MBF24 - TOUCHYTARGET flag, for things like jumppads that need to have a target
   // set in order for a codepointer to successfully execute.
 
-  if (mbf24 && thing->flags3 & MF3_TOUCHYTARGET &&
+  if (mbf24_features && thing->flags3 & MF3_TOUCHYTARGET &&
       tmthing->flags & MF_SOLID &&
       thing->health > 0 &&
       thing->type != tmthing->type &&
@@ -775,6 +775,20 @@ static dboolean PIT_CheckThing(mobj_t *thing) // killough 3/26/98: make static
       tmthing->z + tmthing->height >= thing->z)
   {
     thing->target = tmthing;
+    return true;
+  }
+
+  // MBF25 - support for Patrolling things
+
+  if (mbf24_features && thing->type == MT_PATROL_POINT &&
+      tmthing->flags3 & MF3_PATROL &&
+      thing->angle != tmthing->angle &&
+      abs(tmthing->x - thing->x) < 12 * FRACUNIT &&
+      abs(tmthing->y - thing->y) < 12 * FRACUNIT)
+  {
+    tmthing->angle = thing->angle;
+    tmthing->x = thing->x;
+    tmthing->y = thing->y;
     return true;
   }
 
