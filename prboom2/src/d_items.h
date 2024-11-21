@@ -51,6 +51,7 @@
 #define WPF_FLEEMELEE      0x00000008 // monsters consider it a melee weapon
 #define WPF_AUTOSWITCHFROM 0x00000010 // can be switched away from when ammo is picked up
 #define WPF_NOAUTOSWITCHTO   0x00000020 // cannot be switched to when ammo is picked up
+#define WPF_FORCEAUTOAIM   0x00000040 // forces horizontal autoaim (MBF25)
 
 /* Weapon info: sprite frames, ammunition use. */
 typedef struct

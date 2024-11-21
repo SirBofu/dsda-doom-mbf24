@@ -2,6 +2,15 @@
 
 MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MBF21.
 
+## Weapons
+
+#### New Weapon Flags
+- Weapon-wide bits have been added to the `MBF21 Bits = x` field in the Thing definition due to limited number.
+
+| Flag         | Value      | Description                                          |
+|--------------|------------|------------------------------------------------------|
+| FORCEAUTOAIM | 0x00000040 | Projectile attacks always use horizontal auto-aiming |
+
 ## Things
 
 #### Thing Counters
