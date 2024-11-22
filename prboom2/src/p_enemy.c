@@ -4232,26 +4232,11 @@ void A_Patrol(mobj_t *actor)
   }
 
   actor->flags3 |= MF3_PATROL; // We will use this internal-only flag to help check for collisions - but we also need to turn this flag off when not in patrol
-  if (actor->angle >= 224 << 24)
-    actor->movedir = DI_SOUTHEAST;
-  if (actor->angle >= 192 << 24 && actor->angle < 224 << 24)
-    actor->movedir = DI_SOUTH;
-  if (actor->angle >= 160 << 24 && actor->angle < 192 << 24)
-    actor->movedir = DI_SOUTHWEST;
-  if (actor->angle >= 128 << 24 && actor->angle < 160 << 24)
-    actor->movedir = DI_WEST;
-  if (actor->angle >= 96 << 24 && actor->angle < 128 << 24)
-    actor->movedir = DI_NORTHWEST;
-  if (actor->angle >= 64 << 24 && actor->angle < 96 << 24)
-    actor->movedir = DI_NORTH;
-  if (actor->angle >= 32 << 24 && actor->angle < 64 << 24)
-    actor->movedir = DI_NORTHEAST;
-  if (actor->angle < 32 << 24)
-    actor->movedir = DI_EAST;
-  FaceWanderDirection(actor);   // Face in the direction of movement
-  P_SmartMove(actor);           // Actually move
-  actor->flags3 &= ~MF3_PATROL; // We only need this flag to be on during the actual movement
-  A_Look(actor);                // Look for targets
+  actor->movedir = (actor->angle + (16 << 24)) >> 29; // thanks to Zom-B for the cleaner math
+  FaceWanderDirection(actor);                         // Face in the direction of movement
+  P_SmartMove(actor);                                 // Actually move
+  actor->flags3 &= ~MF3_PATROL;                       // We only need this flag to be on during the actual movement
+  A_Look(actor);                                      // Look for targets
 }
 
 //
@@ -4265,7 +4250,7 @@ void A_ChaseNoAttack(mobj_t *actor)
 {
     int lowerreactiontime, lowerstepcount;
 
-    if (!mbf24)
+    if (!mbf24_features)
     {
       A_Chase(actor);
       return;

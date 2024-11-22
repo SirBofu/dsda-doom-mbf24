@@ -376,7 +376,12 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
   - No args.
   - Notes:
     - It's recommended to keep movement speed below 24 for monsters using this codepointer. 
-        The monster will change its direction while patrolling if it touches an `MT_PATROL_POINT` object, jump to the `MT_PATROL_POINT` object's X and Y position, change its direction to that of the `MT_PATROL_POINT` object.
+        The monster will change its direction while patrolling if it touches an `MT_PATROL_POINT` object, jump to the
+        `MT_PATROL_POINT` object's X and Y position, change its direction to that of the `MT_PATROL_POINT` object.
+    - Because enemies return to their Spawn state when their target dies, it's recommended to use `A_AddFlags`,
+      `A_JumpIfFlagsSet`, and one of the `GENERICx` flags (and enabling it in the first state of an enemy's See
+      sequence) to prevent an enemy from entering its patrol sequnce a second time. Otherwise, it will simply begin
+      patrolling in its current direction as soon as its target dies, which might make it run into a wall. 
 
 - **A_DodgeChase(straferange, strafespeed, strafechance)**
     - Similar to A_Chase, except at a certain range, the thing has a chance to randomly strafe to one side.
