@@ -1147,6 +1147,7 @@ static const char *deh_mobjinfo_fields[] =
   "Min missile chance",  // .minmissilechance
   "Missile chance multiplier", // .missilechancemult
   "Crush frame",         // .crushstate
+  "Active sound chance", // .activesoundchance
 
   NULL
 };
@@ -1599,7 +1600,7 @@ static const deh_bexptr deh_bexptrs[] = // CPhipps - static const
   {A_LaunchTarget,         "A_LaunchTarget", 2, {1000, 0}},
   {A_SetHealth,            "A_SetHealth", 1},
   {A_RegainHealth,         "A_RegainHealth", 2},
-  {A_ChaseNoAttack,        "A_ChaseNoAttack", 2},
+  {A_ChaseEx,              "A_ChaseEx", 3, {1,1,1}},
   {A_ClearTarget,          "A_ClearTarget", 0},
   {A_JumpIfTargetTouching, "A_JumpIfTargetTouching", 2},
   {A_MonsterJump,          "A_MonsterJump", 1},
@@ -2106,7 +2107,6 @@ static void setMobjInfoValue(int mobjInfoIndex, int keyIndex, uint64_t value) {
     case 39: mi->minmissilechance = (int)value; return;
     case 40: mi->missilechancemult = (int)value; return;
     case 41: mi->crushstate = (int)value; return;
-
     default: return;
   }
 }

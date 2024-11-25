@@ -1267,7 +1267,8 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_posact,   // activesound
     MF_SOLID|MF_SHOOTABLE|MF_COUNTKILL,   // flags
-    S_POSS_RAISE1   // raisestate
+    S_POSS_RAISE1,  // raisestate
+    MT_CLIP
   },
 
   {   // MT_SHOTGUY
@@ -1293,7 +1294,8 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_posact,   // activesound
     MF_SOLID|MF_SHOOTABLE|MF_COUNTKILL,   // flags
-    S_SPOS_RAISE1   // raisestate
+    S_SPOS_RAISE1,  // raisestate
+    MT_SHOTGUN
   },
 
   {   // MT_VILE
@@ -1319,7 +1321,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_vilact,   // activesound
     MF_SOLID|MF_SHOOTABLE|MF_COUNTKILL,   // flags
-    S_NULL    // raisestate
+          S_NULL    // raisestate
   },
 
   {   // MT_FIRE
@@ -1371,7 +1373,8 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_skeact,   // activesound
     MF_SOLID|MF_SHOOTABLE|MF_COUNTKILL,   // flags
-    S_SKEL_RAISE1   // raisestate
+    S_SKEL_RAISE1,  // raisestate
+    S_NULL    // raisestate
   },
 
   {   // MT_TRACER
@@ -1449,7 +1452,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_posact,   // activesound
     MF_SOLID|MF_SHOOTABLE|MF_COUNTKILL,   // flags
-    S_FATT_RAISE1   // raisestate
+    S_NULL    // raisestate
   },
 
   {   // MT_FATSHOT
@@ -1501,7 +1504,8 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_posact,   // activesound
     MF_SOLID|MF_SHOOTABLE|MF_COUNTKILL,   // flags
-    S_CPOS_RAISE1   // raisestate
+    S_CPOS_RAISE1,  // raisestate
+    MT_CHAINGUN      // droppeditem
   },
 
   {   // MT_TROOP
@@ -1527,7 +1531,8 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_bgact,    // activesound
     MF_SOLID|MF_SHOOTABLE|MF_COUNTKILL, // killough |MF_TRANSLUCENT,   // flags     // phares
-    S_TROO_RAISE1   // raisestate
+    S_TROO_RAISE1,  // raisestate
+    MT_NULL      // droppeditem
   },
 
   {   // MT_SERGEANT
@@ -1553,7 +1558,8 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_dmact,    // activesound
     MF_SOLID|MF_SHOOTABLE|MF_COUNTKILL,   // flags
-    S_SARG_RAISE1   // raisestate
+    S_SARG_RAISE1,  // raisestate
+    MT_NULL      // droppeditem
   },
 
   {   // MT_SHADOWS
@@ -1579,7 +1585,8 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_dmact,    // activesound
     MF_SOLID|MF_SHOOTABLE|MF_SHADOW|MF_COUNTKILL,   // flags
-    S_SARG_RAISE1   // raisestate
+    S_SARG_RAISE1,  // raisestate
+    MT_NULL      // droppeditem
   },
 
   {   // MT_HEAD
@@ -1605,7 +1612,8 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_dmact,    // activesound
     MF_SOLID|MF_SHOOTABLE|MF_FLOAT|MF_NOGRAVITY|MF_COUNTKILL,   // flags
-    S_HEAD_RAISE1   // raisestate
+    S_HEAD_RAISE1,  // raisestate
+    MT_NULL      // droppeditem
   },
 
   {   // MT_BRUISER
@@ -1631,7 +1639,8 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_dmact,    // activesound
     MF_SOLID|MF_SHOOTABLE|MF_COUNTKILL,   // flags
-    S_BOSS_RAISE1   // raisestate
+    S_BOSS_RAISE1,  // raisestate
+    MT_NULL      // droppeditem
   },
 
   {   // MT_BRUISERSHOT
@@ -1683,7 +1692,8 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_dmact,    // activesound
     MF_SOLID|MF_SHOOTABLE|MF_COUNTKILL,   // flags
-    S_BOS2_RAISE1   // raisestate
+    S_BOS2_RAISE1,  // raisestate
+    MT_NULL      // droppeditem
   },
 
   {   // MT_SKULL
@@ -1709,7 +1719,8 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     3,    // damage
     sfx_dmact,    // activesound
     MF_SOLID|MF_SHOOTABLE|MF_FLOAT|MF_NOGRAVITY,    // flags
-    S_NULL    // raisestate
+    S_NULL,  // raisestate
+    MT_NULL      // droppeditem
   },
 
   {   // MT_SPIDER
@@ -1735,7 +1746,8 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_dmact,    // activesound
     MF_SOLID|MF_SHOOTABLE|MF_COUNTKILL,   // flags
-    S_NULL    // raisestate
+    S_NULL,  // raisestate
+    MT_NULL      // droppeditem
   },
 
   {   // MT_BABY
@@ -1761,7 +1773,8 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_bspact,   // activesound
     MF_SOLID|MF_SHOOTABLE|MF_COUNTKILL,   // flags
-    S_BSPI_RAISE1   // raisestate
+    S_BSPI_RAISE1,  // raisestate
+    MT_NULL      // droppeditem
   },
 
   {   // MT_CYBORG
@@ -1787,7 +1800,8 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_dmact,    // activesound
     MF_SOLID|MF_SHOOTABLE|MF_COUNTKILL,   // flags
-    S_NULL    // raisestate
+    S_NULL,  // raisestate
+    MT_NULL      // droppeditem
   },
 
   {   // MT_PAIN
@@ -1813,7 +1827,8 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_dmact,    // activesound
     MF_SOLID|MF_SHOOTABLE|MF_FLOAT|MF_NOGRAVITY|MF_COUNTKILL,   // flags
-    S_PAIN_RAISE1   // raisestate
+    S_PAIN_RAISE1,  // raisestate
+    MT_NULL      // droppeditem
   },
 
   {   // MT_WOLFSS
@@ -1839,7 +1854,8 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_posact,   // activesound
     MF_SOLID|MF_SHOOTABLE|MF_COUNTKILL,   // flags
-    S_SSWV_RAISE1   // raisestate
+    S_SSWV_RAISE1,  // raisestate
+    MT_CLIP      // droppeditem
   },
 
   {   // MT_KEEN

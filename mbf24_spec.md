@@ -307,11 +307,13 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
         - `healamount (int)`: Amount of health to regain.
         - `maxheal (int)`: Maximum amount of health to heal up to. If 0, uses the thing's spawnhealth instead.
 
-- **A_ChaseNoAttack(lowerreactiontime, lowerstepcount)**
-  - Makes the caller pursue their target similar to A_Chase, but does not perform checks for melee or ranged attacks.
-  - Args:
-    - `lowerreactiontime (int)`: If nonzero, movement counts toward the caller's reaction time.
-    - `lowerstepcount (int)`: If nonzero, movement counts toward the caller's step count between attacks.
+- **A_ChaseEx(rangedstate, attackmelee, chasesound)**
+  - Makes the caller pursue their target similar to A_Chase, but allows parameterization of state for ranged and melee attacks as well as active sound status.
+    - `rangedstate (int)`: If zero, target jumps to its normal ranged state; if negative, disables ranged attack check; otherwise, the state to jump to for the ranged attack check.
+    - `meleestate (int)`: If zero, target jumps to its normal melee state; if negative, disables melee attack check; otherwise, the state to jump to for the melee attack check.
+    - `chasesound (int)`: If zero, target performs its active sound check normally; if negative, disabled active sound check; otherwise, plays the specified sound ID as its chase sound.
+  - Notes:
+    - A thing must still have a missile attack state, melee attack state, or active sound defined in its thing definition to perform the relevant checks.
 
 - **A_ClearTarget**
   - Removes the caller's current target. Use with caution.

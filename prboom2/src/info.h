@@ -6601,6 +6601,7 @@ typedef struct
   int minmissilechance;
   int missilechancemult;
   int crushstate;  /* State to jump to when crushed. */
+  int activesoundchance; /* Chance to play active sound. */
 } mobjinfo_t;
 
 #define NO_ALTSPEED -1
