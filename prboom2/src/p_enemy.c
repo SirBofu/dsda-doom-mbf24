@@ -5164,7 +5164,7 @@ void A_SetTracerState(mobj_t *actor)
 //
 // A_DropThing
 // Drops the specified thing similar to how a corpse drops things.
-//   args[0]: TID of the thing to drop
+//   args[0]: TID of the thing to drop; defaults to the Dropped thing parameter
 //   args[1]: If nonzero, set the DROPPED flag on the new thing
 //   args[2]: If 1, sets dropped thing's target to the caller's target; if 2 or higher, sets to caller instead
 //
@@ -5176,7 +5176,11 @@ void A_DropThing(mobj_t* actor)
     if (!mbf24_features || !actor->state->args[0])
       return;
 
-    type = actor->state->args[0] - 1;
+    if (actor->state->args[0] > 0)
+      type = actor->state->args[0] - 1;
+    else
+      type = actor->info->droppeditem;
+
 
     mo = P_SpawnMobj(actor->x, actor->y,
                      actor->z + (actor->height >> 1), type);

@@ -214,7 +214,7 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
             - Note that these defaults are intentionally different for weapons vs monsters (5d3 vs 3d5) -- yup, Doom did it this way. :P
         - If the current complevel is less than MBF24, then `flatdamage` is ignored.
 
-- **A_WeaponMeleeAttack(damagebase, damagedice, zerkfactor, sound, range, flatdamage, state)**
+- **A_WeaponMeleeAttack(damagebase, damagedice, zerkfactor, sound, range, flatdamage, state, turnonhit)**
 - Generic weapon melee attack. This command has been updated to support an optional flat damage parameter, a state to jump to, and to disable turning the player on hit.
 - Args:
     - `damagebase (uint)`: Base damage of attack; if not set, defaults to 2
@@ -476,7 +476,7 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
     - Otherwise identical to `A_VileTarget`.
 
 - **A_MonsterZapAttack(damagebase, damagedice, flatdamage, blastdamage, blastradius, thrust, forcedmass, sound)**
-  - Paramterized version of `A_VileAttack` that allows defining damage.
+  - Parameterized version of `A_VileAttack` that allows defining damage.
   - Args:
     - `damagebase (uint)`: Base damage of the hitscan attack; if not set, defaults to 0
     - `damagedice (uint)`: Hitscan damage random multiplier; if not set, defaults to 0
@@ -510,11 +510,11 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
 - **A_DropThing(type, isdropped, target)**
   - Causes a thing to spawn with randomized momentum from the caller in the same manner as if the thing had been dropped.
   - Args:
-    - `type (int)`: TID of the thing to drop
+    - `type (int)`: TID of the thing to drop; if 0, defaults to the thing's `Dropped Item` field.
     - `isdropped (uint)`: If nonzero, adds the `DROPPED` flag to the thing that's been dropped
     - `target (uint)`: If 1, sets the dropped thing's target to the caller's target; if higher than 1, sets the dropped thing's target to the caller
   - Notes:
-    - Has no effect if `type` is not provided.
+    - Can be used to spawn decorates and living things as well, but it's recommended to be careful.
 
 - **A_SetSectorBrightness(brightness, tag, change)**
   - Alters the light level of all sectors with a given tag in the map. Can set either absolute or relative values.
