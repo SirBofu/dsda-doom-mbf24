@@ -2682,10 +2682,10 @@ void A_Fall(mobj_t *actor)
   // MBF24 - reset counters
   if(mbf24 && actor->flags3 & MF3_RESETONDEATH)
   {
-    actor->counter1 = 0;
-    actor->counter2 = 0;
-    actor->counter3 = 0;
-    actor->counter4 = 0;
+    actor->counter1 = actor->info->counter1init;
+    actor->counter2 = actor->info->counter2init;
+    actor->counter3 = actor->info->counter3init;
+    actor->counter4 = actor->info->counter4init;
   }
 }
 
@@ -4041,7 +4041,7 @@ void A_JumpIfTargetTouching(mobj_t* actor)
 {
     int state, checkz;
 
-    if (!mbf24 || !(actor->target))
+    if (!mbf24_features || !(actor->target))
       return;
 
     state    = actor->state->args[0];
@@ -4075,20 +4075,20 @@ void A_CleanupCounter(mobj_t* actor)
 {
   if (actor->counter1 < 0)
     actor->counter1 = 0;
-  if (actor->counter1 > 100)
-    actor->counter1 = 100;
+  if (actor->counter1 > actor->counter1max)
+    actor->counter1 = actor->counter1max;
   if (actor->counter2 < 0)
     actor->counter2 = 0;
-  if (actor->counter2 > 100)
-    actor->counter2 = 100;
+  if (actor->counter2 > actor->counter2max)
+    actor->counter2 = actor->counter2max;
   if (actor->counter3 < 0)
     actor->counter3 = 0;
-  if (actor->counter3 > 100)
-    actor->counter3 = 100;
+  if (actor->counter3 > actor->counter3max)
+    actor->counter3 = actor->counter3max;
   if (actor->counter4 < 0)
     actor->counter4 = 0;
-  if (actor->counter4 > 100)
-    actor->counter4 = 100;
+  if (actor->counter4 > actor->counter4max)
+    actor->counter4 = actor->counter4max;
 }
 
 //
@@ -4106,7 +4106,7 @@ void A_SetCounter(mobj_t* actor)
 {
     int counternum, value;
 
-    if (!mbf24 || !actor)
+    if (!mbf24_features || !actor)
         return;
 
     counternum = actor->state->args[0];
@@ -4152,7 +4152,7 @@ void A_AddCounter(mobj_t* actor)
 {
     int counternum, value;
 
-    if (!mbf24 || !actor)
+    if (!mbf24_features || !actor)
         return;
 
     counternum = actor->state->args[0];

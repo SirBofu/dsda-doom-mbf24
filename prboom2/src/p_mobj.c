@@ -2196,6 +2196,17 @@ mobj_t* P_SpawnMobj(fixed_t x,fixed_t y,fixed_t z,mobjtype_t type)
   mobj->flags2 = info->flags2;
   mobj->flags3 = info->flags3;
   if (raven) mobj->damage = info->damage;
+  if (mbf24_features)
+  {
+    mobj->counter1 = info->counter1init;
+    mobj->counter1max = info->counter1max;
+    mobj->counter2 = info->counter2init;
+    mobj->counter2max = info->counter2max;
+    mobj->counter3 = info->counter3init;
+    mobj->counter3max = info->counter3max;
+    mobj->counter4 = info->counter4init;
+    mobj->counter4max = info->counter4max;
+  }
 
   /* killough 8/23/98: no friends, bouncers, or touchy things in old demos */
   if (!mbf_features)

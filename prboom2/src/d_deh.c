@@ -1147,7 +1147,14 @@ static const char *deh_mobjinfo_fields[] =
   "Min missile chance",  // .minmissilechance
   "Missile chance multiplier", // .missilechancemult
   "Crush frame",         // .crushstate
-  "Active sound chance", // .activesoundchance
+  "Counter 1 max",       // .counter1max
+  "Counter 2 max",       // .counter2max
+  "Counter 3 max",       // .counter3max
+  "Counter 4 max",       // .counter4max
+  "Counter 1 spawn",     // .counter1init
+  "Counter 2 spawn",     // .counter2init
+  "Counter 3 spawn",     // .counter3init
+  "Counter 4 spawn",     // .counter4init
 
   NULL
 };
@@ -2107,6 +2114,14 @@ static void setMobjInfoValue(int mobjInfoIndex, int keyIndex, uint64_t value) {
     case 39: mi->minmissilechance = (int)value; return;
     case 40: mi->missilechancemult = (int)value; return;
     case 41: mi->crushstate = (int)value; return;
+    case 42: mi->counter1max = (int)value; return;
+    case 43: mi->counter2max = (int)value; return;
+    case 44: mi->counter3max = (int)value; return;
+    case 45: mi->counter4max = (int)value; return;
+    case 46: mi->counter1init = (int)value; return;
+    case 47: mi->counter2init = (int)value; return;
+    case 48: mi->counter3init = (int)value; return;
+    case 49: mi->counter4init = (int)value; return;
     default: return;
   }
 }

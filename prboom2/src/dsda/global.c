@@ -260,6 +260,10 @@ static void dsda_InitDoom(void) {
     mobjinfo[i].minmissilechance = 0; // not in doom, defaults to 160
     mobjinfo[i].missilechancemult = FRACUNIT; // not in doom, defaults to 65536
     mobjinfo[i].crushstate = S_GIBS; // default
+    mobjinfo[i].counter1max = 100;
+    mobjinfo[i].counter2max = 100;
+    mobjinfo[i].counter3max = 100;
+    mobjinfo[i].counter4max = 100;
   }
 
   // don't want to reorganize info.c structure for a few tweaks...

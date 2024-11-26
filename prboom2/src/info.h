@@ -6601,7 +6601,14 @@ typedef struct
   int minmissilechance;
   int missilechancemult;
   int crushstate;  /* State to jump to when crushed. */
-  int activesoundchance; /* Chance to play active sound. */
+  int counter1max;
+  int counter2max;
+  int counter3max;
+  int counter4max;
+  int counter1init;
+  int counter2init;
+  int counter3init;
+  int counter4init;
 } mobjinfo_t;
 
 #define NO_ALTSPEED -1
@@ -6632,6 +6639,14 @@ typedef struct
     uint64_t flags;
     int raisestate;
     mobjtype_t droppeditem;
+    int counter1max;
+    int counter2max;
+    int counter3max;
+    int counter4max;
+    int counter1init;
+    int counter2init;
+    int counter3init;
+    int counter4init;
 } doom_mobjinfo_t;
 
 typedef struct

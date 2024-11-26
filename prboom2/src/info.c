@@ -1858,8 +1858,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     MT_CLIP      // droppeditem
   },
 
-  {   // MT_KEEN
-    72,   // doomednum
+  {   // MT_KEEN    72,   // doomednum
     S_KEENSTND,   // spawnstate
     100,    // spawnhealth
     S_NULL,   // seestate

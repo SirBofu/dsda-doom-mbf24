@@ -416,8 +416,15 @@ typedef struct mobj_s
     int counter2;               // MBF24 generic counter 2
     int counter3;               // MBF24 generic counter 3
     int counter4;               // MBF24 generic counter 4
+    int counter1max;            // Counter 1 maximum
+    int counter2max;            // Counter 2 maximum
+    int counter3max;            // Counter 3 maximum
+    int counter4max;            // Counter 4 maximum
+    int counter1init;           // Counter 1 initial value
+    int counter2init;           // Counter 2 initial value
+    int counter3init;           // Counter 3 initial value
+    int counter4init;           // Counter 1 initial value
     uint32_t tunnel_hash_[2];   // TUNNEL projectile hash
-    int activesoundchance;      // MBF activve sound chance
 
     // SEE WARNING ABOVE ABOUT POINTER FIELDS!!!
 } mobj_t;
