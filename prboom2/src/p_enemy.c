@@ -5261,32 +5261,40 @@ void A_JumpIfSkill(mobj_t* actor)
 // A_JumpIfMapNum(mapnum, frame, mode)
 // Jumps to the specified frame if the current map is equal to (or optionally greater than) the given value.
 // This codepointer relies on the mapnum from UMAPINFO.
-//   args[0]: The map number to check for.
-//   args[1]: The frame to jump to if the condition is true.
-//   args[2]: Comparison mode.
-//     0 = must be an exact match.
-//     1 (or nonzero) = must be greater than or equal to.
+//   args[0]: The map number to check for. If 0, skip map check and only do episode check if valid.
+//   args[1]: The episode number to check for. If 0, skip episode check and only do map check if valid.
+//   args[2]: The frame to jump to if the condition is true.
+//   args[3]: Comparison mode.
+//     0 = both epinum and mapnum must be an exact match.
+//     1 = both epinum and mapnum must be greater than or equal to.
 //
 
 void A_JumpIfMapNum(mobj_t* actor)
 {
-  int mapnum, state, mode;
+  int mapnum, epinum, state, mode;
 
   if (!mbf24_features || !actor)
     return;
 
   mapnum = actor->state->args[0];
-  state  = actor->state->args[1];
-  mode   = actor->state->args[2];
+  epinum = actor->state->args[1];
+  state  = actor->state->args[2];
+  mode   = actor->state->args[3];
+
+  if (mapnum < 0) mapnum = 0;
+  if (epinum < 0) epinum = 0;
+  if (!mapnum && !epinum) return;
 
   switch (mode)
   {
     case 0:
-      if (gamemap == mapnum)
+      if (gamemap == mapnum && (!epinum || gameepisode == epinum))
         P_SetMobjState(actor, state);
     case 1:
     default:
-      if (gamemap >= mapnum)
+      if ((!mapnum && epinum && gameepisode >= epinum) ||
+          (mapnum && !epinum && gamemap >= mapnum) ||
+          (mapnum && epinum && (gameepisode > epinum || (gameepisode == epinum && gamemap >= mapnum))))
         P_SetMobjState(actor, state);
   }
 }

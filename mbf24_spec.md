@@ -528,13 +528,24 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
     - Should be used with care.
 
 - **A_JumpIfSkill(skillnum, state)**
-  - Jumps to the specified frame if the current skill level is equal to or greater than the current value.
+  - Jumps to the specified frame if the current skill level is equal to or greater than the given value.
   - Args:
     - `skillnum (uint)`: ID of the skill to check for. 0 = ITYTD, 1 = HNTR, 2 = HMP, 3 = UV, 4 = Nightmare.
     - `state (uint)`: State to jump to if conditions are met.
   - Notes:
     - If custom skills are defined, it is based off of the ID of the skill as defined in UMAPINFO.
     - As ZMAPINFO defines skills by name and not by ID, IDs will correlate to the skills in the order defined.
+
+- **A_JumpIfMapNum(mapnum, epinum, state, mode)**
+  - Jumps to the specified frame if the current map number and/or episode number is equal to (or possibly greater than) the given value.
+  - Args:
+    - `mapnum (uint)`: Map number to check for. If 0, only performs a comparison for `epinum` instead.
+    - `epinum (uint)`: Episode number to check for. If 0, only performs a comparison for `mapnum` instead.
+    - `state (uint)`: State to jump to if conditions are met.
+    - `mode (uint)`: If zero, both `mapnum` and `epinum` must be an exact match (excepting if one is set to zero).
+    If 1, then returns true if: the current episode is greater than `epinum`; **or** the current episode is equal to `epinum` and the current map is greater than or equal to `mapnum`.
+  - Notes:
+    - Will no-op if neither `mapnum` or `epinum` are provided.     
 
 - **A_MonsterRefire(chance, state)**
   - Parameterized monster refire codepointer. Allows defintion of both a chance to continue firing when the target is out of line-of-sight as well as the frame to jump to when refire conditions are not met.
