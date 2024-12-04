@@ -2166,6 +2166,18 @@ static void setMobjInfoValue(int mobjInfoIndex, int keyIndex, uint64_t value) {
     case 47: mi->counter2init = (int)value; return;
     case 48: mi->counter3init = (int)value; return;
     case 49: mi->counter4init = (int)value; return;
+    case 50: mi->minrespawntics = (int)value; return;
+    case 51: mi->respawndice = (int)value; return;
+    case 52: mi->pickupammotype = (int)value; return;
+    case 53: mi->pickupammocategory = (int)value; return;
+    case 54: mi->pickupweapontype = (int)value; return;
+    case 55: mi->pickupitemtype = (int)value; return;
+    case 56: mi->pickupbonuscount = (int)value; return;
+    case 57: mi->pickupsound = (int)value; return;
+    // case 58
+    // case 59
+    case 60: mi->pickuphealthamount = (int)value; return;
+    case 61: mi->pickuparmoramount = (int)value; return;
     default: return;
   }
 }
