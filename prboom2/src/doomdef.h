@@ -276,7 +276,7 @@ typedef enum {
   HERETIC_NUMAMMO,
 
   NUMAMMO = HERETIC_NUMAMMO,
-  am_noammo,   // fist, chainsaw, staff, gauntlets
+  am_noammo = -1,   // fist, chainsaw, staff, gauntlets
 
   // hexen
   MANA_1 = 0,

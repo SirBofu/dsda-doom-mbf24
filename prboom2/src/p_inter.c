@@ -106,6 +106,24 @@ int spawn_ssg = 0;
 int maxammo[NUMAMMO]  = {200, 50, 300, 50, 0, 0}; // heretic +2 ammo types
 int clipammo[NUMAMMO] = { 10,  4,  20,  1, 0, 0}; // heretic +2 ammo types
 
+// id24-in-mbf25
+
+int initialammo[NUMAMMO] = { 50, 0, 0, 0, 0, 0};
+int maxupgradedammo[NUMAMMO] = { 400, 100, 600, 100, 0, 0};
+int boxammo[NUMAMMO] = { 50, 20, 100, 5, 0, 0};
+int backpackammo[NUMAMMO] = { 10, 4, 20, 1, 0, 0};
+int weaponammo[NUMAMMO] = { 20, 8, 40, 2, 0, 0};
+int droppedammo[NUMAMMO] = { 5, 2, 10, 1, 0, 0};
+int droppedboxammo[NUMAMMO] = { 25, 10, 50, 2, 0, 0};
+int droppedbackpackammo[NUMAMMO] = { 5, 2, 10, 1, 0, 0};
+int droppedweaponammo[NUMAMMO] = { 10, 4, 20, 1, 0, 0};
+int dmweaponammo[NUMAMMO] = { 50, 20, 100, 5, 0, 0};
+int skill1multiplier[NUMAMMO] = { 131072, 131072, 131072, 131072, 0, 0};
+int skill2multiplier[NUMAMMO] = { 65536, 65536, 65536, 65536, 0, 0};
+int skill3multiplier[NUMAMMO] = { 65536, 65536, 65536, 65536, 0, 0};
+int skill4multiplier[NUMAMMO] = { 65536, 65536, 65536, 65536, 0, 0};
+int skill5multiplier[NUMAMMO] = { 131072, 131072, 131072, 131072, 0, 0};
+
 //
 // GET STUFF
 //
@@ -240,6 +258,103 @@ static dboolean P_GiveAmmo(player_t *player, ammotype_t ammo, int num)
 }
 
 //
+// P_MBF25GiveAmmo
+// Similar to P_GiveAmmo, but uses ID24 definitions for parameterized ammo amounts.
+// Currently unimplemented.
+//
+
+static dboolean P_MBF25GiveAmmo(player_t *player, ammotype_t ammo, int num)
+{
+    int oldammo, addammo, skillmodifier;
+    dboolean dropped, dmpickup;
+
+    if (ammo == am_noammo)
+        return false;
+
+    if (!deathmatch) dmpickup = false;
+    dropped = false;
+
+#ifdef RANGECHECK
+    if (ammo < 0 || ammo > NUMAMMO)
+    I_Error ("P_GiveAmmo: bad type %i", ammo);
+#endif
+
+    if (num > 15) // is out of range
+    {
+      I_Error("Ammo pickup category out of range!");
+    }
+
+    if (num >= 8)
+    {
+      num -= 8;
+      dmpickup = true;
+    }
+    if (num >= 4)
+    {
+      num -= 4;
+      dropped = true;
+    }
+
+    switch (gameskill)
+    {
+        case 0:
+            skillmodifier = skill1multiplier[ammo];
+            break;
+        case 1:
+            skillmodifier = skill2multiplier[ammo];
+            break;
+        case 2:
+        default:
+            skillmodifier = skill3multiplier[ammo];
+            break;
+        case 3:
+            skillmodifier = skill4multiplier[ammo];
+            break;
+        case 4:
+            skillmodifier = skill5multiplier[ammo];
+            break;
+    }
+
+    switch (num)
+    {
+        case PI_CLIPAMMO:
+          if (dropped) addammo = droppedammo[ammo];
+          else addammo = clipammo[ammo];
+          break;
+        case PI_BOXAMMO:
+          if (dropped) addammo = droppedboxammo[ammo];
+          else addammo = boxammo[ammo];
+          break;
+        case PI_WEAPONAMMO:
+          if (dmpickup) addammo = dmweaponammo[ammo];
+          else if (dropped) addammo = droppedweaponammo[ammo];
+          else addammo = weaponammo[ammo];
+          break;
+        case PI_BACKPACK:
+          if (dropped) addammo = droppedbackpackammo[ammo];
+          else addammo = backpackammo[ammo];
+          break;
+        default:
+          addammo = 0;
+          break;
+    }
+
+    if ( player->ammo[ammo] == player->maxammo[ammo]  )
+        return false;
+
+    addammo *= (skillmodifier / FRACUNIT);
+
+    oldammo = player->ammo[ammo];
+    player->ammo[ammo] += addammo;
+
+    if (player->ammo[ammo] > player->maxammo[ammo])
+        player->ammo[ammo] = player->maxammo[ammo];
+
+    return P_GiveAmmoAutoSwitch(player, ammo, oldammo);
+
+}
+
+//
 // P_GiveWeapon
 // The weapon name may have a MF_DROPPED flag ored in.
 //
@@ -291,6 +406,77 @@ dboolean P_GiveWeapon(player_t *player, weapontype_t weapon, dboolean dropped)
       player->pendingweapon = weapon;
     }
   return gaveweapon || gaveammo;
+}
+
+//
+// P_MBF25GiveWeapon
+// We no longer need to enumerate ammo.
+//
+
+dboolean P_MBF25GiveWeapon(player_t *player, weapontype_t weapon, dboolean dropped)
+{
+    dboolean gaveweapon, gaveammo;
+    int skillmodifier;
+
+   if (netgame && deathmatch!=2 && !dropped)
+    {
+        // leave placed weapons forever on net games
+        if (player->weaponowned[weapon])
+            return false;
+
+        player->bonuscount += BONUSADD;
+        player->weaponowned[weapon] = true;
+
+        player->pendingweapon = weapon;
+        /* cph 20028/10 - for old-school DM addicts, allow old behavior
+         * where only consoleplayer's pickup sounds are heard */
+        // displayplayer, not consoleplayer, for viewing multiplayer demos
+        return false;
+    }
+
+    // apply skill modifiers
+
+    switch (gameskill)
+    {
+        case 1:
+        {
+            skillmodifier = skill1multiplier[weaponinfo[weapon].ammo];
+            break;
+        }
+        case 2:
+            skillmodifier = skill2multiplier[weaponinfo[weapon].ammo];
+            break;
+        case 3:
+        default:
+            skillmodifier = skill3multiplier[weaponinfo[weapon].ammo];
+            break;
+        case 4:
+            skillmodifier = skill4multiplier[weaponinfo[weapon].ammo];
+            break;
+        case 5:
+            skillmodifier = skill5multiplier[weaponinfo[weapon].ammo];
+            break;
+    }
+
+    if (weaponinfo[weapon].ammo != am_noammo)
+    {
+        // If weapon was dropped, give dropped weapon ammo.
+        // If weapon was not dropped, if DM, give DM weapon ammo.
+        // Otherwise, give weapon ammo.
+        gaveammo = P_MBF25GiveAmmo (player, weaponinfo[weapon].ammo, dropped ? 7 : deathmatch ? 11 : PI_WEAPONAMMO);
+    }
+    else
+        gaveammo = false;
+
+    if (player->weaponowned[weapon])
+        gaveweapon = false;
+    else
+    {
+        gaveweapon = true;
+        player->weaponowned[weapon] = true;
+        player->pendingweapon = weapon;
+    }
+    return gaveweapon || gaveammo;
 }
 
 int P_PlayerHealthIncrease(int value)
@@ -437,7 +623,7 @@ dboolean P_GivePower(player_t *player, int power)
         return false;
       break;
     case pw_strength:
-      P_GiveBody(player,100);
+        if (!mbf24_features) P_GiveBody(player,100); // in MBF25, pickuphealthamount is used instead
       break;
     case pw_flight:
       player->mo->flags2 |= MF2_FLY;
@@ -817,6 +1003,334 @@ void P_TouchSpecialThing(mobj_t *special, mobj_t *toucher)
     S_StartSound (player->mo, sound | PICKUP_SOUND);   // killough 4/25/98
   else if (player == &players[displayplayer])
     S_StartVoidSound (sound | PICKUP_SOUND);
+}
+
+//
+// P_MBF25TouchSpecialThing
+// Uses ID24's Thing properties to allow arbitrary SPECIAL items regardless of their sprite.
+//
+
+void P_MBF25TouchSpecialThing(mobj_t *special, mobj_t *toucher)
+{
+    player_t *player;
+    int      i;
+    int      sound;
+    fixed_t  delta = special->z - toucher->z;
+    char     pickupmessage[32];
+
+    if (delta > toucher->height || delta < -8*FRACUNIT)
+        return;        // out of reach
+
+    sound = special->info->pickupsound;
+    player = toucher->player;
+
+    // Dead thing touching.
+    // Can happen with a sliding player corpse.
+    if (toucher->health <= 0)
+        return;
+
+    // ID24: Detect pickup properties
+
+    // construct pickup message
+
+    /*
+    if (special->info->pickupstring)
+    {
+      strcpy (pickupmessage, "s_");
+      // strcat (pickupmessage, special->info->pickupstring);
+    }
+     */
+
+    strcpy(pickupmessage, strcat("s_", special->info->pickupstring)); // this isn't right, gotta fix it
+
+    // Handle pickup types
+
+    switch (special->info->pickupitemtype)
+    {
+        case PI_MESSAGE:
+            if (special->info->pickupstring)
+                dsda_AddPlayerMessage(pickupmessage, player);
+            break;
+        case PI_BLUEKEY:
+            if (!player->cards[it_bluecard])
+            {
+                if (special->info->pickupstring) dsda_AddPlayerMessage(pickupmessage, player);
+                else dsda_AddPlayerMessage(s_GOTBLUECARD, player);
+            }
+            P_GiveCard (player, it_bluecard);
+            if (!netgame)
+                break;
+        case PI_YELLOWKEY:
+            if (!player->cards[it_yellowcard])
+            {
+                if (special->info->pickupstring) dsda_AddPlayerMessage(pickupmessage, player);
+                else dsda_AddPlayerMessage(s_GOTYELWCARD, player);
+            }
+            P_GiveCard (player, it_yellowcard);
+            if (!netgame)
+                break;
+        case PI_REDKEY:
+            if (!player->cards[it_redcard])
+            {
+                if (special->info->pickupstring) dsda_AddPlayerMessage(pickupmessage, player);
+                else dsda_AddPlayerMessage(s_GOTREDCARD, player);
+            }
+            P_GiveCard (player, it_redcard);
+            if (!netgame)
+                break;
+        case PI_BLUESKULL:
+            if (!player->cards[it_blueskull])
+            {
+                if (special->info->pickupstring) dsda_AddPlayerMessage(pickupmessage, player);
+                else dsda_AddPlayerMessage(s_GOTBLUESKUL, player);
+            }
+            P_GiveCard (player, it_blueskull);
+            if (!netgame)
+                break;
+        case PI_YELLOWSKULL:
+            if (!player->cards[it_yellowskull])
+            {
+                if (special->info->pickupstring) dsda_AddPlayerMessage(pickupmessage, player);
+                else dsda_AddPlayerMessage(s_GOTYELWSKUL, player);
+            }
+            P_GiveCard (player, it_yellowskull);
+            if (!netgame)
+                break;
+        case PI_REDSKULL:
+            if (!player->cards[it_redskull])
+            {
+                if (special->info->pickupstring) dsda_AddPlayerMessage(pickupmessage, player);
+                else dsda_AddPlayerMessage(s_GOTREDSKULL, player);
+            }
+            P_GiveCard (player, it_redskull);
+            if (!netgame)
+                break;
+        case PI_BACKPACK:
+            int skillmodifier;
+            if (!player->backpack)
+            {
+                for (i=0 ; i<NUMAMMO ; i++)
+                    player->maxammo[i] = backpackammo[i];
+                player->backpack = true;
+            }
+            for (i=0 ; i<NUMAMMO ; i++)
+                P_MBF25GiveAmmo (player, i, (special->flags & MF_DROPPED) ? 7 : 3);
+            if (special->info->pickupstring) dsda_AddPlayerMessage(pickupmessage, player);
+            else dsda_AddPlayerMessage(s_GOTBACKPACK, player);
+            break;
+        case PI_HEALTHBONUS:
+            // can go over 100%
+            player->health += P_PlayerHealthIncrease(special->info->pickuphealthamount);
+            if (player->health > (maxhealthbonus))//e6y
+                player->health = (maxhealthbonus);//e6y
+            player->mo->health = player->health;
+            if (special->info->pickupstring) dsda_AddPlayerMessage(pickupmessage, player);
+            else dsda_AddPlayerMessage(s_GOTHTHBONUS, player);
+            break;
+        case PI_ARMORBONUS:
+            // can go over 100%
+            player->armorpoints[ARMOR_ARMOR] += P_PlayerArmorIncrease(special->info->pickuparmoramount);
+            if (player->armorpoints[ARMOR_ARMOR] > max_armor && compatibility_level != doom_12_compatibility)
+                player->armorpoints[ARMOR_ARMOR] = max_armor;
+            // e6y
+            // We always give armor type 1 for the armor bonuses;
+            // dehacked only affects the GreenArmor.
+            if (!player->armortype)
+                player->armortype =
+                        ((!demo_compatibility || prboom_comp[PC_APPLY_GREEN_ARMOR_CLASS_TO_ARMOR_BONUSES].state) ?
+                         green_armor_class : 1);
+            if (special->info->pickupstring) dsda_AddPlayerMessage(pickupmessage, player);
+            else dsda_AddPlayerMessage(s_GOTARMBONUS, player);
+            break;
+        case PI_STIMPACK:
+            if (!P_GiveBody (player, special->info->pickuphealthamount))
+                return;
+            if (special->info->pickupstring) dsda_AddPlayerMessage(pickupmessage, player);
+            else dsda_AddPlayerMessage(s_GOTSTIM, player);
+            break;
+        case PI_MEDIKIT:
+            if (!P_GiveBody (player, special->info->pickuphealthamount))
+                return;
+            if (special->info->pickupstring) dsda_AddPlayerMessage(pickupmessage, player);
+            else dsda_AddPlayerMessage(s_GOTMEDIKIT, player);
+            break;
+        case PI_SOULSPHERE:
+            player->health += P_PlayerHealthIncrease(special->info->pickuphealthamount ? special->info->pickuphealthamount : soul_health);
+            if (player->health > max_soul)
+                player->health = max_soul;
+            player->mo->health = player->health;
+            if (special->info->pickupstring) dsda_AddPlayerMessage(pickupmessage, player);
+            else dsda_AddPlayerMessage(s_GOTSUPER, player);
+            break;
+        case PI_MEGASPHERE:
+            if (gamemode != commercial)
+                return;
+            player->health = special->info->pickuphealthamount ? special->info->pickuphealthamount : mega_health;
+            player->mo->health = player->health;
+            // e6y
+            // We always give armor type 2 for the megasphere;
+            // dehacked only affects the MegaArmor.
+            P_GiveArmor (player,
+                         ((!demo_compatibility || prboom_comp[PC_APPLY_BLUE_ARMOR_CLASS_TO_MEGASPHERE].state) ?
+                          blue_armor_class : 2));
+            if (special->info->pickupstring) dsda_AddPlayerMessage(pickupmessage, player);
+            else dsda_AddPlayerMessage(s_GOTMSPHERE, player);
+            break;
+        case PI_GREENARMOR:
+            if (!P_GiveArmor (player, green_armor_class))
+                return;
+            if (special->info->pickupstring) dsda_AddPlayerMessage(pickupmessage, player);
+            else dsda_AddPlayerMessage(s_GOTARMOR, player);
+            break;
+        case PI_BLUEARMOR:
+            if (!P_GiveArmor (player, blue_armor_class))
+                return;
+            if (special->info->pickupstring) dsda_AddPlayerMessage(pickupmessage, player);
+            else dsda_AddPlayerMessage(s_GOTMEGA, player);
+            break;
+        case PI_AREAMAP:
+            if (!P_GivePower (player, pw_allmap))
+                return;
+            if (special->info->pickupstring) dsda_AddPlayerMessage(pickupmessage, player);
+            else dsda_AddPlayerMessage(s_GOTMAP, player);
+            break;
+        case PI_LITEAMP:
+            if (!P_GivePower (player, pw_infrared))
+                return;
+            if (special->info->pickupstring) dsda_AddPlayerMessage(pickupmessage, player);
+            else dsda_AddPlayerMessage(s_GOTVISOR, player);
+            break;
+        case PI_BERSERK:
+            if (!P_GivePower (player, pw_strength))
+                return;
+            P_GiveBody(player, special->info->pickuphealthamount); // we parameterize the amount of healing that the berserk back does now
+            if (special->info->pickupstring) dsda_AddPlayerMessage(pickupmessage, player);
+            else dsda_AddPlayerMessage(s_GOTBERSERK, player);
+            if (player->readyweapon != wp_fist)
+                player->pendingweapon = wp_fist;
+            break;
+        case PI_BLURSPHERE:
+            if (!P_GivePower (player, pw_invulnerability))
+                return;
+            if (special->info->pickupstring) dsda_AddPlayerMessage(pickupmessage, player);
+            else dsda_AddPlayerMessage(s_GOTINVIS, player);
+            break;
+        case PI_RADSUIT:
+            if (!P_GivePower (player, pw_ironfeet))
+                return;
+            if (special->info->pickupstring) dsda_AddPlayerMessage(pickupmessage, player);
+            else dsda_AddPlayerMessage(s_GOTSUIT, player);
+            break;
+        case PI_INVULNSPHERE:
+            if (!P_GivePower (player, pw_invulnerability))
+                return;
+            if (special->info->pickupstring) dsda_AddPlayerMessage(pickupmessage, player);
+            else dsda_AddPlayerMessage(s_GOTSUIT, player);
+            break;
+        case PI_NOITEM: // might be weapons or ammo
+            if (special->info->pickupweapontype) // is a weapon!
+            {
+                if (!P_MBF25GiveWeapon (player, special->info->pickupweapontype, (special->flags&MF_DROPPED)!=0) )
+                    return;
+                if (special->info->pickupstring) dsda_AddPlayerMessage(pickupmessage, player);
+                else
+                {
+                    switch (special->info->pickupweapontype)
+                    {
+                        case (wp_bfg):
+                            dsda_AddPlayerMessage(s_GOTBFG9000, player);
+                            break;
+                        case (wp_chaingun):
+                            dsda_AddPlayerMessage(s_GOTCHAINGUN, player);
+                            break;
+                        case (wp_chainsaw):
+                            dsda_AddPlayerMessage(s_GOTCHAINSAW, player);
+                            break;
+                        case (wp_missile):
+                            dsda_AddPlayerMessage(s_GOTLAUNCHER, player);
+                            break;
+                        case (wp_plasma):
+                            dsda_AddPlayerMessage(s_GOTPLASMA, player);
+                            break;
+                        case (wp_shotgun):
+                            dsda_AddPlayerMessage(s_GOTSHOTGUN, player);
+                            break;
+                        case (wp_supershotgun):
+                            dsda_AddPlayerMessage(s_GOTSHOTGUN2, player);
+                            break;
+                    }
+                }
+            }
+            else
+            if (special->info->pickupammotype > -1) // is ammo!
+            {
+                int skillmodifier;
+
+                switch (gameskill)
+                {
+                    case 1:
+                    {
+                        skillmodifier = skill1multiplier[special->info->pickupammotype];
+                        break;
+                    }
+                    case 2:
+                        skillmodifier = skill2multiplier[special->info->pickupammotype];
+                        break;
+                    case 3:
+                    default:
+                        skillmodifier = skill3multiplier[special->info->pickupammotype];
+                        break;
+                    case 4:
+                        skillmodifier = skill4multiplier[special->info->pickupammotype];
+                        break;
+                    case 5:
+                        skillmodifier = skill5multiplier[special->info->pickupammotype];
+                        break;
+                }
+
+                if (deathmatch)
+                {
+                    if (!P_MBF25GiveAmmo (player,special->info->pickupammotype,special->info->pickupammocategory + 8))
+                        return;
+                }
+                else
+                if (special->flags & MF_DROPPED)
+                {
+                    if (!P_MBF25GiveAmmo (player,special->info->pickupammotype,special->info->pickupammocategory + 4))
+                        return;
+                }
+                else
+                if (!P_MBF25GiveAmmo (player,special->info->pickupammotype,special->info->pickupammocategory))
+                    return;
+            }
+            else // Is neither a weapon nor ammo!
+            {
+                I_Error("P_MBF25TouchSpecialThing: Invalid SPECIAL item!");
+            }
+    }
+
+    if (special->special)
+    {
+        map_format.execute_line_special(special->special, special->special_args, NULL, 0, player->mo);
+        special->special = 0;
+    }
+
+    if (special->flags & MF_COUNTITEM)
+        player->itemcount++;
+
+    if (special->flags2 & MF2_COUNTSECRET)
+        P_PlayerCollectSecret(player);
+
+    P_RemoveMobj (special);
+    player->bonuscount += BONUSADD;
+
+    /* cph 20028/10 - for old-school DM addicts, allow old behavior
+     * where only consoleplayer's pickup sounds are heard */
+    // displayplayer, not consoleplayer, for viewing multiplayer demos
+    if (!comp[comp_sound])
+        S_StartSound (player->mo, sound | PICKUP_SOUND);   // killough 4/25/98
+    else if (player == &players[displayplayer])
+        S_StartVoidSound (sound | PICKUP_SOUND);
 }
 
 //

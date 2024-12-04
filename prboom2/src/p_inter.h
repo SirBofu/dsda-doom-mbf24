@@ -47,6 +47,7 @@
 
 dboolean P_GivePower(player_t *, int);
 void P_TouchSpecialThing(mobj_t *special, mobj_t *toucher);
+void P_MBF25TouchSpecialThing(mobj_t *special, mobj_t *toucher);
 void P_DamageMobj(mobj_t *target,mobj_t *inflictor,mobj_t *source,int damage);
 void P_HealMobj(mobj_t *mo, int num);
 int P_PlayerHealthIncrease(int value);
@@ -82,6 +83,9 @@ extern int spawn_bfg; // MBF24
 extern int spawn_csaw; // MBF24
 extern int spawn_ssg; // MBF24
 extern int maxammo[], clipammo[];
+extern int initialammo[], maxupgradedammo[], boxammo[], backpackammo[], weaponammo[];
+extern int droppedammo[], droppedboxammo[], droppedbackpackammo[], droppedweaponammo[], dmweaponammo[];
+extern int skill1multiplier[], skill2multiplier[], skill3multiplier[], skill4multiplier[], skill5multiplier[];
 
 // heretic
 

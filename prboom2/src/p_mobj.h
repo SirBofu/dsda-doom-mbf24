@@ -424,7 +424,21 @@ typedef struct mobj_s
     int counter2init;           // Counter 2 initial value
     int counter3init;           // Counter 3 initial value
     int counter4init;           // Counter 1 initial value
-    uint32_t tunnel_hash_[2];   // TUNNEL projectile hash
+    uint64_t tunnel_hash_[2];   // TUNNEL projectile hash
+
+    // id24-in-mbf25
+    int minrespawntics;          // Minimum number of tics to wait to respawn
+    int respawndice;             // The value that an RNG value (between 0 and 255) must be greater than to allow this item to respawn
+    int pickupammotype;          // The ammo ID to pick up when collecting this SPECIAL thing
+    uint64_t pickupammocategory; // The ammo category to resolve a quantiity from when collecting this SPECIAL thing
+    int pickupweapontype;        // The weapon ID to pick up when collecting this SPECIAL thing
+    int pickupitemtype;          // The powerup to pickup when collecting this SPECIAL thing
+    int pickupsound;             // The sound ID to play when collecting this SPECIAL thing
+    const char* pickupstring;    // The string mnemonic to resolve and display when picking up this SPECIAL thing
+    const char* rtranslation;        // The translation lump to use when rendering this thing
+    // mbf25 extensions based on id24
+    int pickuphealthamount;      // The amount of health to add when collecting this SPECIAL thing if its pickup item type is health bonus, stimpack, medikit, soulsphere, or megasphere
+    int pickuparmoramount;       // The amount of armor to add when collecting this SPECIAL thing if its pickup type is armor bonus, green armor, blue armor, or megasphere
 
     // SEE WARNING ABOVE ABOUT POINTER FIELDS!!!
 } mobj_t;
@@ -452,6 +466,36 @@ typedef struct mobj_s
 // killough 11/98:
 // Whether an object is "sentient" or not. Used for environmental influences.
 #define sentient(mobj) ((mobj)->health > 0 && (mobj)->info->seestate)
+
+// id24-in-mbf25
+
+#define PI_NOITEM       -1
+#define PI_MESSAGE      0
+#define PI_BLUEKEY      1
+#define PI_YELLOWKEY    2
+#define PI_REDKEY       3
+#define PI_BLUESKULL    4
+#define PI_YELLOWSKULL  5
+#define PI_REDSKULL     6
+#define PI_BACKPACK     7
+#define PI_HEALTHBONUS  8
+#define PI_STIMPACK     9
+#define PI_MEDIKIT      10
+#define PI_SOULSPHERE   11
+#define PI_MEGASPHERE   12
+#define PI_ARMORBONUS   13
+#define PI_GREENARMOR   14
+#define PI_BLUEARMOR    15
+#define PI_AREAMAP      16
+#define PI_LITEAMP      17
+#define PI_BERSERK      18
+#define PI_BLURSPHERE   19
+#define PI_RADSUIT      20
+#define PI_INVULNSPHERE 21
+
+#define PI_CLIPAMMO     1
+#define PI_BOXAMMO      2
+#define PI_WEAPONAMMO   3
 
 extern int iquehead;
 extern int iquetail;

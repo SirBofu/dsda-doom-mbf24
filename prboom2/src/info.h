@@ -6601,6 +6601,18 @@ typedef struct
   int minmissilechance;
   int missilechancemult;
   int crushstate;  /* State to jump to when crushed. */
+  int minrespawntics;
+  int respawndice;
+  int pickupammotype;
+  int pickupammocategory;
+  int pickupweapontype;
+  int pickupitemtype;
+  int pickupbonuscount;
+  int pickupsound;
+  char pickupstring[30];
+  char translation[8];
+  int pickuphealthamount;
+  int pickuparmoramount;
   int counter1max;
   int counter2max;
   int counter3max;
@@ -6639,6 +6651,15 @@ typedef struct
     uint64_t flags;
     int raisestate;
     mobjtype_t droppeditem;
+    int pickupammotype;
+    int pickupammocategory;
+    int pickupweapontype;
+    int pickupitemtype;
+    int pickupbonuscount;
+    int pickupsound;
+    int pickuphealthamount;
+    int pickuparmoramount;
+    char pickupstring[30];
     int counter1max;
     int counter2max;
     int counter3max;

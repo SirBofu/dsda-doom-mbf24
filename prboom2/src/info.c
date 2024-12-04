@@ -1241,7 +1241,15 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SOLID|MF_SHOOTABLE|MF_DROPOFF|MF_PICKUP|MF_NOTDMATCH,    // flags
-    S_NULL    // raisestate
+    S_NULL,    // raisestate
+    MT_NULL, // droppeditem
+    am_noammo, // pickupammotype
+    PI_NOITEM, // pickupammocategory
+    0, // pickupweapontype
+    PI_NOITEM, // pickupitemtype
+    sfx_None, // pickupsound
+    0, // pickuphealthamount
+    0 // pickuparmoramount
   },
 
   {   // MT_POSSESSED
@@ -1268,7 +1276,14 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_posact,   // activesound
     MF_SOLID|MF_SHOOTABLE|MF_COUNTKILL,   // flags
     S_POSS_RAISE1,  // raisestate
-    MT_CLIP
+    MT_CLIP, // droppeditem
+    am_noammo, // pickupammotype
+    PI_NOITEM, // pickupammocategory
+    0, // pickupweapontype
+    PI_NOITEM, // pickupitemtype
+    sfx_None, // pickupsound
+    0, // pickuphealthamount
+    0 // pickuparmoramount
   },
 
   {   // MT_SHOTGUY
@@ -1295,7 +1310,14 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_posact,   // activesound
     MF_SOLID|MF_SHOOTABLE|MF_COUNTKILL,   // flags
     S_SPOS_RAISE1,  // raisestate
-    MT_SHOTGUN
+    MT_SHOTGUN, // droppeditem
+    am_noammo, // pickupammotype
+    PI_NOITEM, // pickupammocategory
+    0, // pickupweapontype
+    PI_NOITEM, // pickupitemtype
+    sfx_None, // pickupsound
+    0, // pickuphealthamount
+    0 // pickuparmoramount
   },
 
   {   // MT_VILE
@@ -1321,7 +1343,15 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_vilact,   // activesound
     MF_SOLID|MF_SHOOTABLE|MF_COUNTKILL,   // flags
-          S_NULL    // raisestate
+    S_NULL,    // raisestate
+    MT_NULL, // droppeditem
+    am_noammo, // pickupammotype
+    PI_NOITEM, // pickupammocategory
+    0, // pickupweapontype
+    PI_NOITEM, // pickupitemtype
+    sfx_None, // pickupsound
+    0, // pickuphealthamount
+    0 // pickuparmoramount
   },
 
   {   // MT_FIRE
@@ -1347,7 +1377,15 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_NOBLOCKMAP|MF_NOGRAVITY|MF_TRANSLUCENT,   // flags  // killough 2/21/98
-    S_NULL    // raisestate
+    S_NULL,    // raisestate
+    MT_NULL, // droppeditem
+    am_noammo, // pickupammotype
+    PI_NOITEM, // pickupammocategory
+    0, // pickupweapontype
+    PI_NOITEM, // pickupitemtype
+    sfx_None, // pickupsound
+    0, // pickuphealthamount
+    0 // pickuparmoramount
   },
 
   {   // MT_UNDEAD
@@ -1374,7 +1412,14 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_skeact,   // activesound
     MF_SOLID|MF_SHOOTABLE|MF_COUNTKILL,   // flags
     S_SKEL_RAISE1,  // raisestate
-    S_NULL    // raisestate
+    MT_NULL,    // raisestate
+    am_noammo, // pickupammotype
+    PI_NOITEM, // pickupammocategory
+    0, // pickupweapontype
+    PI_NOITEM, // pickupitemtype
+    sfx_None, // pickupsound
+    0, // pickuphealthamount
+    0 // pickuparmoramount
   },
 
   {   // MT_TRACER
@@ -2114,7 +2159,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     20,   // damage
     sfx_None,   // activesound
     MF_NOBLOCKMAP|MF_MISSILE|MF_DROPOFF|MF_NOGRAVITY,   // flags
-    S_NULL    // raisestate
+    S_NULL // raisestate
   },
 
   {   // MT_PLASMA
@@ -2374,7 +2419,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL,   // flags
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    -1,
+    PI_NOITEM,
+    -1,
+    PI_GREENARMOR,
+    6,
+    sfx_itemup,
+    0,
+    100,
+    "GOTARMOR"
   },
 
   {   // MT_MISC1
@@ -2400,7 +2455,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL,   // flags
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    -1,
+    PI_NOITEM,
+    -1,
+    PI_BLUEARMOR,
+    6,
+    sfx_itemup,
+    0,
+    200,
+    "GOTMEGA"
   },
 
   {   // MT_MISC2
@@ -2426,7 +2491,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL|MF_COUNTITEM,    // flags
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    -1,
+    PI_NOITEM,
+    -1,
+    PI_HEALTHBONUS,
+    6,
+    sfx_itemup,
+    1,
+    0,
+    "GOTHTHBONUS"
   },
 
   {   // MT_MISC3
@@ -2452,7 +2527,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL|MF_COUNTITEM,    // flags
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    -1,
+    PI_NOITEM,
+    -1,
+    PI_ARMORBONUS,
+    6,
+    sfx_itemup,
+    0,
+    1,
+    "GOTARMBONUS"
   },
 
   {   // MT_MISC4
@@ -2478,7 +2563,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL|MF_NOTDMATCH,    // flags
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    -1,
+    PI_NOITEM,
+    -1,
+    PI_BLUEKEY,
+    6,
+    sfx_itemup,
+    0,
+    0,
+    "GOTBLUECARD"
   },
 
   {   // MT_MISC5
@@ -2504,7 +2599,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL|MF_NOTDMATCH,    // flags
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    -1,
+    PI_NOITEM,
+    -1,
+    PI_REDKEY,
+    6,
+    sfx_itemup,
+    0,
+    0,
+    "GOTREDCARD"
   },
 
   {   // MT_MISC6
@@ -2530,7 +2635,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL|MF_NOTDMATCH,    // flags
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    -1,
+    PI_NOITEM,
+    -1,
+    PI_YELLOWKEY,
+    6,
+    sfx_itemup,
+    0,
+    0,
+    "GOTYELWCARD"
   },
 
   {   // MT_MISC7
@@ -2556,7 +2671,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL|MF_NOTDMATCH,    // flags
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    -1,
+    PI_NOITEM,
+    -1,
+    PI_YELLOWSKULL,
+    6,
+    sfx_itemup,
+    0,
+    0,
+    "GOTYELWSKULL"
   },
 
   {   // MT_MISC8
@@ -2582,7 +2707,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL|MF_NOTDMATCH,    // flags
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    -1,
+    PI_NOITEM,
+    -1,
+    PI_REDSKULL,
+    6,
+    sfx_itemup,
+    0,
+    0,
+    "GOTREDSKULL"
   },
 
   {   // MT_MISC9
@@ -2608,7 +2743,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL|MF_NOTDMATCH,    // flags
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    -1,
+    PI_NOITEM,
+    -1,
+    PI_BLUESKULL,
+    6,
+    sfx_itemup,
+    0,
+    0,
+    "GOTBLUESKUL"
   },
 
   {   // MT_MISC10
@@ -2634,7 +2779,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL,   // flags
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    -1,
+    PI_NOITEM,
+    -1,
+    PI_STIMPACK,
+    6,
+    sfx_itemup,
+    10,
+    0,
+    "GOTSTIM"
   },
 
   {   // MT_MISC11
@@ -2660,7 +2815,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL,   // flags
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    -1,
+    PI_NOITEM,
+    -1,
+    PI_MEDIKIT,
+    6,
+    sfx_itemup,
+    25,
+    0,
+    "GOTMEDIKIT"
   },
 
   {   // MT_MISC12
@@ -2686,7 +2851,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL|MF_COUNTITEM|MF_TRANSLUCENT,    // flags   // killough 2/21/98
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    -1,
+    PI_NOITEM,
+    -1,
+    PI_SOULSPHERE,
+    6,
+    sfx_getpow,
+    100,
+    0,
+    "GOTSUPER"
   },
 
   {   // MT_INV
@@ -2712,7 +2887,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL|MF_COUNTITEM|MF_TRANSLUCENT,    // flags // killough 2/21/98
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    -1,
+    PI_NOITEM,
+    -1,
+    PI_INVULNSPHERE,
+    6,
+    sfx_getpow,
+    0,
+    0,
+    "GOTINVUL"
   },
 
   {   // MT_MISC13
@@ -2738,7 +2923,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL|MF_COUNTITEM,    // flags
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    -1,
+    PI_NOITEM,
+    -1,
+    PI_BERSERK,
+    6,
+    sfx_getpow,
+    100,
+    0,
+    "GOTBERSERK"
   },
 
   {   // MT_INS
@@ -2764,7 +2959,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL|MF_COUNTITEM|MF_TRANSLUCENT,    // flags // killough 2/21/98
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    -1,
+    PI_NOITEM,
+    -1,
+    PI_BLURSPHERE,
+    6,
+    sfx_getpow,
+    0,
+    0,
+    "GOTINVIS"
   },
 
   {   // MT_MISC14
@@ -2790,7 +2995,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL,   // flags
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    -1,
+    PI_NOITEM,
+    -1,
+    PI_RADSUIT,
+    6,
+    sfx_getpow,
+    0,
+    0,
+    "GOTSUIT"
   },
 
   {   // MT_MISC15
@@ -2816,7 +3031,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL|MF_COUNTITEM,    // flags
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    -1,
+    PI_NOITEM,
+    -1,
+    PI_AREAMAP,
+    6,
+    sfx_getpow,
+    0,
+    0,
+    "GOTMAP"
   },
 
   {   // MT_MISC16
@@ -2842,7 +3067,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL|MF_COUNTITEM,    // flags
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    -1,
+    PI_NOITEM,
+    -1,
+    PI_LITEAMP,
+    6,
+    sfx_getpow,
+    0,
+    0,
+    "GOTVISOR"
   },
 
   {   // MT_MEGA
@@ -2868,7 +3103,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL|MF_COUNTITEM|MF_TRANSLUCENT,    // flags // killough 2/21/98
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    -1,
+    PI_NOITEM,
+    -1,
+    PI_MEGASPHERE,
+    6,
+    sfx_getpow,
+    200,
+    200,
+    "GOTMSPHERE"
   },
 
   {   // MT_CLIP
@@ -2894,7 +3139,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL,   // flags
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL, // droppeditem
+    am_clip, // pickupammotype
+    PI_CLIPAMMO, // pickupammocategory
+    0, // pickupweapontype
+    PI_NOITEM, // pickupitemtype
+    6,
+    sfx_itemup, // pickupsound
+    0, // pickuphealthamount
+    0, // pickuparmoramount
+    "GOTCLIP" // pickupstring
   },
 
   {   // MT_MISC17
@@ -2920,7 +3175,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL,   // flags
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL, // droppeditem
+    am_clip, // pickupammotype
+    PI_BOXAMMO, // pickupammocategory
+    0, // pickupweapontype
+    PI_NOITEM, // pickupitemtype
+    6,
+    sfx_itemup, // pickupsound
+    0, // pickuphealthamount
+    0, // pickuparmoramount
+    "GOTCLIPBOX" // pickupstring
   },
 
   {   // MT_MISC18
@@ -2946,7 +3211,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL,   // flags
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    am_misl,
+    PI_CLIPAMMO,
+    0,
+    PI_NOITEM,
+    6,
+    sfx_itemup,
+    0,
+    0,
+    "GOTROCKET"
   },
 
   {   // MT_MISC19
@@ -2972,7 +3247,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL,   // flags
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    am_misl,
+    PI_BOXAMMO,
+    0,
+    PI_NOITEM,
+    6,
+    sfx_itemup,
+    0,
+    0,
+    "GOTROCKBOX"
   },
 
   {   // MT_MISC20
@@ -2998,7 +3283,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL,   // flags
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    am_cell,
+    PI_CLIPAMMO,
+    0,
+    PI_NOITEM,
+    6,
+    sfx_itemup,
+    0,
+    0,
+    "GOTCELL"
   },
 
   {   // MT_MISC21
@@ -3024,7 +3319,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL,   // flags
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    am_cell,
+    PI_BOXAMMO,
+    0,
+    PI_NOITEM,
+    6,
+    sfx_itemup,
+    0,
+    0,
+    "GOTCELLBOX"
   },
 
   {   // MT_MISC22
@@ -3050,7 +3355,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL,   // flags
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    am_shell,
+    PI_CLIPAMMO,
+    0,
+    PI_NOITEM,
+    6,
+    sfx_itemup,
+    0,
+    0,
+    "GOTSHELLS"
   },
 
   {   // MT_MISC23
@@ -3076,7 +3391,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL,   // flags
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    am_shell,
+    PI_BOXAMMO,
+    0,
+    PI_NOITEM,
+    6,
+    sfx_itemup,
+    0,
+    0,
+    "GOTSHELLBOX"
   },
 
   {   // MT_MISC24
@@ -3102,7 +3427,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL,   // flags
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    -1,
+    PI_NOITEM,
+    0,
+    PI_BACKPACK,
+    6,
+    sfx_itemup,
+    0,
+    0,
+    "GOTBACKPACK"
   },
 
   {   // MT_MISC25
@@ -3128,7 +3463,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL,   // flags
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    am_noammo,
+    PI_NOITEM,
+    wp_bfg,
+    PI_NOITEM,
+    6,
+    sfx_wpnup,
+    0,
+    0,
+    "GOTBFG9000"
   },
 
   {   // MT_CHAINGUN
@@ -3154,7 +3499,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL,   // flags
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    am_noammo,
+    PI_NOITEM,
+    wp_chaingun,
+    PI_NOITEM,
+    6,
+    sfx_wpnup,
+    0,
+    0,
+    "GOTCHAINGUN"
   },
 
   {   // MT_MISC26
@@ -3180,7 +3535,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL,   // flags
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    am_noammo,
+    PI_NOITEM,
+    wp_chainsaw,
+    PI_NOITEM,
+    6,
+    sfx_wpnup,
+    0,
+    0,
+    "GOTCHAINSAW"
   },
 
   {   // MT_MISC27
@@ -3206,7 +3571,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL,   // flags
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    am_misl,
+    am_noammo,
+    wp_missile,
+    PI_NOITEM,
+    6,
+    sfx_wpnup,
+    0,
+    0,
+    "GOTLAUNCHER"
   },
 
   {   // MT_MISC28
@@ -3232,7 +3607,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL,   // flags
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    am_noammo,
+    PI_NOITEM,
+    wp_plasma,
+    PI_NOITEM,
+    6,
+    sfx_wpnup,
+    0,
+    0,
+    "GOTPLASMA"
   },
 
   {   // MT_SHOTGUN
@@ -3258,7 +3643,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL,   // flags
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    am_noammo,
+    PI_NOITEM,
+    wp_shotgun,
+    PI_NOITEM,
+    6,
+    sfx_wpnup,
+    0,
+    0,
+    "GOTSHOTGUN"
   },
 
   {   // MT_SUPERSHOTGUN
@@ -3284,7 +3679,17 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     0,    // damage
     sfx_None,   // activesound
     MF_SPECIAL,   // flags
-    S_NULL    // raisestate
+    S_NULL,   // raisestate
+    MT_NULL,
+    am_noammo,
+    PI_NOITEM,
+    wp_supershotgun,
+    PI_NOITEM,
+    6,
+    sfx_wpnup,
+    0,
+    0,
+    "GOTSHOTGUN2"
   },
 
   {   // MT_MISC29

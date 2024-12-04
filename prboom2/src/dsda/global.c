@@ -264,6 +264,17 @@ static void dsda_InitDoom(void) {
     mobjinfo[i].counter2max = 100;
     mobjinfo[i].counter3max = 100;
     mobjinfo[i].counter4max = 100;
+
+    // id24-in-mbf25
+    mobjinfo[i].pickupammotype = mobjinfo_p->pickupammotype;
+    mobjinfo[i].pickupammocategory = mobjinfo_p->pickupammocategory;
+    mobjinfo[i].pickupweapontype = mobjinfo_p->pickupweapontype;
+    mobjinfo[i].pickupitemtype = mobjinfo_p->pickupitemtype;
+    mobjinfo[i].pickupbonuscount = mobjinfo_p->pickupbonuscount;
+    mobjinfo[i].pickupsound = mobjinfo_p->pickupsound;
+    memcpy(mobjinfo[i].pickupstring, mobjinfo_p->pickupstring, sizeof(mobjinfo[i].pickupstring));
+    mobjinfo[i].pickuphealthamount = mobjinfo_p->pickuphealthamount;
+    mobjinfo[i].pickuparmoramount = mobjinfo_p->pickuparmoramount;
   }
 
   // don't want to reorganize info.c structure for a few tweaks...

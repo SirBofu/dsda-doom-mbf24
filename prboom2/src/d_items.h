@@ -66,6 +66,16 @@ typedef struct
   int         ammopershot;
   int         intflags;
   int         flags;
+  // id24-in-mbf25
+  int         slot;
+  int         slotpriority;
+  int         switchpriority;
+  dboolean    initialowned;
+  dboolean    initialraised;
+  int         allowswitchweapon;
+  int         noswitchweapon;
+  int         allowswitchitem;
+  int         noswitchitem;
 } weaponinfo_t;
 
 extern weaponinfo_t doom_weaponinfo[NUMWEAPONS+2];

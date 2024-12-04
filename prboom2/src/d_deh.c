@@ -1137,7 +1137,7 @@ static const char *deh_mobjinfo_fields[] =
   // misc
   "Blood color",         // .bloodcolor
 
-  // mbf24
+  // mbf25
   "MBF24 Bits",          // .flags3
   "Use frame",           // .usestate
   "Damage dice",         // .damagedice
@@ -1155,6 +1155,21 @@ static const char *deh_mobjinfo_fields[] =
   "Counter 2 spawn",     // .counter2init
   "Counter 3 spawn",     // .counter3init
   "Counter 4 spawn",     // .counter4init
+
+  // id24-in-mbf25
+  "Min respawn tics",    // .minrespawntics
+  "Respawn dice",        // .respawndice
+  "Pickup ammo type",    // .pickupammotype
+  "Pickup ammo category",// .pickupammocategory
+  "Pickup weapon type",  // .pickupweapontype
+  "Pickup item type",    // .pickupitemtype
+  "Pickup bonus count",  // .pickupbonuscount
+  "Pickup sound",        // .pickupsound
+  "Pickup message",      // .pickupmessage
+  "Translation",         // .rtranslation
+  // mbf25 extensions based on id24
+  "Pickup health amount",// .pickuphealthamount
+  "Pickup armor amount", // .pickuparmoramount
 
   NULL
 };
@@ -1350,28 +1365,30 @@ static const struct deh_flag_s deh_weaponflags_mbf21[] = {
 
 static const char *deh_state_fields[] = // CPhipps - static const*
 {
-  "Sprite number",    // .sprite (spritenum_t) // an enum
-  "Sprite subnumber", // .frame (long)
-  "Duration",         // .tics (long)
-  "Next frame",       // .nextstate (statenum_t)
+  "Sprite number",     // .sprite (spritenum_t) // an enum
+  "Sprite subnumber",  // .frame (long)
+  "Duration",          // .tics (long)
+  "Next frame",        // .nextstate (statenum_t)
   // This is set in a separate "Pointer" block from Dehacked
-  "Codep Frame",      // pointer to first use of action (actionf_t)
-  "Unknown 1",        // .misc1 (long)
-  "Unknown 2",        // .misc2 (long)
-  "Args1",            // .args[0] (statearg_t)
-  "Args2",            // .args[1] (statearg_t)
-  "Args3",            // .args[2] (statearg_t)
+  "Codep Frame",       // pointer to first use of action (actionf_t)
+  "Unknown 1",         // .misc1 (long)
+  "Unknown 2",         // .misc2 (long)
+  "Args1",             // .args[0] (statearg_t)
+  "Args2",             // .args[1] (statearg_t)
+  "Args3",             // .args[2] (statearg_t)
   "Args4",            // .args[3] (statearg_t)
   "Args5",            // .args[4] (statearg_t)
   "Args6",            // .args[5] (statearg_t)
   "Args7",            // .args[6] (statearg_t)
   "Args8",            // .args[7] (statearg_t)
   "MBF21 Bits",       // .flags
+  // id24-in-mbf25
+  "Tranmap"           // .tranmap (string)
 };
 
 static const struct deh_flag_s deh_stateflags_mbf21[] = {
   { "SKILL5FAST", STATEF_SKILL5FAST }, // tics halve on nightmare skill
-  { "ALLOWUSE", STATEF_ALLOWUSE }, // thing can be used while this state is displayed
+  { "ALLOWUSE", STATEF_ALLOWUSE }, // (mbf25) thing can be used while this state is displayed
   { NULL }
 };
 
@@ -1381,8 +1398,24 @@ static const struct deh_flag_s deh_stateflags_mbf21[] = {
 
 static const char *deh_ammo[] = // CPhipps - static const*
 {
-  "Max ammo",   // maxammo[]
-  "Per ammo"    // clipammo[]
+  "Max ammo",                // maxammo[]
+  "Per ammo",                // clipammo[]
+  // id24-in-mbf25
+  "Initial ammo",            // initialammo[]
+  "Max upgraded ammo",       // maxupgradedammo[]
+  "Box ammo",                // boxammo[]
+  "Backpack ammo",           // backpackammo[]
+  "Weapon ammo",             // weaponammo[]
+  "Dropped ammo",            // droppedammo[]
+  "Dropped box ammo",        // droppedboxammo[]
+  "Dropped backpack ammo",   // droppedbackpackammo[]
+  "Dropped weapon ammo",    // droppedweaponammo[]
+  "Deathmatch weapon ammo", // dmweaponammo[]
+  "Skill 1 multiplier",     // skill1multiplier[]
+  "Skill 2 multiplier",     // skill2multiplier[]
+  "Skill 3 multiplier",     // skill3multiplier[]
+  "Skill 4 multiplier",     // skill4multiplier[]
+  "Skill 5 multiplier"      // skill5multiplier
 };
 
 // WEAPONS - Dehacked block name = "Weapon"
@@ -1391,14 +1424,25 @@ static const char *deh_ammo[] = // CPhipps - static const*
 
 static const char *deh_weapon[] = // CPhipps - static const*
 {
-  "Ammo type",      // .ammo
-  "Deselect frame", // .upstate
-  "Select frame",   // .downstate
-  "Bobbing frame",  // .readystate
-  "Shooting frame", // .atkstate
-  "Firing frame",   // .flashstate
-  "Ammo per shot",  // .ammopershot [XA] new to mbf21
-  "MBF21 Bits",     // .flags
+  "Ammo type",        // .ammo
+  "Deselect frame",   // .upstate
+  "Select frame",     // .downstate
+  "Bobbing frame",    // .readystate
+  "Shooting frame",   // .atkstate
+  "Firing frame",     // .flashstate
+  "Ammo per shot",    // .ammopershot [XA] new to mbf21
+  "MBF21 Bits",       // .flags
+  // 1d24-in-mbf25
+  "Slot",             // .slot
+  "Slot priority",    // .slotpriority
+  "Switch priority", // .switchpriority
+  "Initial owned",   // .initialowned
+  "Initial raised",  // .initialraised
+  "Allow switch with owned weapon", // .allowswitchweapon
+  "No switch with owned weapon",    // .noswitchweapon
+  "Allow switch with owned item",   // .allowswitchitem
+  "No switch with owned item"       // .noswitchitem
+
 };
 
 // CHEATS - Dehacked block name = "Cheat"
@@ -2577,6 +2621,36 @@ static void deh_procAmmo(DEHFILE *fpin, char *line)
       maxammo[indexnum] = (int)value;
     else if (!deh_strcasecmp(key, deh_ammo[1]))  // Per ammo
       clipammo[indexnum] = (int)value;
+    else if (!deh_strcasecmp(key, deh_ammo[2]))  // Initial ammo
+        initialammo[indexnum] = (int)value;
+    else if (!deh_strcasecmp(key, deh_ammo[3]))  // Max upgraded ammo
+        maxupgradedammo[indexnum] = (int)value;
+    else if (!deh_strcasecmp(key, deh_ammo[4]))  // Box ammo
+        boxammo[indexnum] = (int)value;
+    else if (!deh_strcasecmp(key, deh_ammo[5]))  // Backpack ammo
+        backpackammo[indexnum] = (int)value;
+    else if (!deh_strcasecmp(key, deh_ammo[6]))  // Weapon ammo
+        weaponammo[indexnum] = (int)value;
+    else if (!deh_strcasecmp(key, deh_ammo[7]))  // Dropped ammo
+        droppedammo[indexnum] = (int)value;
+    else if (!deh_strcasecmp(key, deh_ammo[8]))  // Dropped box ammo
+        droppedboxammo[indexnum] = (int)value;
+    else if (!deh_strcasecmp(key, deh_ammo[9]))  // Dropped backpack ammo
+        droppedbackpackammo[indexnum] = (int)value;
+    else if (!deh_strcasecmp(key, deh_ammo[10]))  // Dropped weapon ammo
+        droppedweaponammo[indexnum] = (int)value;
+    else if (!deh_strcasecmp(key, deh_ammo[11]))  // Deathmatch weapon ammo
+        dmweaponammo[indexnum] = (int)value;
+    else if (!deh_strcasecmp(key, deh_ammo[12]))  // Skill 1 multiplier
+        skill1multiplier[indexnum] = (int)value;
+    else if (!deh_strcasecmp(key, deh_ammo[13]))  // Skill 2 multiplier
+        skill2multiplier[indexnum] = (int)value;
+    else if (!deh_strcasecmp(key, deh_ammo[14]))  // Skill 3 multiplier
+        skill3multiplier[indexnum] = (int)value;
+    else if (!deh_strcasecmp(key, deh_ammo[15]))  // Skill 4 multiplier
+        skill4multiplier[indexnum] = (int)value;
+    else if (!deh_strcasecmp(key, deh_ammo[16]))  // Skill 5 multiplier
+        skill5multiplier[indexnum] = (int)value;
     else
       deh_log("Invalid ammo string index for '%s'\n", key);
   }

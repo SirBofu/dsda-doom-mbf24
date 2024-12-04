@@ -1259,7 +1259,7 @@ static dboolean PIT_CheckThing(mobj_t *thing) // killough 3/26/98: make static
   {
     uint64_t solid = thing->flags & MF_SOLID;
     if (tmthing->flags & MF_PICKUP) // hexen_note: can probably use tmflags here?
-      P_TouchSpecialThing(thing, tmthing); // can remove thing
+      mbf24_features ? P_MBF25TouchSpecialThing(thing, tmthing) : P_TouchSpecialThing(thing, tmthing); // can remove thing
     return !solid;
   }
 

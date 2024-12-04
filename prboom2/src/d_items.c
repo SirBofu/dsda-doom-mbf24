@@ -64,7 +64,12 @@ weaponinfo_t doom_weaponinfo[NUMWEAPONS+2] =
     S_NULL,
     1,
     0,
-    WPF_FLEEMELEE | WPF_AUTOSWITCHFROM | WPF_NOAUTOSWITCHTO
+    WPF_FLEEMELEE | WPF_AUTOSWITCHFROM | WPF_NOAUTOSWITCHTO,
+    1,
+    0,
+    0,
+    true,
+    false
   },
   {
     // pistol
@@ -77,7 +82,12 @@ weaponinfo_t doom_weaponinfo[NUMWEAPONS+2] =
     S_PISTOLFLASH,
     1,
     0,
-    WPF_AUTOSWITCHFROM
+    WPF_AUTOSWITCHFROM,
+    2,
+    0,
+    6,
+    true,
+    true
   },
   {
     // shotgun
@@ -90,7 +100,12 @@ weaponinfo_t doom_weaponinfo[NUMWEAPONS+2] =
     S_SGUNFLASH1,
     1,
     0,
-    WPF_NOFLAG
+    WPF_NOFLAG,
+    3,
+    0,
+    7,
+    false,
+    false
   },
   {
     // chaingun
@@ -103,7 +118,12 @@ weaponinfo_t doom_weaponinfo[NUMWEAPONS+2] =
     S_CHAINFLASH1,
     1,
     0,
-    WPF_NOFLAG
+    WPF_NOFLAG,
+    4,
+    0,
+    8,
+    false,
+    false
   },
   {
     // missile launcher
@@ -116,7 +136,12 @@ weaponinfo_t doom_weaponinfo[NUMWEAPONS+2] =
     S_MISSILEFLASH1,
     1,
     0,
-    WPF_NOAUTOFIRE
+    WPF_NOAUTOFIRE,
+    5,
+    0,
+    4,
+    false,
+    false
   },
   {
     // plasma rifle
@@ -129,7 +154,12 @@ weaponinfo_t doom_weaponinfo[NUMWEAPONS+2] =
     S_PLASMAFLASH1,
     1,
     0,
-    WPF_NOFLAG
+    WPF_NOFLAG,
+    6,
+    0,
+    10,
+    false,
+    false
   },
   {
     // bfg 9000
@@ -142,7 +172,12 @@ weaponinfo_t doom_weaponinfo[NUMWEAPONS+2] =
     S_BFGFLASH1,
     40,
     0,
-    WPF_NOAUTOFIRE
+    WPF_NOAUTOFIRE,
+    7,
+    0,
+    2,
+    false,
+    false
   },
   {
     // chainsaw
@@ -155,7 +190,12 @@ weaponinfo_t doom_weaponinfo[NUMWEAPONS+2] =
     S_NULL,
     1,
     0,
-    WPF_NOTHRUST | WPF_FLEEMELEE | WPF_NOAUTOSWITCHTO
+    WPF_NOTHRUST | WPF_FLEEMELEE | WPF_NOAUTOSWITCHTO,
+    1,
+    1,
+    5,
+    false,
+    false
   },
   {
     // super shotgun
@@ -168,7 +208,12 @@ weaponinfo_t doom_weaponinfo[NUMWEAPONS+2] =
     S_DSGUNFLASH1,
     2,
     0,
-    WPF_NOFLAG
+    WPF_NOFLAG,
+    3,
+    1,
+    9,
+    false,
+    false
   },
 
   // dseg03:00082D90                 weaponinfo_t <5, 46h, 45h, 43h, 47h, 0>
