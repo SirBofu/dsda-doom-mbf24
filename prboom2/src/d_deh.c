@@ -3134,8 +3134,8 @@ static void deh_procText(DEHFILE *fpin, char *line)
 
   if (!found) // Nothing we want to handle here--see if strings can deal with it.
   {
-    deh_log("Checking text area through strings for '%.12s%s' from=%d to=%d\n",
-            inbuffer, (strlen(inbuffer) > 12) ? "..." : "", fromlen, tolen);
+    deh_log("Checking text area through strings for '%.32s%s' from=%d to=%d\n",
+            inbuffer, (strlen(inbuffer) > 32) ? "..." : "", fromlen, tolen);
     if ((size_t)fromlen <= strlen(inbuffer))
     {
       line2 = Z_Strdup(&inbuffer[fromlen]);
@@ -3173,6 +3173,7 @@ static void deh_procStrings(DEHFILE *fpin, char *line)
   // holds the final result of the string after concatenation
   static char *holdstring = NULL;
   dboolean found = false;  // looking for string continuation
+  dboolean userstring = false; // adding a user string
 
   deh_log("Processing extended string substitution\n");
 
@@ -3223,7 +3224,15 @@ static void deh_procStrings(DEHFILE *fpin, char *line)
       found = deh_procStringSub(key, NULL, holdstring);  // supply keyand not search string
 
       if (!found)
+      {
+        if (strncasecmp(key, "USER_", 5) == 0)
+        {
+            deh_log("User-created string '%s' found, adding to internal string table.\n", key);
+
+        }
+        else
         deh_log("Invalid string key '%s', substitution skipped.\n", key);
+      }
 
       *holdstring = '\0';  // empty string for the next one
     }
@@ -3276,9 +3285,9 @@ dboolean deh_procStringSub(char *key, char *lookfor, char *newstring)
         deh_log("Assigned key %s => '%s'\n", key, newstring);
 
       if (!key)
-        deh_log("Assigned '%.12s%s' to'%.12s%s' at key %s\n",
-                lookfor, (strlen(lookfor) > 12) ? "..." : "",
-                newstring, (strlen(newstring) > 12) ? "..." :"",
+        deh_log("Assigned '%.32s%s' to'%.32s%s' at key %s\n",
+                lookfor, (strlen(lookfor) > 32) ? "..." : "",
+                newstring, (strlen(newstring) > 32) ? "..." :"",
                 deh_strlookup[i].lookup);
 
       if (!key) // must have passed an old style string so showBEX
@@ -3289,7 +3298,7 @@ dboolean deh_procStringSub(char *key, char *lookfor, char *newstring)
     }
   }
   if (!found)
-    deh_log("Could not find '%.12s'\n", key ? key : lookfor);
+    deh_log("Could not find '%.32s'\n", key ? key : lookfor);
 
   return found;
 }

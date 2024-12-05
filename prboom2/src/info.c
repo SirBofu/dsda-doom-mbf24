@@ -43,6 +43,11 @@
 #include "p_mobj.h"
 #include "p_enemy.h"
 #include "p_pspr.h"
+#ifdef FRENCH
+#include "d_french.h"
+#else
+#include "d_englsh.h"
+#endif
 
 #include "info.h"
 
@@ -2429,7 +2434,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_itemup,
     0,
     100,
-    "GOTARMOR"
+    GOTARMOR
   },
 
   {   // MT_MISC1
@@ -2465,7 +2470,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_itemup,
     0,
     200,
-    "GOTMEGA"
+    GOTMEGA
   },
 
   {   // MT_MISC2
@@ -2501,7 +2506,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_itemup,
     1,
     0,
-    "GOTHTHBONUS"
+    GOTHTHBONUS
   },
 
   {   // MT_MISC3
@@ -2537,7 +2542,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_itemup,
     0,
     1,
-    "GOTARMBONUS"
+    GOTARMBONUS
   },
 
   {   // MT_MISC4
@@ -2573,7 +2578,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_itemup,
     0,
     0,
-    "GOTBLUECARD"
+    GOTBLUECARD
   },
 
   {   // MT_MISC5
@@ -2609,7 +2614,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_itemup,
     0,
     0,
-    "GOTREDCARD"
+    GOTREDCARD
   },
 
   {   // MT_MISC6
@@ -2645,7 +2650,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_itemup,
     0,
     0,
-    "GOTYELWCARD"
+    GOTYELWCARD
   },
 
   {   // MT_MISC7
@@ -2681,7 +2686,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_itemup,
     0,
     0,
-    "GOTYELWSKULL"
+    GOTYELWSKUL
   },
 
   {   // MT_MISC8
@@ -2717,7 +2722,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_itemup,
     0,
     0,
-    "GOTREDSKULL"
+    GOTREDSKULL
   },
 
   {   // MT_MISC9
@@ -2753,7 +2758,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_itemup,
     0,
     0,
-    "GOTBLUESKUL"
+    GOTBLUESKUL
   },
 
   {   // MT_MISC10
@@ -2789,7 +2794,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_itemup,
     10,
     0,
-    "GOTSTIM"
+    GOTSTIM
   },
 
   {   // MT_MISC11
@@ -2825,7 +2830,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_itemup,
     25,
     0,
-    "GOTMEDIKIT"
+    GOTMEDIKIT
   },
 
   {   // MT_MISC12
@@ -2861,7 +2866,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_getpow,
     100,
     0,
-    "GOTSUPER"
+    GOTSUPER
   },
 
   {   // MT_INV
@@ -2897,7 +2902,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_getpow,
     0,
     0,
-    "GOTINVUL"
+    GOTINVUL
   },
 
   {   // MT_MISC13
@@ -2933,7 +2938,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_getpow,
     100,
     0,
-    "GOTBERSERK"
+    GOTBERSERK
   },
 
   {   // MT_INS
@@ -2969,7 +2974,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_getpow,
     0,
     0,
-    "GOTINVIS"
+    GOTINVIS
   },
 
   {   // MT_MISC14
@@ -3005,7 +3010,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_getpow,
     0,
     0,
-    "GOTSUIT"
+    GOTSUIT
   },
 
   {   // MT_MISC15
@@ -3041,7 +3046,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_getpow,
     0,
     0,
-    "GOTMAP"
+    GOTMAP
   },
 
   {   // MT_MISC16
@@ -3077,7 +3082,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_getpow,
     0,
     0,
-    "GOTVISOR"
+    GOTVISOR
   },
 
   {   // MT_MEGA
@@ -3113,7 +3118,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_getpow,
     200,
     200,
-    "GOTMSPHERE"
+    GOTMSPHERE
   },
 
   {   // MT_CLIP
@@ -3149,7 +3154,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_itemup, // pickupsound
     0, // pickuphealthamount
     0, // pickuparmoramount
-    "GOTCLIP" // pickupstring
+    GOTCLIP // pickupstring
   },
 
   {   // MT_MISC17
@@ -3185,7 +3190,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_itemup, // pickupsound
     0, // pickuphealthamount
     0, // pickuparmoramount
-    "GOTCLIPBOX" // pickupstring
+    GOTCLIPBOX // pickupstring
   },
 
   {   // MT_MISC18
@@ -3221,7 +3226,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_itemup,
     0,
     0,
-    "GOTROCKET"
+    GOTROCKET
   },
 
   {   // MT_MISC19
@@ -3257,7 +3262,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_itemup,
     0,
     0,
-    "GOTROCKBOX"
+    GOTROCKBOX
   },
 
   {   // MT_MISC20
@@ -3293,7 +3298,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_itemup,
     0,
     0,
-    "GOTCELL"
+    GOTCELL
   },
 
   {   // MT_MISC21
@@ -3329,7 +3334,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_itemup,
     0,
     0,
-    "GOTCELLBOX"
+    GOTCELLBOX
   },
 
   {   // MT_MISC22
@@ -3365,7 +3370,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_itemup,
     0,
     0,
-    "GOTSHELLS"
+    GOTSHELLS
   },
 
   {   // MT_MISC23
@@ -3401,7 +3406,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_itemup,
     0,
     0,
-    "GOTSHELLBOX"
+    GOTSHELLBOX
   },
 
   {   // MT_MISC24
@@ -3437,7 +3442,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_itemup,
     0,
     0,
-    "GOTBACKPACK"
+    GOTBACKPACK
   },
 
   {   // MT_MISC25
@@ -3473,7 +3478,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_wpnup,
     0,
     0,
-    "GOTBFG9000"
+    GOTBFG9000
   },
 
   {   // MT_CHAINGUN
@@ -3509,7 +3514,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_wpnup,
     0,
     0,
-    "GOTCHAINGUN"
+    GOTCHAINGUN
   },
 
   {   // MT_MISC26
@@ -3545,7 +3550,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_wpnup,
     0,
     0,
-    "GOTCHAINSAW"
+    GOTCHAINSAW
   },
 
   {   // MT_MISC27
@@ -3581,7 +3586,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_wpnup,
     0,
     0,
-    "GOTLAUNCHER"
+    GOTLAUNCHER
   },
 
   {   // MT_MISC28
@@ -3617,7 +3622,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_wpnup,
     0,
     0,
-    "GOTPLASMA"
+    GOTPLASMA
   },
 
   {   // MT_SHOTGUN
@@ -3653,7 +3658,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_wpnup,
     0,
     0,
-    "GOTSHOTGUN"
+    GOTSHOTGUN
   },
 
   {   // MT_SUPERSHOTGUN
@@ -3689,7 +3694,7 @@ doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
     sfx_wpnup,
     0,
     0,
-    "GOTSHOTGUN2"
+    GOTSHOTGUN2
   },
 
   {   // MT_MISC29
