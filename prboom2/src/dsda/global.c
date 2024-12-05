@@ -301,7 +301,7 @@ static void dsda_InitDoom(void) {
   mobjinfo[MT_HEADSHOT].altspeed = 20 * FRACUNIT;
   mobjinfo[MT_TROOPSHOT].altspeed = 20 * FRACUNIT;
 
-  mobjinfo[MT_SKULL].flags3   = MF3_DEADFLOAT;
+  mobjinfo[MT_SKULL].flags3   = MF3_DEADFLOAT | MF3_KEEPCHARGETARGET | MF3_ONLYSLAMSOLID; // Lost Souls will be bugfixed by default in MBF25!
 
   for (i = S_SARG_RUN1; i <= S_SARG_PAIN2; ++i)
     states[i].flags |= STATEF_SKILL5FAST;
