@@ -1906,7 +1906,7 @@ void P_MobjThinker (mobj_t* mobj)
   {
     // check for nightmare respawn
 
-    if (mbf24 && mobj->flags3 & MF3_NEVERRESPAWN)
+    if (mbf24_features && mobj->flags3 & MF3_NEVERRESPAWN)
       return;
 
     if (! (mobj->flags & MF_COUNTKILL) )
@@ -1917,14 +1917,30 @@ void P_MobjThinker (mobj_t* mobj)
 
     mobj->movecount++;
 
-    if (mobj->movecount < skill_info.respawn_time * 35)
+    if (!mbf24_features || mobj->movecount < skill_info.respawn_time * 35)
+    {
       return;
+    }
+    else
+    {
+      if (mobj->movecount < mobj->info->minrespawntics)
+        return;
+    }
+
 
     if (leveltime & 31)
       return;
 
-    if (P_Random(pr_respawn) > 4)
-      return;
+    if (!mbf24_features || !mobj->info->respawndice)
+    {
+      if (P_Random(pr_respawn) > 4)
+        return;
+    }
+    else
+    {
+      if (P_Random(pr_respawn) > mobj->info->respawndice)
+        return;
+    }
 
     P_NightmareRespawn (mobj);
   }
