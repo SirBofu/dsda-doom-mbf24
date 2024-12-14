@@ -1,6 +1,7 @@
 # MBF25 Specification v0.1-WIP
 
-MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MBF21.
+MBF25 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MBF21.
+ID24HACKED support is currently also being implemented.
 
 ## Weapons
 
@@ -28,36 +29,42 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
 - The value can also be given as a number (sum of the individual flag values below).
 - While these flags can be set via the `A_AddFlags`/`A_RemoveFlags` or queried via the `A_JumpIfFlagsSet` codepointers (see below) in the MBF21 complevel, the actual gameplay logic is gated behind the MBF24 complevel to preserve demo compatibility.
 
-| Flag             | Value     | Description                                                                                                                                                       |
-|------------------|-----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| NODAMAGE         | 0x0000001 | Thing doesn't take damage even if it can be shot                                                                                                                  |
-| NOCRUSH          | 0x0000002 | Thing's corpse will not turn into gibs when crushed; a dropped Thing with this flag will not be destroyed when crushed                                            |
-| PUSHABLE         | 0x0000004 | Thing can be pushed by other things                                                                                                                               |
-| CANNOTPUSH       | 0x0000008 | Thing cannot push other things                                                                                                                                    |
-| ANTITELEFRAG     | 0x0000010 | Thing kills things that teleport into it instead of the other way around                                                                                          |
-| NEVERRESPAWN     | 0x0000020 | Thing doesn't respawn on Nightmare or with `-respawn`                                                                                                             |
-| NOTAUTOAIMED     | 0x0000040 | Thing is ignored by player autoaim                                                                                                                                |
-| ONLYSLAMSOLID    | 0x0000080 | Charging thing doesn't stop when hitting non-solid objects                                                                                                        |
-| KEEPCHARGETARGET | 0x0000100 | Charging thing doesn't lose its target after collision                                                                                                            |
-| NOINFIGHTING     | 0x0000200 | Thing doesn't retaliate against other monsters when damaged                                                                                                       |
-| DONTTHRUST       | 0x0000400 | Thing doesn't get moved by damage                                                                                                                                 |
-| NOPAIN           | 0x0000800 | Thing doesn't enter its pain state when damaged; can be used to temporarily prevent damage from interrupting attacks                                              |
-| FLOORHUGGER      | 0x0001000 | Missile moves along floor until it hits an obstacle                                                                                                               |
-| STEPMISSILE      | 0x0002000 | Missile can climb up ledges                                                                                                                                       |
-| RESETONDEATH     | 0x0004000 | Reset thing counters to initial values on death                                                                                                                   |
-| NOBFGSPRAY       | 0x0008000 | Thing is ignored by spray attacks (such as A_BFGSpray)                                                                                                            |
-| NOHITTHRUST      | 0x0010000 | Thing does not cause thrust when it directly damages another thing (to be implemented)                                                                            |
-| UNSTOPPABLE      | 0x0020000 | Charging thing does not stop when taking damage                                                                                                                   |
-| FLOATBOB         | 0x0040000 | Renderer-only floatbobbing movement (GZDoom style)                                                                                                                |
-| DEADFLOAT        | 0x0080000 | Thing does not drop when killed (such as Lost Souls)                                                                                                              |
-| TOUCHYTARGET     | 0x0100000 | Thing automatically changes its target to any actor that touches it                                                                                               |
-| TARGETUSE        | 0x0200000 | Thing automatically targets any actor that uses it                                                                                                                |
-| FASTPROJECTILE   | 0x0400000 | Thing moves in smaller increments and checks for collision multiple times per tic if speed is greater than size. (Despite the name, it works on non-projectiles.) |
-| TUNNEL           | 0x0800000 | If thing is a ripper projectile, will only deal damage to each thing it hits once                                                                                 |
-| GENERIC1         | 0x1000000 | Generic flag 1                                                                                                                                                    |
-| GENERIC2         | 0x2000000 | Generic flag 2                                                                                                                                                    |
-| GENERIC3         | 0x4000000 | Generic flag 3                                                                                                                                                    |
-| GENERIC4         | 0x8000000 | Generic flag 4                                                                                                                                                    |
+| Flag             | Value      | Description                                                                                                                                                       |
+|------------------|------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| NODAMAGE         | 0x00000001 | Thing doesn't take damage even if it can be shot                                                                                                                  |
+| NOCRUSH          | 0x00000002 | Thing's corpse will not turn into gibs when crushed; a dropped Thing with this flag will not be destroyed when crushed                                            |
+| PUSHABLE         | 0x00000004 | Thing can be pushed by other things                                                                                                                               |
+| CANNOTPUSH       | 0x00000008 | Thing cannot push other things                                                                                                                                    |
+| ANTITELEFRAG     | 0x00000010 | Thing kills things that teleport into it instead of the other way around                                                                                          |
+| NEVERRESPAWN     | 0x00000020 | Thing doesn't respawn on Nightmare or with `-respawn`                                                                                                             |
+| NOTAUTOAIMED     | 0x00000040 | Thing is ignored by player autoaim                                                                                                                                |
+| ONLYSLAMSOLID    | 0x00000080 | Charging thing doesn't stop when hitting non-solid objects                                                                                                        |
+| KEEPCHARGETARGET | 0x00000100 | Charging thing doesn't lose its target after collision                                                                                                            |
+| NOINFIGHTING     | 0x00000200 | Thing doesn't retaliate against other monsters when damaged                                                                                                       |
+| DONTTHRUST       | 0x00000400 | Thing doesn't get moved by damage                                                                                                                                 |
+| NOPAIN           | 0x00000800 | Thing doesn't enter its pain state when damaged; can be used to temporarily prevent damage from interrupting attacks                                              |
+| FLOORHUGGER      | 0x00001000 | Missile moves along floor until it hits an obstacle                                                                                                               |
+| STEPMISSILE      | 0x00002000 | Missile can climb up ledges                                                                                                                                       |
+| RESETONDEATH     | 0x00004000 | Reset thing counters to initial values on death                                                                                                                   |
+| NOBFGSPRAY       | 0x00008000 | Thing is ignored by spray attacks (such as A_BFGSpray)                                                                                                            |
+| NOHITTHRUST      | 0x00010000 | Thing does not cause thrust when it directly damages another thing (to be implemented)                                                                            |
+| UNSTOPPABLE      | 0x00020000 | Charging thing does not stop when taking damage                                                                                                                   |
+| FLOATBOB         | 0x00040000 | Renderer-only floatbobbing movement (GZDoom style)                                                                                                                |
+| DEADFLOAT        | 0x00080000 | Thing does not drop when killed (such as Lost Souls)                                                                                                              |
+| TOUCHYTARGET     | 0x00100000 | Thing automatically changes its target to any actor that touches it                                                                                               |
+| TARGETUSE        | 0x00200000 | Thing automatically targets any actor that uses it                                                                                                                |
+| FASTPROJECTILE   | 0x00400000 | Thing moves in smaller increments and checks for collision multiple times per tic if speed is greater than size. (Despite the name, it works on non-projectiles.) |
+| TUNNEL           | 0x00800000 | If thing is a ripper projectile, will only deal damage to each thing it hits once                                                                                 |
+| ALWAYSRESPAWN    | 0x01000000 | Thing respawns even when not using `-respawn` or not playing Nightmare                                                                                            |
+| GENERIC1         | 0x02000000 | Generic flag 1                                                                                                                                                    |
+| GENERIC2         | 0x04000000 | Generic flag 2                                                                                                                                                    |
+| GENERIC3         | 0x08000000 | Generic flag 3                                                                                                                                                    |
+| GENERIC4         | 0x10000000 | Generic flag 4                                                                                                                                                    |
+
+### Thing Properties
+
+In addition to the thing properties provided by MBF21, MBF25 introduces a variety of new thing properties and includes those from ID24HACKED.
+For the ID24HACKED properties, please refer to the [ID24HACKED specification](https://docs.google.com/document/d/15mMB92KwRfE8vTkXMIqy8_dm_rVcb2sT-ccM78N_WX4/edit?tab=t.0#heading=h.6jl50zhuy37m).
 
 #### Use frame
 
@@ -123,6 +130,17 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
 - A value of 0 defaults to `S_GIBS`, which is equivalent to 895.
 - Add `Crush frame = X` in the Thing definition.
 - `X` represents a frame number.
+
+#### Pickup health amount
+
+- If a `SPECIAL` Thing has a `Pickup item type` of `Health bonus`, `Stimpack`, or `Medikit` defined, this is the amount of health to give the player upon pickup.
+- If the `Pickup item type` is instead `Berserk` or `Megasphere`, it will set health to this value upon pickup if current health is lower.
+- Add `Pickup health amount = X` in the Thing definition.
+
+#### Pickup armor amount
+
+- If a `SPECIAL` Thing has a `Pickup item type` of `Armor bonus`, this much armor will be added to the player's current armor value.
+- Add `Pickup armor amount = X` in the Thing definition.
 
 ## Frames
 
@@ -382,6 +400,9 @@ MBF24 is built off of MBF21 and thus supports the full spec of Boom, MBF, and MB
     - It's recommended to keep movement speed below 24 for monsters using this codepointer. 
         The monster will change its direction while patrolling if it touches an `MT_PATROL_POINT` object, jump to the
         `MT_PATROL_POINT` object's X and Y position, change its direction to that of the `MT_PATROL_POINT` object.
+    - There is an internal flag called `PATROL` that is set when a thing's codepointer is `A_Patrol` and is unset as soon as it finds a target.
+        This is used to prevent non-patrolling monsters from having their direction changed by an `MT_PATROL_POINT` object.
+    - If a patrolling monster walks into a solid linedef that can be activated by monsters, such as a door, it will activate the linedef if it is able.  
     - Because enemies return to their Spawn state when their target dies, it's recommended to use `A_AddFlags`,
       `A_JumpIfFlagsSet`, and one of the `GENERICx` flags (and enabling it in the first state of an enemy's See
       sequence) to prevent an enemy from entering its patrol sequnce a second time. Otherwise, it will simply begin
@@ -580,7 +601,7 @@ If an attack's base damage is set to 0 but it has a flat damage amount, it will 
   - Disables horizontal autoaim for player projectile weapons (default)
   - Note that projectiles that would normally trigger horizontal autoaim will still be aimed vertically, allowing for leading shots.
 
-#### DEHACKED Starting Ammunition
+#### DEHACKED Starting Ammunition and Weapons
 
 - **Initial Shells, Initial Missiles, Initial Cells**
   - Allows definition in the `Misc` block for the player's starting shell, missile, and cell ammunition.
@@ -592,6 +613,8 @@ If an attack's base damage is set to 0 but it has a flat damage amount, it will 
      Initial Missiles = 2
      Initial Cells = 20
      ```
+  - This will be moved to the ammo definition to expand upon ID24HACKED's implementation.
+     
 - **Spawn Weapons**
   - Allows definition in the `Misc` block for defining additional weapons for the player to spawn with.
   - Include `Spawn Shotgun = 1`, `Spawn Chaingun = 1`, `Spawn Missile Launcher = 1`, `Spawn Plasma Rifle = 1`, `Spawn BFG9000 = 1`, `Spawn Chainsaw = 1`, or `Spawn SSG = 1` in the `Misc` block.
@@ -602,18 +625,23 @@ If an attack's base damage is set to 0 but it has a flat damage amount, it will 
     Spawn SSG = 1
     Spawn Chaingun = 1
     ```
-  - Does not allow removing of the pistol or fists, as there is no way to pick those weapons up and could put the player in a bad state.   
+  - Does not allow removing of the pistol or fists, as there is no way to pick those weapons up and could put the player in a bad state.
+  - This will be deprecated and replaced with ID24HACKED's implementation at some point.    
     
 #### In-progress/To-Do
+- Full adoption of ID24HACKED capabilities.
 - Refine FLOORHUGGER and implement CEILINGHUGGER.
 - Implement BORE thing flag for ripper projectiles from EDGE-Classic.
 - Climbing and falling vertical movement codepointers.
 - Thing flag to disable Z height changes.
-- Basic map format enhancements, such as "Block flying monsters", "Wrap midtex", and "Translucent midtex" flags.
+- Replace all references to MBF24 with ones to MBF25.
+- Re-enable MBF monster infighting behavior, but only for `FRIENDLY` monsters.
+- Enhance parameterized bullet attacks to allow custom pufftypes.
 
 #### Potential Additions
 - Support for additional weapon and ammo types as well as pickups. (This will build on the ID24 spec.)
 - Quake II BFG-style projectile codepointers.
+- Basic map format enhancements, such as "Block flying monsters", "Wrap midtex", and "Translucent midtex" flags.
 
 #### Blockers
 - Source port developers have signaled a collective distaste for adding to DEHACKED, and rightfully so. A definition standard is likely to be introduced, and if so, MBF25 will need to support it.

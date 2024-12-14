@@ -1906,18 +1906,24 @@ void P_MobjThinker (mobj_t* mobj)
   {
     // check for nightmare respawn
 
+
+    // MBF25: If thing has NEVERRESPAWN flag, don't bother
     if (mbf24_features && mobj->flags3 & MF3_NEVERRESPAWN)
       return;
 
     if (! (mobj->flags & MF_COUNTKILL) )
       return;
 
-    if (!skill_info.respawn_time)
+    // MBF25: If not in a skill with respawning, don't bother... unless we're in MBF25 and the thing has ALWAYSRESPAWN
+    if (!skill_info.respawn_time || (mbf24_features && !(mobj->flags3 & MF3_ALWAYSRESPAWN)))
       return;
 
     mobj->movecount++;
 
-    if (!mbf24_features || mobj->movecount < skill_info.respawn_time * 35)
+    // MBF25: If thing doesn't have a respawn time property, we need default handling.
+    // Since we can't guarantee skill_info.respawn_time, set a fallback value of 420 (nice)
+    // Of course, if we're in MBF25 and it has a respawn time property, use that!
+    if (!mbf24_features || mobj->movecount < skill_info.respawn_time ? skill_info.respawn_time * 35 : 420)
     {
       return;
     }
@@ -1931,6 +1937,8 @@ void P_MobjThinker (mobj_t* mobj)
     if (leveltime & 31)
       return;
 
+    // MBF25: If we're not in MBF25 or the thing doesn't have a respawn dice value set, use default behavior.
+    // Otherwise, use the respawn dice value.
     if (!mbf24_features || !mobj->info->respawndice)
     {
       if (P_Random(pr_respawn) > 4)
