@@ -1868,7 +1868,12 @@ void P_MobjThinker (mobj_t* mobj)
     // killough 9/12/98: objects fall off ledges if they are hanging off
     // slightly push off of ledge if hanging more than halfway off
 
-    if (mobj->z > mobj->dropoffz &&      // Only objects contacting dropoff
+    // MBF25: If the difference in height is 8 map units or less, then don't bother.
+    // Should help cut down on the number of infinitely sliding corpses in levels with
+    // decorative floor height differences.
+
+    if ((mbf24_features ? (mobj->z - 8*FRACUNIT > mobj->dropoffz) :
+        (mobj->z > mobj->dropoffz)) &&      // Only objects contacting dropoff
         !(mobj->flags & MF_NOGRAVITY) && // Only objects which fall
         !comp[comp_falloff]) // Not in old demos
       P_ApplyTorque(mobj);               // Apply torque

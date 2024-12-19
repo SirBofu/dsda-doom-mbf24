@@ -1838,14 +1838,11 @@ static dboolean PIT_ApplyTorque(line_t *ld)
                  - (ld->dx >> FRACBITS) * (ld->v1->y >> FRACBITS)
                  + (ld->dy >> FRACBITS) * (ld->v1->x >> FRACBITS);
 
-    // MBF25: We don't want corpses to start sliding just because of small floor height differences.
-    // Therefore, if MBF25 is enabled (eventually compflag?), then do not move.
-
     if (dist < 0 ?                               // dropoff direction
         ld->frontsector->floorheight < mo->z &&
-        ld->backsector->floorheight >= mbf24_features ? mo->z + 4*FRACUNIT : mo->z :
+        ld->backsector->floorheight >= mo->z :
         ld->backsector->floorheight < mo->z &&
-        ld->frontsector->floorheight >= mbf24_features ? mo->z + 4*FRACUNIT : mo->z)
+        ld->frontsector->floorheight >= mo->z)
     {
       /* At this point, we know that the object straddles a two-sided
         * linedef, and that the object's center of mass is above-ground.

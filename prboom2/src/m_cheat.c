@@ -522,7 +522,8 @@ static void cheat_comp(char buf[3])
 
   if (compatibility_level < 0 ||
       compatibility_level >= MAX_COMPATIBILITY_LEVEL ||
-      (compatibility_level > 17 && compatibility_level < 21))
+      (compatibility_level > 17 && compatibility_level < 21) ||
+      (compatibility_level > 21 && compatibility_level < 24))
   {
     doom_printf("Invalid complevel");
   }
