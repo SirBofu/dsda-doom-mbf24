@@ -1336,6 +1336,7 @@ static const struct deh_flag_s deh_mobjflags_mbf24[] = {
   {"FASTPROJECTILE",  MF3_FASTPROJECTILE}, // projectile that moves quickly
   {"TUNNEL",          MF3_TUNNEL}, // ripper projectile will only damage each mobj once
   {"ALWAYSRESPAWN",   MF3_ALWAYSRESPAWN}, // thing always respawns even when not in Nightmare! or -respawn
+  {"FORCEMONSTER",   MF3_FORCEMONSTER}, // thing doesn't spawn when -nomonsters is set
   {"GENERIC1",        MF3_GENERIC1}, // generic flag 1
   {"GENERIC2",        MF3_GENERIC2}, // generic flag 2
   {"GENERIC3",        MF3_GENERIC3}, // generic flag 3

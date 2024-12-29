@@ -608,12 +608,13 @@ void P_RemoveMonsters(void);
 #define MF3_FASTPROJECTILE    0x00400000ull // fast projectile (move and check for collision multiple times per tic)
 #define MF3_TUNNEL            0x00800000ull // if ripper projectile, only does damage to a single thing once
 #define MF3_ALWAYSRESPAWN     0x01000000ull // thing respawns even when not in Nightmare! or using -respawn
-#define MF3_GENERIC1          0x02000000ull // generic flag 1
-#define MF3_GENERIC2          0x04000000ull // generic flag 2
-#define MF3_GENERIC3          0x08000000ull // generic flag 3
-#define MF3_GENERIC4          0x10000000ull // generic flag 4
-#define MF3_JUMPED            0x20000000ull // thing has just jumped/been launched
-#define MF3_PATROL            0x40000000ull // thing is patrolling
+#define MF3_FORCEMONSTER      0x02000000ull // thing doesn't spawn in -nomonsters even without COUNTKILL
+#define MF3_GENERIC1          0x04000000ull // generic flag 1
+#define MF3_GENERIC2          0x08000000ull // generic flag 2
+#define MF3_GENERIC3          0x10000000ull // generic flag 3
+#define MF3_GENERIC4          0x20000000ull // generic flag 4
+#define MF3_JUMPED            0x40000000ull // thing has just jumped/been launched
+#define MF3_PATROL            0x80000000ull // thing is patrolling
 
 #define AMMO_GWND_WIMPY 10
 #define AMMO_GWND_HEFTY 50

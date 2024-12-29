@@ -341,8 +341,9 @@ void dsda_WatchCrush(mobj_t* thing, int damage) {
 void dsda_WatchSpawn(mobj_t* spawned) {
   if (
     (spawned->flags & MF_COUNTKILL) \
+    || (spawned->flags3 & MF3_FORCEMONSTER) \
     || spawned->type == MT_SKULL \
-    || spawned->type == MT_BOSSBRAIN
+    || spawned->type == MT_BOSSBRAIN \
   ) dsda_any_monsters = true;
 
   if (!dsda_any_weapons) dsda_any_weapons = dsda_IsWeapon(spawned);

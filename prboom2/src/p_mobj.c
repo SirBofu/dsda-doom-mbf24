@@ -2042,7 +2042,7 @@ dboolean P_SpawnProjectile(short thing_id, mobj_t *source, int spawn_num, angle_
   if (type == num_mobj_types)
     return false;
 
-  is_monster = (type == MT_SKULL || (mobjinfo[type].flags & MF_COUNTKILL));
+  is_monster = (type == MT_SKULL || (mobjinfo[type].flags & MF_COUNTKILL) || (mobjinfo[type].flags3 & MF3_FORCEMONSTER));
 
   if (nomonsters && is_monster)
     return false;
@@ -2145,7 +2145,7 @@ dboolean P_SpawnThing(short thing_id, mobj_t *source, int spawn_num,
   if (type == num_mobj_types)
     return false;
 
-  if (nomonsters && (type == MT_SKULL || (mobjinfo[type].flags & MF_COUNTKILL)))
+  if (nomonsters && (type == MT_SKULL || (mobjinfo[type].flags & MF_COUNTKILL) || (mobjinfo[type].flags3 & MF3_FORCEMONSTER)))
     return false;
 
   dsda_ResetThingIDSearch(&search);
@@ -2181,7 +2181,7 @@ int P_MobjSpawnHealth(const mobj_t* mobj)
 {
   int result;
 
-  if (mobj->type == MT_SKULL || mobj->flags & MF_COUNTKILL)
+  if (mobj->type == MT_SKULL || mobj->flags & MF_COUNTKILL || mobj->flags3 & MF3_FORCEMONSTER)
   {
     if (mobj->flags & MF_FRIEND)
     {
@@ -2479,6 +2479,7 @@ void P_RemoveMonsters(void)
     if (
       mobj->type == MT_SKULL ||
       mobj->flags & MF_COUNTKILL ||
+      mobj->flags3 & MF3_FORCEMONSTER ||
       (mobj->target && !mobj->target->player)
     )
       P_RemoveMobj(mobj);
@@ -3072,7 +3073,7 @@ mobj_t* P_SpawnMapThing (const mapthing_t* mthing, int index)
 
   // don't spawn any monsters if -nomonsters
 
-  if (nomonsters && (i == MT_SKULL || (mobjinfo[i].flags & MF_COUNTKILL)))
+  if (nomonsters && (i == MT_SKULL || (mobjinfo[i].flags & MF_COUNTKILL) || (mobjinfo[i].flags3 & MF3_FORCEMONSTER)))
     return NULL;
 
   // spawn it

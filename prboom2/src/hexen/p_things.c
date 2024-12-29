@@ -159,7 +159,7 @@ dboolean EV_ThingProjectile(byte * args, dboolean gravity)
     searcher = -1;
     tid = args[0];
     moType = TranslateThingType[args[1]];
-    if (nomonsters && (mobjinfo[moType].flags & MF_COUNTKILL))
+    if (nomonsters && (mobjinfo[moType].flags & MF_COUNTKILL)) // added FORCEMONSTER
     {                           // Don't spawn monsters if -nomonsters
         return false;
     }

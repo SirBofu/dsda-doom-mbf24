@@ -56,10 +56,11 @@ ID24HACKED support is currently also being implemented.
 | FASTPROJECTILE   | 0x00400000 | Thing moves in smaller increments and checks for collision multiple times per tic if speed is greater than size. (Despite the name, it works on non-projectiles.) |
 | TUNNEL           | 0x00800000 | If thing is a ripper projectile, will only deal damage to each thing it hits once                                                                                 |
 | ALWAYSRESPAWN    | 0x01000000 | Thing respawns even when not using `-respawn` or not playing Nightmare                                                                                            |
-| GENERIC1         | 0x02000000 | Generic flag 1                                                                                                                                                    |
-| GENERIC2         | 0x04000000 | Generic flag 2                                                                                                                                                    |
-| GENERIC3         | 0x08000000 | Generic flag 3                                                                                                                                                    |
-| GENERIC4         | 0x10000000 | Generic flag 4                                                                                                                                                    |
+| FORCEMONSTER     | 0x02000000 | When `COUNTKILL` is not set, this Thing will still count as a monster, causing it not to spawn with `-nomonsters`                                                 | 
+| GENERIC1         | 0x04000000 | Generic flag 1                                                                                                                                                    |
+| GENERIC2         | 0x08000000 | Generic flag 2                                                                                                                                                    |
+| GENERIC3         | 0x10000000 | Generic flag 3                                                                                                                                                    |
+| GENERIC4         | 0x20000000 | Generic flag 4                                                                                                                                                    |
 
 ### Thing Properties
 
