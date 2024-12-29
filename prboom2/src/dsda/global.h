@@ -19,6 +19,7 @@
 #define __DSDA_GLOBAL__
 
 #include "doomtype.h"
+#include "doomdef.h"
 
 extern int g_maxplayers;
 extern int g_viewheight;

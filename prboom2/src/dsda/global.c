@@ -662,6 +662,52 @@ static dboolean dsda_AutoDetectHexen(void)
 
 extern void dsda_ResetNullPClass(void);
 
+void dsda_InitPickupMessages(void)
+{
+    pickupmessagetable = ht_create();
+    ht_set(pickupmessagetable, "GOTARMOR", "Picked up the armor.");
+    ht_set(pickupmessagetable, "GOTMEGA", "Picked up the MegaArmor!");
+    ht_set(pickupmessagetable, "GOTHTHBONUS", "Picked up a health bonus.");
+    ht_set(pickupmessagetable, "GOTARMBONUS", "Picked up an armor bonus.");
+    ht_set(pickupmessagetable, "GOTSTIM", "Picked up a stimpack.");
+    ht_set(pickupmessagetable, "GOTMEDINEED", "Picked up a medikit that you REALLY need!");
+    ht_set(pickupmessagetable, "GOTMEDIKIT", "Picked up a medikit.");
+    ht_set(pickupmessagetable, "GOTSUPER", "Supercharge!");
+    ht_set(pickupmessagetable, "GOTBLUECARD", "Picked up a blue keycard.");
+    ht_set(pickupmessagetable, "GOTYELWCARD", "Picked up a yellow keycard.");
+    ht_set(pickupmessagetable, "GOTREDCARD", "Picked up a red keycard.");
+    ht_set(pickupmessagetable, "GOTBLUESKUL", "Picked up a blue skull key.");
+    ht_set(pickupmessagetable, "GOTYELWSKUL", "Picked up a yellow skull key.");
+    ht_set(pickupmessagetable, "GOTREDSKULL", "Picked up a red skull key.");
+    ht_set(pickupmessagetable, "GOTINVUL", "Invulnerability!");
+    ht_set(pickupmessagetable, "GOTBERSERK", "Berserk!");
+    ht_set(pickupmessagetable, "GOTINVIS", "Partial Invisibility");
+    ht_set(pickupmessagetable, "GOTSUIT", "Radiation Shielding Suit");
+    ht_set(pickupmessagetable, "GOTMAP", "Computer Area Map");
+    ht_set(pickupmessagetable, "GOTVISOR", "Light Amplification Visor");
+    ht_set(pickupmessagetable, "GOTMSPHERE", "MegaSphere!");
+    ht_set(pickupmessagetable, "GOTCLIP", "Picked up a clip.");
+    ht_set(pickupmessagetable, "GOTCLIPBOX", "Picked up a box of bullets.");
+    ht_set(pickupmessagetable, "GOTROCKET", "Picked up a rocket.");
+    ht_set(pickupmessagetable, "GOTROCKBOX", "Picked up a box of rockets.");
+    ht_set(pickupmessagetable, "GOTCELL", "Picked up an energy cell.");
+    ht_set(pickupmessagetable, "GOTCELLBOX", "Picked up an energy cell pack.");
+    ht_set(pickupmessagetable, "GOTSHELLS", "Picked up 4 shotgun shells.");
+    ht_set(pickupmessagetable, "GOTSHELLBOX", "Picked up a box of shotgun shells.");
+    ht_set(pickupmessagetable, "GOTBACKPACK", "Picked up a backpack full of ammo!");
+    ht_set(pickupmessagetable, "GOTBFG9000", "You got the BFG9000!  Oh, yes.");
+    ht_set(pickupmessagetable, "GOTCHAINGUN", "You got the chaingun!");
+    ht_set(pickupmessagetable, "GOTCHAINSAW", "A chainsaw!  Find some meat!");
+    ht_set(pickupmessagetable, "GOTLAUNCHER", "You got the rocket launcher!");
+    ht_set(pickupmessagetable, "GOTPLASMA", "You got the plasma gun!");
+    ht_set(pickupmessagetable, "GOTSHOTGUN", "You got the shotgun!");
+    ht_set(pickupmessagetable, "GOTSHOTGUN2", "You got the super shotgun!");
+    ht_set(pickupmessagetable, "ID24_GOTINCINERATOR", "You got the incinerator!");
+    ht_set(pickupmessagetable, "ID24_GOTCALAMITYBLADE", "You got the calamity blade!  Hot damn!");
+    ht_set(pickupmessagetable, "ID24_GOTFUELCAN", "Picked up a fuel can.");
+    ht_set(pickupmessagetable, "ID24_GOTFUELTANK", "Picked up a fuel tank.");
+}
+
 void dsda_InitGlobal(void) {
   heretic = dsda_Flag(dsda_arg_heretic) || dsda_AutoDetectHeretic();
   hexen = dsda_Flag(dsda_arg_hexen) || dsda_AutoDetectHexen();
@@ -674,5 +720,6 @@ void dsda_InitGlobal(void) {
   else
     dsda_InitDoom();
 
+  dsda_InitPickupMessages();
   dsda_ResetNullPClass();
 }

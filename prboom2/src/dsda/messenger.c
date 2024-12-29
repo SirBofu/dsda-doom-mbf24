@@ -111,6 +111,11 @@ void dsda_AddPlayerMessage(const char* str, player_t* player) {
     dsda_QueueMessage(str, message_normal);
 }
 
+void dsda_MBF25AddPlayerMessage(const char* mnemonic, player_t* player) {
+  if (dsda_ShowMessages() && player == &players[displayplayer])
+    dsda_QueueMessage(ht_get(pickupmessagetable, mnemonic), message_normal);
+}
+
 void dsda_AddMessage(const char* str) {
   if (dsda_ShowMessages())
     dsda_QueueMessage(str, message_normal);

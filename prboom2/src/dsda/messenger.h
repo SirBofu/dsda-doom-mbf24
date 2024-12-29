@@ -21,6 +21,7 @@
 void dsda_AddPlayerAlert(const char* str, player_t* player);
 void dsda_AddAlert(const char* str);
 void dsda_AddPlayerMessage(const char* str, player_t* player);
+void dsda_MBF25AddPlayerMessage(const char* mnemonic, player_t* player);
 void dsda_AddMessage(const char* str);
 void dsda_AddUnblockableMessage(const char* str);
 void dsda_UpdateMessenger(void);

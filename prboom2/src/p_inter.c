@@ -1049,12 +1049,12 @@ void P_MBF25TouchSpecialThing(mobj_t *special, mobj_t *toucher)
     {
         case PI_MESSAGE:
             if (special->info->pickupstring)
-                dsda_AddPlayerMessage(special->info->pickupstring, player);
+                dsda_MBF25AddPlayerMessage(special->info->pickupstring, player);
             break;
         case PI_BLUEKEY:
             if (!player->cards[it_bluecard])
             {
-                if (special->info->pickupstring) dsda_AddPlayerMessage(message, player);
+                if (special->info->pickupstring) dsda_MBF25AddPlayerMessage(message, player);
                 else dsda_AddPlayerMessage(s_GOTBLUECARD, player);
             }
             P_GiveCard (player, it_bluecard);
@@ -1063,7 +1063,7 @@ void P_MBF25TouchSpecialThing(mobj_t *special, mobj_t *toucher)
         case PI_YELLOWKEY:
             if (!player->cards[it_yellowcard])
             {
-                if (special->info->pickupstring) dsda_AddPlayerMessage(message, player);
+                if (special->info->pickupstring) dsda_MBF25AddPlayerMessage(message, player);
                 else dsda_AddPlayerMessage(s_GOTYELWCARD, player);
             }
             P_GiveCard (player, it_yellowcard);
@@ -1072,7 +1072,7 @@ void P_MBF25TouchSpecialThing(mobj_t *special, mobj_t *toucher)
         case PI_REDKEY:
             if (!player->cards[it_redcard])
             {
-                if (special->info->pickupstring) dsda_AddPlayerMessage(message, player);
+                if (special->info->pickupstring) dsda_MBF25AddPlayerMessage(message, player);
                 else dsda_AddPlayerMessage(s_GOTREDCARD, player);
             }
             P_GiveCard (player, it_redcard);
@@ -1081,7 +1081,7 @@ void P_MBF25TouchSpecialThing(mobj_t *special, mobj_t *toucher)
         case PI_BLUESKULL:
             if (!player->cards[it_blueskull])
             {
-                if (special->info->pickupstring) dsda_AddPlayerMessage(message, player);
+                if (special->info->pickupstring) dsda_MBF25AddPlayerMessage(message, player);
                 else dsda_AddPlayerMessage(s_GOTBLUESKUL, player);
             }
             P_GiveCard (player, it_blueskull);
@@ -1090,7 +1090,7 @@ void P_MBF25TouchSpecialThing(mobj_t *special, mobj_t *toucher)
         case PI_YELLOWSKULL:
             if (!player->cards[it_yellowskull])
             {
-                if (special->info->pickupstring) dsda_AddPlayerMessage(message, player);
+                if (special->info->pickupstring) dsda_MBF25AddPlayerMessage(message, player);
                 else dsda_AddPlayerMessage(s_GOTYELWSKUL, player);
             }
             P_GiveCard (player, it_yellowskull);
@@ -1099,7 +1099,7 @@ void P_MBF25TouchSpecialThing(mobj_t *special, mobj_t *toucher)
         case PI_REDSKULL:
             if (!player->cards[it_redskull])
             {
-                if (special->info->pickupstring) dsda_AddPlayerMessage(message, player);
+                if (special->info->pickupstring) dsda_MBF25AddPlayerMessage(message, player);
                 else dsda_AddPlayerMessage(s_GOTREDSKULL, player);
             }
             P_GiveCard (player, it_redskull);
@@ -1115,7 +1115,7 @@ void P_MBF25TouchSpecialThing(mobj_t *special, mobj_t *toucher)
             }
             for (i=0 ; i<NUMAMMO ; i++)
                 P_MBF25GiveAmmo (player, i, (special->flags & MF_DROPPED) ? 7 : 3);
-            if (special->info->pickupstring) dsda_AddPlayerMessage(message, player);
+            if (special->info->pickupstring) dsda_MBF25AddPlayerMessage(message, player);
             else dsda_AddPlayerMessage(s_GOTBACKPACK, player);
             break;
         case PI_HEALTHBONUS:
@@ -1124,7 +1124,7 @@ void P_MBF25TouchSpecialThing(mobj_t *special, mobj_t *toucher)
             if (player->health > (maxhealthbonus))//e6y
                 player->health = (maxhealthbonus);//e6y
             player->mo->health = player->health;
-            if (special->info->pickupstring) dsda_AddPlayerMessage(special->info->pickupstring, player);
+            if (special->info->pickupstring) dsda_MBF25AddPlayerMessage(special->info->pickupstring, player);
             else dsda_AddPlayerMessage(s_GOTHTHBONUS, player);
             break;
         case PI_ARMORBONUS:
@@ -1139,13 +1139,13 @@ void P_MBF25TouchSpecialThing(mobj_t *special, mobj_t *toucher)
                 player->armortype =
                         ((!demo_compatibility || prboom_comp[PC_APPLY_GREEN_ARMOR_CLASS_TO_ARMOR_BONUSES].state) ?
                          green_armor_class : 1);
-            if (special->info->pickupstring) dsda_AddPlayerMessage(message, player);
+            if (special->info->pickupstring) dsda_MBF25AddPlayerMessage(message, player);
             else dsda_AddPlayerMessage(s_GOTARMBONUS, player);
             break;
         case PI_STIMPACK:
             if (!P_GiveBody (player, special->info->pickuphealthamount))
                 return;
-            if (special->info->pickupstring) dsda_AddPlayerMessage(message, player);
+            if (special->info->pickupstring) dsda_MBF25AddPlayerMessage(message, player);
             else dsda_AddPlayerMessage(s_GOTSTIM, player);
             break;
         case PI_MEDIKIT:
@@ -1153,7 +1153,7 @@ void P_MBF25TouchSpecialThing(mobj_t *special, mobj_t *toucher)
                 return;
             if (player->health < 25+special->info->pickuphealthamount) // PI_MEDIKIT will have special text handling when the player was originally at 25 health or lower
                 dsda_AddPlayerMessage(s_GOTMEDINEED, player);
-            else if (special->info->pickupstring) dsda_AddPlayerMessage(message, player);
+            else if (special->info->pickupstring) dsda_MBF25AddPlayerMessage(message, player);
             else dsda_AddPlayerMessage(s_GOTMEDIKIT, player);
             break;
         case PI_SOULSPHERE:
@@ -1161,7 +1161,7 @@ void P_MBF25TouchSpecialThing(mobj_t *special, mobj_t *toucher)
             if (player->health > max_soul)
                 player->health = max_soul;
             player->mo->health = player->health;
-            if (special->info->pickupstring) dsda_AddPlayerMessage(message, player);
+            if (special->info->pickupstring) dsda_MBF25AddPlayerMessage(message, player);
             else dsda_AddPlayerMessage(s_GOTSUPER, player);
         case PI_MEGASPHERE:
             if (gamemode != commercial)
@@ -1174,38 +1174,38 @@ void P_MBF25TouchSpecialThing(mobj_t *special, mobj_t *toucher)
             P_GiveArmor (player,
                          ((!demo_compatibility || prboom_comp[PC_APPLY_BLUE_ARMOR_CLASS_TO_MEGASPHERE].state) ?
                           blue_armor_class : 2));
-            if (special->info->pickupstring) dsda_AddPlayerMessage(message, player);
+            if (special->info->pickupstring) dsda_MBF25AddPlayerMessage(message, player);
             else dsda_AddPlayerMessage(s_GOTMSPHERE, player);
             break;
         case PI_GREENARMOR:
             if (!P_GiveArmor (player, green_armor_class))
                 return;
-            if (special->info->pickupstring) dsda_AddPlayerMessage(message, player);
+            if (special->info->pickupstring) dsda_MBF25AddPlayerMessage(message, player);
             else dsda_AddPlayerMessage(s_GOTARMOR, player);
             break;
         case PI_BLUEARMOR:
             if (!P_GiveArmor (player, blue_armor_class))
                 return;
-            if (special->info->pickupstring) dsda_AddPlayerMessage(message, player);
+            if (special->info->pickupstring) dsda_MBF25AddPlayerMessage(message, player);
             else dsda_AddPlayerMessage(s_GOTMEGA, player);
             break;
         case PI_AREAMAP:
             if (!P_GivePower (player, pw_allmap))
                 return;
-            if (special->info->pickupstring) dsda_AddPlayerMessage(message, player);
+            if (special->info->pickupstring) dsda_MBF25AddPlayerMessage(message, player);
             else dsda_AddPlayerMessage(s_GOTMAP, player);
             break;
         case PI_LITEAMP:
             if (!P_GivePower (player, pw_infrared))
                 return;
-            if (special->info->pickupstring) dsda_AddPlayerMessage(message, player);
+            if (special->info->pickupstring) dsda_MBF25AddPlayerMessage(message, player);
             else dsda_AddPlayerMessage(s_GOTVISOR, player);
             break;
         case PI_BERSERK:
             if (!P_GivePower (player, pw_strength))
                 return;
             P_GiveBody(player, special->info->pickuphealthamount); // we parameterize the amount of healing that the berserk back does now
-            if (special->info->pickupstring) dsda_AddPlayerMessage(message, player);
+            if (special->info->pickupstring) dsda_MBF25AddPlayerMessage(message, player);
             else dsda_AddPlayerMessage(s_GOTBERSERK, player);
             if (player->readyweapon != wp_fist)
                 player->pendingweapon = wp_fist;
@@ -1213,19 +1213,19 @@ void P_MBF25TouchSpecialThing(mobj_t *special, mobj_t *toucher)
         case PI_BLURSPHERE:
             if (!P_GivePower (player, pw_invulnerability))
                 return;
-            if (special->info->pickupstring) dsda_AddPlayerMessage(message, player);
+            if (special->info->pickupstring) dsda_MBF25AddPlayerMessage(message, player);
             else dsda_AddPlayerMessage(s_GOTINVIS, player);
             break;
         case PI_RADSUIT:
             if (!P_GivePower (player, pw_ironfeet))
                 return;
-            if (special->info->pickupstring) dsda_AddPlayerMessage(message, player);
+            if (special->info->pickupstring) dsda_MBF25AddPlayerMessage(message, player);
             else dsda_AddPlayerMessage(s_GOTSUIT, player);
             break;
         case PI_INVULNSPHERE:
             if (!P_GivePower (player, pw_invulnerability))
                 return;
-            if (special->info->pickupstring) dsda_AddPlayerMessage(message, player);
+            if (special->info->pickupstring) dsda_MBF25AddPlayerMessage(message, player);
             else dsda_AddPlayerMessage(s_GOTSUIT, player);
             break;
         case PI_NOITEM: // might be weapons or ammo
@@ -1233,7 +1233,7 @@ void P_MBF25TouchSpecialThing(mobj_t *special, mobj_t *toucher)
             {
                 if (!P_MBF25GiveWeapon (player, special->info->pickupweapontype, (special->flags&MF_DROPPED)!=0) )
                     return;
-                if (special->info->pickupstring) dsda_AddPlayerMessage(message, player);
+                if (special->info->pickupstring) dsda_MBF25AddPlayerMessage(message, player);
                 else
                 {
                     switch (special->info->pickupweapontype)
@@ -1293,19 +1293,19 @@ void P_MBF25TouchSpecialThing(mobj_t *special, mobj_t *toucher)
                 {
                     if (!P_MBF25GiveAmmo (player,special->info->pickupammotype,special->info->pickupammocategory + 8))
                         return;
-                    dsda_AddPlayerMessage(message, player);
+                    dsda_MBF25AddPlayerMessage(message, player);
                 }
                 else
                 if (special->flags & MF_DROPPED)
                 {
                     if (!P_MBF25GiveAmmo (player,special->info->pickupammotype,special->info->pickupammocategory + 4))
                         return;
-                    dsda_AddPlayerMessage(message, player);
+                    dsda_MBF25AddPlayerMessage(message, player);
                 }
                 else
                 if (!P_MBF25GiveAmmo (player,special->info->pickupammotype,special->info->pickupammocategory))
                     return;
-            dsda_AddPlayerMessage(message, player);
+            dsda_MBF25AddPlayerMessage(message, player);
             }
             else // Is neither a weapon nor ammo!
             {
