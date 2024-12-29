@@ -1033,16 +1033,6 @@ void P_MBF25TouchSpecialThing(mobj_t *special, mobj_t *toucher)
 
     // ID24: Detect pickup properties
 
-    // construct pickup message
-
-    /*
-    if (special->info->pickupstring)
-    {
-      strcpy (pickupmessage, "s_");
-      // strcat (pickupmessage, special->info->pickupstring);
-    }
-     */
-
     // Handle pickup types
 
     switch (special->info->pickupitemtype)

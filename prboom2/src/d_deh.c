@@ -2176,7 +2176,7 @@ static void setMobjInfoValue(int mobjInfoIndex, int keyIndex, uint64_t value) {
     case 55: mi->pickupitemtype = (int)value; return;
     case 56: mi->pickupbonuscount = (int)value; return;
     case 57: mi->pickupsound = (int)value; return;
-    // case 58
+    // case 58: sprintf(mi->pickupstring, "%d", (int)value); return;
     // case 59
     case 60: mi->pickuphealthamount = (int)value; return;
     case 61: mi->pickuparmoramount = (int)value; return;
@@ -2204,6 +2204,8 @@ static void deh_procThing(DEHFILE *fpin, char *line)
   int internal_index;
   int ix;
   char *strval;
+  char trimmedstring[30];
+  memset(&trimmedstring[0], 0, sizeof(trimmedstring));
   dsda_deh_mobjinfo_t deh_mobjinfo;
 
   strncpy(inbuffer, line, DEH_BUFFERMAX - 1);
@@ -2249,7 +2251,13 @@ static void deh_procThing(DEHFILE *fpin, char *line)
     for (ix = 0; deh_mobjinfo_fields[ix]; ix++) {
       if (deh_strcasecmp(key, deh_mobjinfo_fields[ix])) continue;
 
-      if (!deh_strcasecmp(key, "MBF21 Bits")) {
+      if (!deh_strcasecmp(key, "Pickup message"))
+      {
+        strcpy(trimmedstring, ptr_lstrip(strval));
+
+        strcpy(deh_mobjinfo.info->pickupstring, ptr_lstrip(trimmedstring));
+      }
+      else if (!deh_strcasecmp(key, "MBF21 Bits")) {
         if (bGetData == 1)
         {
           value = deh_translate_bits(value, deh_mobjflags_mbf21);
@@ -3175,7 +3183,6 @@ static void deh_procStrings(DEHFILE *fpin, char *line)
   // holds the final result of the string after concatenation
   static char *holdstring = NULL;
   dboolean found = false;  // looking for string continuation
-  dboolean userstring = false; // adding a user string
 
   deh_log("Processing extended string substitution\n");
 
@@ -3223,18 +3230,31 @@ static void deh_procStrings(DEHFILE *fpin, char *line)
     if (*holdstring) // didn't have a backslash, trap above would catch that
     {
       // go process the current string
-      found = deh_procStringSub(key, NULL, holdstring);  // supply keyand not search string
+      if (strncasecmp(key, "GOT", 3) == 0 || strncasecmp(key, "ID24_", 5) == 0) // is a pickup string
+      {
+        if (ht_get(pickupmessagetable, key) != NULL)
+        {
+          found = true;
+          if (ht_set(pickupmessagetable, key, holdstring) == NULL) I_Error("deh_procStrings: Failed to insert string!");
+          deh_procStringSub(key, NULL, holdstring); // for legacy
+        }
+      }
+      else
+      {
+        found = deh_procStringSub(key, NULL, holdstring);  // supply keyand not search string
+      }
 
       if (!found)
       {
         if (strncasecmp(key, "USER_", 5) == 0)
         {
             deh_log("User-created string '%s' found, adding to internal string table.\n", key);
-
+            if (ht_set(pickupmessagetable, key, holdstring) == NULL) I_Error("deh_ProcStrings: Failed to insert string!");
         }
         else
         deh_log("Invalid string key '%s', substitution skipped.\n", key);
       }
+
 
       *holdstring = '\0';  // empty string for the next one
     }

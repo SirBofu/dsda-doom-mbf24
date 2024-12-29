@@ -58,7 +58,7 @@ int WIDE_SCREENHEIGHT = 200;
 // This can be filled or empty as needed (empty ones are used for defining new strings)
 typedef struct {
     const char* key;  // key is NULL if this slot is empty
-    void* value;
+    char* value;
 } ht_entry;
 
 // Hash table structure: create with ht_create, free with ht_destroy.
@@ -68,7 +68,7 @@ struct ht {
     size_t length;      // number of items in hash table
 };
 
-#define INITIAL_CAPACITY 42  // must not be zero
+#define INITIAL_CAPACITY 1024  // must not be zero
 
 ht* ht_create(void) {
     // Allocate space for hash table struct.
@@ -113,7 +113,7 @@ static uint64_t hash_key(const char* key) {
     return hash;
 }
 
-void* ht_get(ht* table, const char* key) {
+const char* ht_get(ht* table, const char* key) {
     // AND hash with capacity-1 to ensure it's within entries array.
     uint64_t hash = hash_key(key);
     size_t index = (size_t)(hash & (uint64_t)(table->capacity - 1));
@@ -138,7 +138,7 @@ void* ht_get(ht* table, const char* key) {
 
 // Internal function to set an entry (without expanding table).
 static const char* ht_set_entry(ht_entry* entries, size_t capacity,
-                                const char* key, void* value, size_t* plength) {
+                                const char* key, const char* value, size_t* plength) {
     // AND hash with capacity-1 to ensure it's within entries array.
     uint64_t hash = hash_key(key);
     size_t index = (size_t)(hash & (uint64_t)(capacity - 1));
@@ -147,7 +147,7 @@ static const char* ht_set_entry(ht_entry* entries, size_t capacity,
     while (entries[index].key != NULL) {
         if (strcmp(key, entries[index].key) == 0) {
             // Found key (it already exists), update value.
-            entries[index].value = value;
+           entries[index].value = (char*)value;
             return entries[index].key;
         }
         // Key wasn't in this slot, move to next (linear probing).
@@ -167,7 +167,7 @@ static const char* ht_set_entry(ht_entry* entries, size_t capacity,
         (*plength)++;
     }
     entries[index].key = (char*)key;
-    entries[index].value = value;
+    entries[index].value = (char*)value;
     return key;
 }
 
@@ -200,7 +200,7 @@ static bool ht_expand(ht* table) {
     return true;
 }
 
-const char* ht_set(ht* table, const char* key, void* value) {
+const char* ht_set(ht* table, const char* key, const char* value) {
     assert(value != NULL);
     if (value == NULL) {
         return NULL;
